@@ -1,0 +1,6 @@
+.DS_Store
+pico-go-electron
+# ignore generated code
+bind_darwin_amd64.go
+# ignore output assets
+output/*
