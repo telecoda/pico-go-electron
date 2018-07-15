@@ -17,14 +17,30 @@
             height: 100%;
         }
 
-        #gameframe {
-            height: 500px;
-            /* new height (400 * (1/0.8) ) */
-            width: 125%;
-            /* new width (100 * (1/0.8) )*/
-            transform: scale(0.8);
-            transform-origin: 0 0;
+        #gameDiv {
+            position: relative;
+            min-height: 256px;
+            height: 100%;
+            width: 100%;
         }
+
+        #gameFrame {
+            position: fixed;
+            min-height: 256px;
+            height: 100%;
+            width: 100%;
+        }
+
+
+        /* height: 500px;
+            /* new height (400 * (1/0.8) ) */
+
+        /* width: 125%; */
+
+        /* new width (100 * (1/0.8) )*/
+
+        /* transform: scale(0.8);
+            transform-origin: 0 0; */
     </style>
 </head>
 
@@ -57,7 +73,9 @@
                 <p>more stuff here</p>
             </div>
             <div role="tabpanel" class="tab-pane" id="game">
-                <iframe id="gameFrame" src="game.html" width="256px" height="256px" style="border: 0px"></iframe>
+                <div id="gameDiv">
+                    <iframe id="gameFrame" src="game.html" style="border: 0px;float: left;height: 100%;"></iframe>
+                </div>
             </div>
             <div role="tabpanel" class="tab-pane" id="sprites">This is where the sprite editor goes</div>
             <div role="tabpanel" class="tab-pane" id="audio">This is where the audio editor goes</div>
@@ -88,11 +106,24 @@
     <script type="text/javascript">
         $("#gameTab").click(function () {
             // get a reference to the embedded canvas created in the iframe page
-            var canvas = document.getElementById("gameFrame").contentDocument.getElementById("gameWrapper").childNodes[2];
+            var canvas = document.getElementById("gameFrame").contentDocument.getElementById("gameWrapper").childNodes[1];
             // force focus on it so ebiten starts rendering frames
             canvas.focus();
         });
     </script>
+
+    <!-- <script type="text/javascript">
+        // on window resize
+        $(window).resize(function () {
+            var canvas = document.getElementById("gameFrame").contentDocument.getElementById("gameWrapper").childNodes[1];
+            var iFrameWin = document.getElementById("gameFrame").contentWindow;
+            iFrameWin.resizeTo(
+                iFrameWin.screen.availWidth,
+                iFrameWin.screen.availWidth
+            );
+            canvas.resizeTo(iFrameWin.screen.availWidth,iFrameWin.screen.availWidth);
+        });
+    </script> -->
 
     <!-- <script type="text/javascript">
         index.init();
