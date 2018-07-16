@@ -2,10 +2,10 @@
 	<head>
 		<meta charset="utf-8">
 	</head>
-	<body id="gameWrapper" style="width: 100%; height: 100%"><script src="dynamic/js/drawing.js"></script></body>
+	<body id="gameWrapper"><script src="dynamic/js/drawing.js"></script></body>
 	<script type="text/javascript">
 	var resizer = function () {
-		var W = H = 256;
+		var W = H = 512;
 		var scale = Math.min(window.innerHeight/H, window.innerWidth/W);
 	
 		var canvas = document.getElementById('gameWrapper').childNodes[1];
@@ -16,11 +16,6 @@
 		canvas.style.height = (H * scale) + "px";
 		canvas.style.left = (window.innerWidth * 0.5 - W * scale * 0.5) + "px";
 		canvas.style.top = (window.innerHeight * 0.5 - H * scale * 0.5) + "px";
-	
-		// var ctx = canvas.getContext("2d");
-		// ctx.rect(0, 0, canvas.width, canvas.height);
-		// ctx.fillStyle = "red";
-		// ctx.fill();
 	};
 
 	window.addEventListener('resize', resizer); 

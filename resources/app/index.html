@@ -3,45 +3,14 @@
 
 <head>
     <meta charset="UTF-8">
-    <!-- <link rel="stylesheet" href="static/css/base.css"/>
-    <link rel="stylesheet" href="static/lib/astiloader/astiloader.css">
+    <!--<link rel="stylesheet" href="static/lib/astiloader/astiloader.css">
     <link rel="stylesheet" href="static/lib/astimodaler/astimodaler.css">
     <link rel="stylesheet" href="static/lib/astinotifier/astinotifier.css">-->
     <link rel="stylesheet" href="static/lib/font-awesome-4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="static/lib/bootstrap-3.3.7-dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="static/lib/bootstrap-3.3.7-dist/css/bootstrap-darkly.min.css">
     <link rel="fonts" href="static/lib/bootstrap-3.3.7-dist/fonts/glyphicons-halflings-regular.ttf">
-    <style type="text/css" media="screen">
-        #editor {
-            position: relative;
-            min-height: 400px;
-            height: 100%;
-        }
-
-        #gameDiv {
-            position: relative;
-            min-height: 256px;
-            height: 100%;
-            width: 100%;
-        }
-
-        #gameFrame {
-            position: fixed;
-            min-height: 256px;
-            height: 100%;
-            width: 100%;
-        }
-
-
-        /* height: 500px;
-            /* new height (400 * (1/0.8) ) */
-
-        /* width: 125%; */
-
-        /* new width (100 * (1/0.8) )*/
-
-        /* transform: scale(0.8);
-            transform-origin: 0 0; */
-    </style>
+    <link rel="stylesheet" href="static/css/base.css"/>
 </head>
 
 <body>
@@ -49,7 +18,7 @@
     <div>
 
         <!-- Nav tabs -->
-        <ul class="nav nav-tabs" role="tablist">
+        <ul class="nav nav-pills" role="tablist">
             <li role="presentation" class="active">
                 <a href="#codeeditor" aria-controls="codeeditor" role="tab" data-toggle="tab">Code</a>
             </li>
@@ -65,7 +34,7 @@
         </ul>
 
         <!-- Tab panes -->
-        <div class="tab-content" style="padding:10px;">
+        <div class="tab-content">
             <div role="tabpanel" class="tab-pane active" id="codeeditor">
                 <p>This is where the code editor goes</p>
                 <div id="editor">package main import "fmt" func main() { fmt.Println("Hello world") }
@@ -74,7 +43,7 @@
             </div>
             <div role="tabpanel" class="tab-pane" id="game">
                 <div id="gameDiv">
-                    <iframe id="gameFrame" src="game.html" style="border: 0px;float: left;height: 100%;"></iframe>
+                    <iframe id="gameFrame" src="game.html"></iframe>
                 </div>
             </div>
             <div role="tabpanel" class="tab-pane" id="sprites">This is where the sprite editor goes</div>
@@ -111,19 +80,6 @@
             canvas.focus();
         });
     </script>
-
-    <!-- <script type="text/javascript">
-        // on window resize
-        $(window).resize(function () {
-            var canvas = document.getElementById("gameFrame").contentDocument.getElementById("gameWrapper").childNodes[1];
-            var iFrameWin = document.getElementById("gameFrame").contentWindow;
-            iFrameWin.resizeTo(
-                iFrameWin.screen.availWidth,
-                iFrameWin.screen.availWidth
-            );
-            canvas.resizeTo(iFrameWin.screen.availWidth,iFrameWin.screen.availWidth);
-        });
-    </script> -->
 
     <!-- <script type="text/javascript">
         index.init();
