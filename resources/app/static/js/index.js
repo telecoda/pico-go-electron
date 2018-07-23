@@ -23,13 +23,13 @@ let index = {
             // Listen
             index.listen();
 
-            // Explore default path
-            index.explore();
+            // Load initial code
+            index.load();
         })
     },
-    explore: function(path) {
+    load: function(path) {
         // Create message
-        let message = {"name": "explore"};
+        let message = {"name": "load"};
         if (typeof path !== "undefined") {
             message.payload = path
         }
@@ -46,27 +46,29 @@ let index = {
                 return
             }
 
-            // Process path
-            document.getElementById("path").innerHTML = message.payload.path;
+            console.log(message.payload)
+            editor.session.setValue(message.payload)
+            // // Process path
+            // document.getElementById("path").innerHTML = message.payload.path;
 
-            // Process dirs
-            document.getElementById("dirs").innerHTML = ""
-            for (let i = 0; i < message.payload.dirs.length; i++) {
-                index.addFolder(message.payload.dirs[i].name, message.payload.dirs[i].path);
-            }
+            // // Process dirs
+            // document.getElementById("dirs").innerHTML = ""
+            // for (let i = 0; i < message.payload.dirs.length; i++) {
+            //     index.addFolder(message.payload.dirs[i].name, message.payload.dirs[i].path);
+            // }
 
-            // Process files
-            document.getElementById("files_count").innerHTML = message.payload.files_count;
-            document.getElementById("files_size").innerHTML = message.payload.files_size;
-            document.getElementById("files").innerHTML = "";
-            if (typeof message.payload.files !== "undefined") {
-                document.getElementById("files_panel").style.display = "block";
-                let canvas = document.createElement("canvas");
-                document.getElementById("files").append(canvas);
-                new Chart(canvas, message.payload.files);
-            } else {
-                document.getElementById("files_panel").style.display = "none";
-            }
+            // // Process files
+            // document.getElementById("files_count").innerHTML = message.payload.files_count;
+            // document.getElementById("files_size").innerHTML = message.payload.files_size;
+            // document.getElementById("files").innerHTML = "";
+            // if (typeof message.payload.files !== "undefined") {
+            //     document.getElementById("files_panel").style.display = "block";
+            //     let canvas = document.createElement("canvas");
+            //     document.getElementById("files").append(canvas);
+            //     new Chart(canvas, message.payload.files);
+            // } else {
+            //     document.getElementById("files_panel").style.display = "none";
+            // }
         })
     },
     listen: function() {
