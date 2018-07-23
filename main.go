@@ -13,8 +13,8 @@ import (
 )
 
 // Constants
-const htmlAbout = `Welcome on <b>Astilectron</b> demo!<br>
-This is using the bootstrap and the bundler.`
+const htmlAbout = `Welcome on <b>pico-go</b><br>
+The golang fantasy console.`
 
 // Vars
 var (
