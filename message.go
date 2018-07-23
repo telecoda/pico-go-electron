@@ -33,6 +33,12 @@ func handleMessages(_ *astilectron.Window, m bootstrap.MessageIn) (payload inter
 			payload = err.Error()
 			return
 		}
+	case "load":
+		return "here is some sourcecode\nand some more", nil
+	case "save":
+		return nil, fmt.Errorf("Save function not implemented yet")
+	case "run":
+		return nil, fmt.Errorf("Run function not implemented yet")
 	}
 	return
 }
