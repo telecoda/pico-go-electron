@@ -80,8 +80,8 @@ func main() {
 			Options: &astilectron.WindowOptions{
 				BackgroundColor: astilectron.PtrStr("#333"),
 				Center:          astilectron.PtrBool(true),
-				Height:          astilectron.PtrInt(800),
-				Width:           astilectron.PtrInt(640),
+				Height:          astilectron.PtrInt(850),
+				Width:           astilectron.PtrInt(850),
 			},
 		}},
 	}); err != nil {

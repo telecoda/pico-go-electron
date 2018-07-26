@@ -47,6 +47,7 @@ let index = {
             }
 
             console.log(message.payload)
+            document.getElementById("path").innerHTML = "path: " +message.payload.path;
             editor.session.setValue(message.payload.source)
             // // Process path
             // document.getElementById("path").innerHTML = message.payload.path;

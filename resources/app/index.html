@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="static/lib/bootstrap-3.3.7-dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="static/lib/bootstrap-3.3.7-dist/css/bootstrap-darkly.min.css">
     <link rel="fonts" href="static/lib/bootstrap-3.3.7-dist/fonts/glyphicons-halflings-regular.ttf">
-    <link rel="stylesheet" href="static/css/base.css"/>
+    <link rel="stylesheet" href="static/css/base.css" />
 </head>
 
 <body>
@@ -36,10 +36,25 @@
         <!-- Tab panes -->
         <div class="tab-content">
             <div role="tabpanel" class="tab-pane active" id="codeeditor">
-                <p>This is where the code editor goes</p>
-                <div id="editor">package main import "fmt" func main() { fmt.Println("Hello world") }
-                </div>
-                <p>more stuff here</p>
+                <div class="no-gutters">
+                    <div class="row">
+                        <div class="col">Path:</div>
+                        <div class="col-10" id="path">not loaded</div>
+                    </div>
+                        <div class="row">
+                        <div class="col">
+                            <div id="editor">package main import "fmt" func main() { fmt.Println("Hello world") }
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                            <div class="col">Controls:</div>
+                        </div>
+                    <div class="row">
+                            <div class="col-10"></div>
+                            <div class="col-2"><button id="run-button" type="button" class="btn btn-primary btn-lg btn-danger">Run</button></div>
+                        </div>
+                    </div>
             </div>
             <div role="tabpanel" class="tab-pane" id="game">
                 <div id="gameDiv">
@@ -56,7 +71,6 @@
     <script src="static/lib/astiloader/astiloader.js"></script>
     <script src="static/lib/astimodaler/astimodaler.js"></script>
     <script src="static/lib/astinotifier/astinotifier.js"></script>
-    <script src="static/lib/chart/chart.min.js"></script>
     <!-- <script>
             window.nodeRequire = require;
             delete window.require;
@@ -73,8 +87,7 @@
         editor.setTheme("ace/theme/monokai");
         editor.session.setMode("ace/mode/golang");
         // load initial source code
-        editor.session.setValue("some code here");
-        
+        editor.session.setValue("initialising...");
     </script>
     <script type="text/javascript" src="static/lib/jquery-2.2.4/jquery-min.js"></script>
     <script>window.jQuery = window.$ = module.exports</script>

@@ -1,9 +1,11 @@
 package main
 
 import (
+	"path/filepath"
 	"fmt"
-	"os/user"
-
+	"io/ioutil"
+	"os"
+	
 	"github.com/asticode/go-astilectron"
 	"github.com/asticode/go-astilectron-bootstrap"
 )
@@ -12,7 +14,11 @@ import (
 func handleMessages(_ *astilectron.Window, m bootstrap.MessageIn) (payload interface{}, err error) {
 	switch m.Name {
 	case "load":
-		return load("no-path")
+		payload, err = load("")
+		if err != nil {
+			payload = err.Error()
+		}
+		return
 	case "save":
 		return nil, fmt.Errorf("Save function not implemented yet")
 	case "run":
@@ -27,32 +33,54 @@ type Application struct {
 	Source string `json:"source"`
 }
 
-// loads sourcecode from a specific path
-func load(path string) (Application, error) {
+const (
+	defaultCodeDir = "gosrc"
+	defaultSourceFile = "main.go"	
+)
 
-	var err error
+
+
+// loads sourcecode from a specific path
+func load(path string) (a Application, err error) {
+
+
 	// If no path is provided, use the user's home dir
 	if len(path) == 0 {
-		var u *user.User
-		if u, err = user.Current(); err != nil {
-			return Application{}, err
+		var wd string
+		wd, err=os.Getwd()
+		if err != nil {
+			err = fmt.Errorf("Failed to get current working dir: %s", err)
+			return
 		}
-		path = u.HomeDir
+		//path = filepath.Join(wd,defaultCodeDir,defaultSourceFile)
+		path = filepath.Join(wd,"resources/app/gosrc/main.go")
 	}
 
-	// // Read dir
+	f, err:= os.Open(path)
+	if err != nil {
+		err = fmt.Errorf("Failed to open file: %s", err)
+		return
+	}
+
+	src, err := ioutil.ReadAll(f)
+	if err != nil {
+		err = fmt.Errorf("Failed to read file: %s", err)
+		return
+	}
+	//  Read source
 	// var files []os.FileInfo
+
 	// if files, err = ioutil.ReadDir(path); err != nil {
 	// 	return Application{}, err
 	// }
 
 	// Init Application
-	a := Application{
-		Source: "this is the source that's been loaded",
+	a = Application{
+		Source: string(src),
 		Path:   path,
 	}
 
-	return a, nil
+	return
 }
 
 // // Exploration represents the results of an exploration
