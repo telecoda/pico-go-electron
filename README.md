@@ -1,10 +1,15 @@
 # pico-go-electron
 
+The aim of this project is to produce a standalone (offline) gamedev tool using Go.  It is for developing simple games / demos like the [pico8 console](https://www.lexaloffle.com/pico-8.php) but instead of coding in Lua you use Go.
+
+The idea originally started in my [pico-go](https://github.com/telecoda/pico-go) repo but I found the external dependencies too complex/limiting for getting developers quickly productive on multiple platforms.
+
+This tool wraps the [Ebiten](https://hajimehoshi.github.io/ebiten/) game engine which supports compiling to JS using [GopherJS](https://github.com/gopherjs/gopherjs) into an Electron app.
+
 This code is based upon the [go-astilectron-demo](https://github.com/asticode/go-astilectron-demo) app that uses the [bootstrap](https://github.com/asticode/go-astilectron-bootstrap) and the [bundler](https://github.com/asticode/go-astilectron-bundler).
 
-It's also the subject of this [blog post](https://medium.com/@social_57971/how-to-add-a-gui-to-your-golang-app-in-5-easy-steps-c25c99d4d8e0).
+Watch this space for future developments.
 
-![screenshot](screenshot.png)
 
 # Step 1: installation
 
