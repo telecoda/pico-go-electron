@@ -35,33 +35,39 @@
 
         <!-- Tab panes -->
         <div class="tab-content">
+            <!-- Code editor panel -->
             <div role="tabpanel" class="tab-pane active" id="codeeditor">
                 <div class="no-gutters">
                     <div class="row">
                         <div class="col">Path:</div>
                         <div class="col-10" id="path">not loaded</div>
                     </div>
-                        <div class="row">
+                    <div class="row">
                         <div class="col">
                             <div id="editor">package main import "fmt" func main() { fmt.Println("Hello world") }
                             </div>
                         </div>
                     </div>
                     <div class="row">
-                            <div class="col">Controls:</div>
-                        </div>
+                        <div class="col">Controls:</div>
+                    </div>
                     <div class="row">
-                            <div class="col-10"></div>
-                            <div class="col-2"><button id="run-button" type="button" class="btn btn-primary btn-lg btn-danger">Run</button></div>
+                        <div class="col-10"></div>
+                        <div class="col-2">
+                            <button id="runButton" type="button" class="btn btn-primary btn-lg btn-danger">Run</button>
                         </div>
                     </div>
+                </div>
             </div>
+            <!-- Game panel -->
             <div role="tabpanel" class="tab-pane" id="game">
                 <div id="gameDiv">
                     <iframe id="gameFrame" src="game.html"></iframe>
                 </div>
             </div>
+            <!-- Sprite editor panel -->
             <div role="tabpanel" class="tab-pane" id="sprites">This is where the sprite editor goes</div>
+            <!-- Audio editor panel -->
             <div role="tabpanel" class="tab-pane" id="audio">This is where the audio editor goes</div>
         </div>
 
@@ -93,11 +99,14 @@
     <script>window.jQuery = window.$ = module.exports</script>
     <script src="static/lib/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
     <script type="text/javascript">
-        $("#gameTab").click(function () {
+        document.getElementById("gameTab").addEventListener("click", function () {
             // get a reference to the embedded canvas created in the iframe page
             var canvas = document.getElementById("gameFrame").contentDocument.getElementById("gameWrapper").childNodes[1];
             // force focus on it so ebiten starts rendering frames
             canvas.focus();
+        });
+        document.getElementById("runButton").addEventListener("click", function () {
+            index.run();
         });
     </script>
 

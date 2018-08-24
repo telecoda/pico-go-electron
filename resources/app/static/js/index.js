@@ -49,27 +49,47 @@ let index = {
             console.log(message.payload)
             document.getElementById("path").innerHTML = "path: " +message.payload.path;
             editor.session.setValue(message.payload.source)
-            // // Process path
-            // document.getElementById("path").innerHTML = message.payload.path;
+        })
+    },
+    run: function() {
+        // Create message
+        let message = {"name": "run",
+            "payload": editor.session.getValue()
+        };
 
-            // // Process dirs
-            // document.getElementById("dirs").innerHTML = ""
-            // for (let i = 0; i < message.payload.dirs.length; i++) {
-            //     index.addFolder(message.payload.dirs[i].name, message.payload.dirs[i].path);
-            // }
+        // send sourcecode to backend for compilation
 
-            // // Process files
-            // document.getElementById("files_count").innerHTML = message.payload.files_count;
-            // document.getElementById("files_size").innerHTML = message.payload.files_size;
-            // document.getElementById("files").innerHTML = "";
-            // if (typeof message.payload.files !== "undefined") {
-            //     document.getElementById("files_panel").style.display = "block";
-            //     let canvas = document.createElement("canvas");
-            //     document.getElementById("files").append(canvas);
-            //     new Chart(canvas, message.payload.files);
-            // } else {
-            //     document.getElementById("files_panel").style.display = "none";
-            // }
+        // Send message
+        asticode.loader.show();
+        astilectron.sendMessage(message, function(message) {
+            // Init
+            asticode.loader.hide();
+            editor.session.clearAnnotations();
+            // Check error
+            if (message.name === "error") {
+                asticode.notifier.error("Compilation error(s)");
+
+                // convert response to annotations on sourcecode
+                annotations = [];
+                if (message.payload.CompErrs != undefined && message.payload.CompErrs.length > 0) {
+                    errs = message.payload.CompErrs
+                    for (var i = 0; i < errs.length; i++) {
+                        annotations.push(errs[i]);
+                    }
+                    // for i:=0; i<length(message.payload.CompErrs); i++ {
+                    //     annotations.append(message.payload.CompErrs[i]);
+                    // }
+                    editor.session.setAnnotations(annotations);
+                    return
+                }
+                
+            }
+
+            // if no errors - code compiled successfully
+            // switch to game tab
+            document.getElementById("gameFrame").contentWindow.location.reload();
+            document.getElementById("gameTab").click();
+            // refresh js
         })
     },
     listen: function() {
