@@ -26,8 +26,8 @@ import (
 )
 
 const (
-	screenWidth  = 320
-	screenHeight = 240
+	screenWidth  = 128
+	screenHeight = 128
 )
 
 var (

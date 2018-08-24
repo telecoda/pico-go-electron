@@ -2,17 +2,9 @@
     box-sizing:  border-box;
 }
 
-/* html, body {
-    background-color: #000;
-    color: #fff;
-    height: 100%;
-    margin: 0;
-    width: 100%;
-} */
-
 #editor {
     position: relative;
-    min-height: 400px;
+    min-height: 640px;
     height: 100%;
 }
 

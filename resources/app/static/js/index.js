@@ -76,9 +76,6 @@ let index = {
                     for (var i = 0; i < errs.length; i++) {
                         annotations.push(errs[i]);
                     }
-                    // for i:=0; i<length(message.payload.CompErrs); i++ {
-                    //     annotations.append(message.payload.CompErrs[i]);
-                    // }
                     editor.session.setAnnotations(annotations);
                     return
                 }
