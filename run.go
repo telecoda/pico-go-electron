@@ -99,7 +99,7 @@ func getCompErrs(output string) []CompErr {
 			// parts should contain 4 parts
 			if len(parts) < 4 {
 				errs[i] = compErr
-				fmt.Printf("TEMP: parts! %#v\n",parts)
+				fmt.Printf("TEMP: parts! %#v\n", parts)
 				continue
 			}
 
@@ -109,9 +109,9 @@ func getCompErrs(output string) []CompErr {
 			// get column
 			compErr.Column, _ = strconv.ParseInt(parts[2], 10, 64)
 			// get error text - concat remaining parts with colons
-			compErr.Text = strings.Join(parts[3:],":")
+			compErr.Text = strings.Join(parts[3:], ":")
 			compErr.Text = strings.TrimSpace(compErr.Text)
-			
+
 			compErr.ErrType = "error"
 
 			errs[i] = compErr

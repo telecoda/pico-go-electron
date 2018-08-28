@@ -52,7 +52,6 @@ func Test_getCompErrs(t *testing.T) {
 				},
 			},
 		},
-		
 
 		{
 			name: "Error message with colons in it",
@@ -66,7 +65,6 @@ func Test_getCompErrs(t *testing.T) {
 				},
 			},
 		},
-
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {

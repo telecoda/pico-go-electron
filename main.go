@@ -40,29 +40,51 @@ func main() {
 			AppIconDefaultPath: "resources/icon.png",
 		},
 		Debug: *debug,
-		MenuOptions: []*astilectron.MenuItemOptions{{
-			Label: astilectron.PtrStr("File"),
-			SubMenu: []*astilectron.MenuItemOptions{
-				{
-					Label: astilectron.PtrStr("About"),
-					OnClick: func(e astilectron.Event) (deleteListener bool) {
-						if err := bootstrap.SendMessage(w, "about", htmlAbout, func(m *bootstrap.MessageIn) {
-							// Unmarshal payload
-							var s string
-							if err := json.Unmarshal(m.Payload, &s); err != nil {
-								astilog.Error(errors.Wrap(err, "unmarshaling payload failed"))
-								return
+		MenuOptions: []*astilectron.MenuItemOptions{
+			&astilectron.MenuItemOptions{
+				Label: astilectron.PtrStr("File"),
+				SubMenu: []*astilectron.MenuItemOptions{
+					{
+						Label: astilectron.PtrStr("About"),
+						OnClick: func(e astilectron.Event) (deleteListener bool) {
+							if err := bootstrap.SendMessage(w, "about", htmlAbout, func(m *bootstrap.MessageIn) {
+								// Unmarshal payload
+								var s string
+								if err := json.Unmarshal(m.Payload, &s); err != nil {
+									astilog.Error(errors.Wrap(err, "unmarshaling payload failed"))
+									return
+								}
+								astilog.Infof("About modal has been displayed and payload is %s!", s)
+							}); err != nil {
+								astilog.Error(errors.Wrap(err, "sending about event failed"))
 							}
-							astilog.Infof("About modal has been displayed and payload is %s!", s)
-						}); err != nil {
-							astilog.Error(errors.Wrap(err, "sending about event failed"))
-						}
-						return
+							return
+						},
+					},
+					{Role: astilectron.MenuItemRoleClose},
+				},
+			},
+			&astilectron.MenuItemOptions{
+				Label: astilectron.PtrStr("Edit"),
+				SubMenu: []*astilectron.MenuItemOptions{
+					{
+						Label:       astilectron.PtrStr("Cut"),
+						Accelerator: &astilectron.Accelerator{"CmdOrCtrl+X"},
+						Role:        astilectron.MenuItemRoleCut,
+					},
+					{
+						Label:       astilectron.PtrStr("Copy"),
+						Accelerator: &astilectron.Accelerator{"CmdOrCtrl+C"},
+						Role:        astilectron.MenuItemRoleCopy,
+					},
+					{
+						Label:       astilectron.PtrStr("Paste"),
+						Accelerator: &astilectron.Accelerator{"CmdOrCtrl+V"},
+						Role:        astilectron.MenuItemRolePaste,
 					},
 				},
-				{Role: astilectron.MenuItemRoleClose},
 			},
-		}},
+		},
 		OnWait: func(_ *astilectron.Astilectron, ws []*astilectron.Window, _ *astilectron.Menu, _ *astilectron.Tray, _ *astilectron.Menu) error {
 			w = ws[0]
 			go func() {
