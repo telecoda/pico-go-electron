@@ -12,14 +12,14 @@ func load(path string) (a Application, err error) {
 
 	// If no path is provided, use the user's home dir
 	if len(path) == 0 {
-		var wd string
-		wd, err = os.Getwd()
-		if err != nil {
-			err = fmt.Errorf("Failed to get current working dir: %s", err)
-			return
-		}
+		// var wd string
+		// wd, err = os.Getwd()
+		// if err != nil {
+		// 	err = fmt.Errorf("Failed to get current working dir: %s", err)
+		// 	return
+		// }
 		//path = filepath.Join(wd,defaultCodeDir,defaultSourceFile)
-		path = filepath.Join(wd, "resources/app/gosrc/main.go")
+		path = filepath.Join(".", "resources/app/gosrc/main.go")
 	}
 
 	f, err := os.Open(path)

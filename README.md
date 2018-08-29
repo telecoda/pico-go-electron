@@ -18,11 +18,18 @@ Run the following commands:
     $ go get -u github.com/telecoda/pico-go-electron/...
     $ rm $GOPATH/src/github.com/telecoda/pico-go-electron/bind.go
 
-# Step 2: install the electron bundler
+on Windows:
+
+    $ rm %GOPATH%/src/github.com/telecoda/pico-go-electron/bind.go
+
+# Step 2: install the prerequisites
 
 Run the following command:
 
     $ go get -u github.com/asticode/go-astilectron-bundler/...
+    $ go get -u github.com/gopherjs/gopherjs
+    $ go get -u github.com/gopherjs/gopherwasm/js
+    $ go get -u github.com/hajimehoshi/ebiten
     
 And don't forget to add `$GOPATH/bin` to your `$PATH`.
     
@@ -33,6 +40,11 @@ Run the following commands:
     $ cd $GOPATH/src/github.com/telecoda/pico-go-electron
     $ astilectron-bundler -v
     
+on Windows:
+
+    $ cd %GOPATH%/src/github.com/telecoda/pico-go-electron
+    $ astilectron-bundler.exe -v
+
 # Step 4: test the app
 
 The result is in the `output/<your os>-<your arch>` folder and is waiting for you to test it!
@@ -49,3 +61,5 @@ To bundle the app for more environments, add an `environments` key to the bundle
 ```
 
 and repeat **step 3**.
+
+

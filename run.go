@@ -33,11 +33,15 @@ func run(source string) (a Application, err error) {
 
 	// compile with GopherJS
 	cartName := filepath.Join(dir, "cart.js")
-	cmd := exec.Command("gopherjs", "build", tmpfn, "-o", cartName)
+	// we use GOOS=linux to compile to JS even on windows...
+	cmd := exec.Command(gopherJS, "build", tmpfn, "-o", cartName)
+	cmd.Env = append(os.Environ(),"GOOS=linux")
+	//cmd := exec.Command("GOOS=linux",gopherJS, "build", tmpfn, "-o", cartName)
 	var out []byte
 	out, err = cmd.CombinedOutput()
 	if err != nil {
-		fmt.Printf("TEMP: command: %s\n", string(out))
+		fmt.Printf("TEMP: dir:%s-%s\n",dir, tmpfn)
+		fmt.Printf("TEMP: command:%s-%s\n",gopherJS, string(out))
 		// decode compiler error
 		a.CompErrs = getCompErrs(string(out))
 		err = fmt.Errorf("Failed to compile source using GopherJS - %s", err)
@@ -48,21 +52,25 @@ func run(source string) (a Application, err error) {
 	var src, dst *os.File
 	src, err = os.Open(cartName)
 	if err != nil {
+		fmt.Printf("Failed to open cart js file - %s\n", err)
 		err = fmt.Errorf("Failed to open cart js file - %s", err)
 		return
 	}
 	defer src.Close()
 
-	destFilename := "/Users/robbaines/go/src/github.com/telecoda/pico-go-electron/resources/app/dynamic/js/cart.js"
+	destFilename := "./resources/app/dynamic/js/cart.js"
 
 	dst, err = os.Create(destFilename)
 	if err != nil {
+		fmt.Printf("Failed to create target cart js file - %s\n", err)
 		err = fmt.Errorf("Failed to create target cart js file - %s", err)
 		return
 	}
 	defer dst.Close()
+	fmt.Printf("TEMP: copying %s to %s\n",cartName,destFilename)
 	_, err = io.Copy(dst, src)
 	if err != nil {
+		fmt.Printf("Failed to copy compiled cart js to target file - %s\n", err)
 		err = fmt.Errorf("Failed to copy compiled cart js to target file - %s", err)
 		return
 	}
