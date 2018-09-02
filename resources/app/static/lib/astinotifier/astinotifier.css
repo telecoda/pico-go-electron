@@ -1,7 +1,8 @@
 .astinotifier {
     right: 0;
-    position: fixed;
+    display: block;
     top: 0;
+    align-content: center;
     width: 100%;
     z-index: 1;
 }

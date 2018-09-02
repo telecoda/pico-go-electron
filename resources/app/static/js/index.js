@@ -5,19 +5,12 @@ let index = {
         asticode.modaler.setContent(c);
         asticode.modaler.show();
     },
-    addFolder(name, path) {
-        let div = document.createElement("div");
-        div.className = "dir";
-        div.onclick = function() { index.explore(path) };
-        div.innerHTML = `<i class="fa fa-folder"></i><span>` + name + `</span>`;
-        document.getElementById("dirs").appendChild(div)
-    },
     init: function() {
         // Init
         asticode.loader.init();
         asticode.modaler.init();
         asticode.notifier.init();
-
+        
         // Wait for astilectron to be ready
         document.addEventListener('astilectron-ready', function() {
             // Listen
@@ -42,7 +35,8 @@ let index = {
 
             // Check error
             if (message.name === "error") {
-                asticode.notifier.error(message.payload);
+                //asticode.notifier.error(message.payload);
+                dialog.showErrorBox("Load Error",message.payload);
                 return
             }
 
@@ -67,16 +61,18 @@ let index = {
             editor.session.clearAnnotations();
             // Check error
             if (message.name === "error") {
-                asticode.notifier.error("Compilation error(s)");
-
+                //asticode.notifier.error("Compilation error(s)");
                 // convert response to annotations on sourcecode
                 annotations = [];
+                errorMessage = "";
                 if (message.payload.CompErrs != undefined && message.payload.CompErrs.length > 0) {
                     errs = message.payload.CompErrs
                     for (var i = 0; i < errs.length; i++) {
                         annotations.push(errs[i]);
+                        errorMessage += errs[i].text + "\n"
                     }
                     editor.session.setAnnotations(annotations);
+                    dialog.showErrorBox("Compile Error",errorMessage);
                     return
                 }
                 

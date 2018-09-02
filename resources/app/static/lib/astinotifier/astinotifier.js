@@ -9,6 +9,7 @@ asticode.notifier = {
         this.notify("info", message);
     },
     init: function() {
+        // class="modal" tabindex="-1" role="dialog"
         document.body.innerHTML = `<div class="astinotifier" id="astinotifier"></div>` + document.body.innerHTML
     },
     notify: function(type, message) {
@@ -31,7 +32,7 @@ asticode.notifier = {
         document.getElementById("astinotifier").prepend(wrapper);
         setTimeout(function() {
             close.click();
-        }, 5000);
+        }, 20000);
     },
     success: function(message) {
         this.notify("success", message);
