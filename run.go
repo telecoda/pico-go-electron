@@ -63,7 +63,8 @@ func run(source string) (a Application, err error) {
 		// decode compiler error
 		compResp.Errors = getCompErrs(raw)
 		a.CompResp = compResp
-		err = fmt.Errorf("Failed to compile source using GopherJS - %s", err)
+		//err = fmt.Errorf("Failed to compile source using GopherJS - %s", err)
+		err = nil
 		return
 	}
 
@@ -126,7 +127,6 @@ func getCompErrs(output string) []CompErr {
 			// parts should contain 4 parts
 			if len(parts) < 4 {
 				errs[i] = compErr
-				fmt.Printf("TEMP: parts! %#v\n", parts)
 				continue
 			}
 

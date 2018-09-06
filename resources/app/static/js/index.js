@@ -34,7 +34,6 @@ let index = {
                 return
             }
 
-            console.log(message.payload)
             document.getElementById("path").innerHTML = "path: " +message.payload.path;
             editor.session.setValue(message.payload.source)
         })
@@ -53,24 +52,29 @@ let index = {
             // Init
             asticode.loader.hide();
             editor.session.clearAnnotations();
+            document.getElementById("compErrors").innerHTML = ""; // Clear errors
             // Check error
             if (message.name === "error") {
-                // convert response to annotations on sourcecode
-                annotations = [];
-                errorMessage = "";
-                if (message.payload.compResp != undefined && message.payload.compResp.errors != undefined && message.payload.compResp.errors.length > 0) {
-                    errs = message.payload.compResp.errors
-                    for (var i = 0; i < errs.length; i++) {
-                        annotations.push(errs[i]);
-                        errorMessage += errs[i].text + "\n"
-                    }
-                    editor.session.setAnnotations(annotations);
-                    dialog.showErrorBox("Compile Error",errorMessage);
-                    return
-                }
-                
+                dialog.showErrorBox("Load Error",message.payload);
+                return
             }
 
+            // convert response to annotations on sourcecode
+            annotations = [];
+            errorMessage = "";
+            if (message.payload.compResp != undefined && message.payload.compResp.errors != undefined && message.payload.compResp.errors.length > 0) {
+                errs = message.payload.compResp.errors
+                for (var i = 0; i < errs.length; i++) {
+                    annotations.push(errs[i]);
+                    errorMessage += errs[i].text + "\n"
+                    //errorMessage += message.payload.compResp.raw;
+                }
+                editor.session.setAnnotations(annotations);
+                document.getElementById("compErrors").innerHTML =message.payload.compResp.raw;
+                dialog.showErrorBox("Compile Error",errorMessage);
+                return
+            }
+            
             // if no errors - code compiled successfully
             // switch to game tab
             document.getElementById("gameFrame").contentWindow.location.reload();
