@@ -58,8 +58,8 @@ let index = {
                 // convert response to annotations on sourcecode
                 annotations = [];
                 errorMessage = "";
-                if (message.payload.CompErrs != undefined && message.payload.CompErrs.length > 0) {
-                    errs = message.payload.CompErrs
+                if (message.payload.compResp != undefined && message.payload.compResp.errors != undefined && message.payload.compResp.errors.length > 0) {
+                    errs = message.payload.compResp.errors
                     for (var i = 0; i < errs.length; i++) {
                         annotations.push(errs[i]);
                         errorMessage += errs[i].text + "\n"

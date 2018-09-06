@@ -11,6 +11,20 @@ import (
 	"strings"
 )
 
+// CompErr - compiler errors
+type CompErr struct {
+	Row     int64  `json:"row"`
+	Column  int64  `json:"col"`
+	Text    string `json:"text"`
+	ErrType string `json:"type"`
+}
+
+// CompResp - compiler response
+type CompResp struct {
+	Raw string `json:"raw"`
+	Errors []CompErr `json:"errors"`
+}
+
 // run - compiles and executes latest code
 func run(source string) (a Application, err error) {
 
@@ -40,10 +54,15 @@ func run(source string) (a Application, err error) {
 	var out []byte
 	out, err = cmd.CombinedOutput()
 	if err != nil {
+		raw:= string(out)
 		fmt.Printf("TEMP: dir:%s-%s\n",dir, tmpfn)
-		fmt.Printf("TEMP: command:%s-%s\n",gopherJS, string(out))
+		fmt.Printf("TEMP: command:%s-%s\n",gopherJS, raw)
+		compResp := &CompResp{
+			Raw: raw,
+		}
 		// decode compiler error
-		a.CompErrs = getCompErrs(string(out))
+		compResp.Errors = getCompErrs(raw)
+		a.CompResp = compResp
 		err = fmt.Errorf("Failed to compile source using GopherJS - %s", err)
 		return
 	}

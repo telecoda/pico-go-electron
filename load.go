@@ -44,7 +44,6 @@ func load(path string) (a Application, err error) {
 	a = Application{
 		Source:   string(src),
 		Path:     path,
-		CompErrs: make([]CompErr, 0),
 	}
 
 	return

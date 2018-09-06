@@ -8,19 +8,13 @@ import (
 	"github.com/asticode/go-astilectron-bootstrap"
 )
 
-// CompErr - compiler errors
-type CompErr struct {
-	Row     int64  `json:"row"`
-	Column  int64  `json:"col"`
-	Text    string `json:"text"`
-	ErrType string `json:"type"`
-}
+
 
 // Application represents the content of an applicaton
 type Application struct {
 	Path     string `json:"path"`
 	Source   string `json:"source"`
-	CompErrs []CompErr
+	CompResp *CompResp `json:"compResp"`
 }
 
 const (
