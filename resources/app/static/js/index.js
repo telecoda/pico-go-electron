@@ -1,9 +1,6 @@
 let index = {
-    about: function(html) {
-        let c = document.createElement("div");
-        c.innerHTML = html;
-        asticode.modaler.setContent(c);
-        asticode.modaler.show();
+    about: function(message) {
+        dialog.showMessageBox({"title": "About","message": message});
     },
     init: function() {
         // Init
@@ -33,7 +30,6 @@ let index = {
 
             // Check error
             if (message.name === "error") {
-                //asticode.notifier.error(message.payload);
                 dialog.showErrorBox("Load Error",message.payload);
                 return
             }
@@ -59,7 +55,6 @@ let index = {
             editor.session.clearAnnotations();
             // Check error
             if (message.name === "error") {
-                //asticode.notifier.error("Compilation error(s)");
                 // convert response to annotations on sourcecode
                 annotations = [];
                 errorMessage = "";
@@ -89,9 +84,6 @@ let index = {
                 case "about":
                     index.about(message.payload);
                     return {payload: "payload"};
-                    break;
-                case "check.out.menu":
-                    asticode.notifier.info(message.payload);
                     break;
             }
         });

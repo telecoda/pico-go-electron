@@ -12,7 +12,7 @@ import (
 )
 
 // Constants
-const htmlAbout = `Welcome on <b>pico-go</b><br>
+const aboutBody = `Welcome on to pico-go
 The golang fantasy console.`
 
 // Vars
@@ -46,7 +46,7 @@ func main() {
 					{
 						Label: astilectron.PtrStr("About"),
 						OnClick: func(e astilectron.Event) (deleteListener bool) {
-							if err := bootstrap.SendMessage(w, "about", htmlAbout, func(m *bootstrap.MessageIn) {
+							if err := bootstrap.SendMessage(w, "about", aboutBody, func(m *bootstrap.MessageIn) {
 								// Unmarshal payload
 								var s string
 								if err := json.Unmarshal(m.Payload, &s); err != nil {
@@ -84,7 +84,16 @@ func main() {
 				},
 			},
 		},
-		
+		OnWait: func(_ *astilectron.Astilectron, ws []*astilectron.Window, _ *astilectron.Menu, _ *astilectron.Tray, _ *astilectron.Menu) error {
+			w = ws[0]
+			// go func() {
+			// 	time.Sleep(5 * time.Second)
+			// 	if err := bootstrap.SendMessage(w, "check.out.menu", "Don't forget to check out the menu!"); err != nil {
+			// 		astilog.Error(errors.Wrap(err, "sending check.out.menu event failed"))
+			// 	}
+			// }()
+			return nil
+		},
 		RestoreAssets: RestoreAssets,
 		Windows: []*bootstrap.Window{{
 			Homepage:       "index.html",
