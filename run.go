@@ -78,7 +78,13 @@ func run(source string) (a Application, err error) {
 	}
 	defer src.Close()
 
-	destFilename := "./resources/app/dynamic/js/cart.js"
+	wd,err := os.Executable()
+	if err != nil {
+		err = fmt.Errorf("Failed to get executable details: %s", err)
+		return
+	}
+
+	destFilename := filepath.Join(wd, "../resources/app/dynamic/js/cart.js")
 
 	dst, err = os.Create(destFilename)
 	if err != nil {
@@ -94,6 +100,8 @@ func run(source string) (a Application, err error) {
 		err = fmt.Errorf("Failed to copy compiled cart js to target file - %s", err)
 		return
 	}
+
+	// err = fmt.Errorf("TEMP: Failed to copy compiled cart js to target file source: %s - dest: %s", cartName,destFilename)
 
 	return
 }

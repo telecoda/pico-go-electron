@@ -43,7 +43,10 @@ func handleMessages(_ *astilectron.Window, m bootstrap.MessageIn) (payload inter
 				return
 			}
 		}
-		return run(source)
+		payload,err = run(source)
+		if err != nil {
+			payload = err.Error()
+		}
 	}
 	return
 }
