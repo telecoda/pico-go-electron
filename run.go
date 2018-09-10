@@ -78,13 +78,12 @@ func run(source string) (a Application, err error) {
 	}
 	defer src.Close()
 
-	wd,err := os.Executable()
+	destDir,err := getDestDir()
 	if err != nil {
-		err = fmt.Errorf("Failed to get executable details: %s", err)
 		return
 	}
 
-	destFilename := filepath.Join(wd, "../resources/app/dynamic/js/cart.js")
+	destFilename := filepath.Join(destDir, "cart.js")
 
 	dst, err = os.Create(destFilename)
 	if err != nil {
