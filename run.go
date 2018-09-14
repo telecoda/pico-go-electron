@@ -26,7 +26,7 @@ type CompResp struct {
 }
 
 // run - compiles and executes latest code
-func run(source string) (a Application, err error) {
+func run(sourceCode SourceCode) (a Application, err error) {
 
 	// save source to file
 	dir, err := ioutil.TempDir("", "example")
@@ -38,7 +38,7 @@ func run(source string) (a Application, err error) {
 	defer os.RemoveAll(dir) // clean up
 
 	tmpfn := filepath.Join(dir, "main.go")
-	if err = ioutil.WriteFile(tmpfn, []byte(source), 0666); err != nil {
+	if err = ioutil.WriteFile(tmpfn, []byte(sourceCode.Source), 0666); err != nil {
 		err = fmt.Errorf("Failed to write source to to temporary dir - %s", err)
 		return
 	}
@@ -78,12 +78,13 @@ func run(source string) (a Application, err error) {
 	}
 	defer src.Close()
 
-	destDir,err := getDestDir()
-	if err != nil {
-		return
-	}
+	// destDir,err := getDestDir()
+	// if err != nil {
+	// 	return
+	// }
 
-	destFilename := filepath.Join(destDir, "cart.js")
+	fmt.Printf("TEMP: sourcePath: %s\n", sourceCode.Path)
+	destFilename := filepath.Join(sourceCode.Path,"Local Storage","cart.js")
 
 	dst, err = os.Create(destFilename)
 	if err != nil {

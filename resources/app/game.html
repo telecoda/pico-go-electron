@@ -1,24 +1,32 @@
 <html>
 	<head>
 		<meta charset="utf-8">
+		
 	</head>
-	<body id="gameWrapper"><script src="dynamic/js/cart.js"></script></body>
+	<!--<body id="gameWrapper"><script src="dynamic/js/cart.js"></script></body>-->
+	<body id="gameWrapper"></body>
+	<script src="static/js/game.js"></script>
 	<script type="text/javascript">
-	var resizer = function () {
-		var W = H = 512;
-		var scale = Math.min(window.innerHeight/H, window.innerWidth/W);
-	
-		var canvas = document.getElementById('gameWrapper').childNodes[1];
-		canvas.width= W;
-		canvas.height= H;
-		canvas.style.position = "absolute";
-		canvas.style.width = (W * scale) + "px";
-		canvas.style.height = (H * scale) + "px";
-		canvas.style.left = (window.innerWidth * 0.5 - W * scale * 0.5) + "px";
-		canvas.style.top = (window.innerHeight * 0.5 - H * scale * 0.5) + "px";
-	};
+		gameFuncs.init();
+		console.log("parent:" + parent.userPath);
+		var resizer = function () {
+			var W = H = 512;
+			var scale = Math.min(window.innerHeight/H, window.innerWidth/W);
+		
+			var canvas = document.getElementById('gameWrapper').childNodes[1];
+			if (canvas == undefined) {
+				return;
+			}
+			canvas.width= W;
+			canvas.height= H;
+			canvas.style.position = "absolute";
+			canvas.style.width = (W * scale) + "px";
+			canvas.style.height = (H * scale) + "px";
+			canvas.style.left = (window.innerWidth * 0.5 - W * scale * 0.5) + "px";
+			canvas.style.top = (window.innerHeight * 0.5 - H * scale * 0.5) + "px";
+		};
 
-	window.addEventListener('resize', resizer); 
-	resizer(); // initial resize
+		window.addEventListener('resize', resizer); 
+		resizer(); // initial resize
 	</script>
 </html>

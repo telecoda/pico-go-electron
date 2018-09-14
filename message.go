@@ -17,6 +17,13 @@ type Application struct {
 	CompResp *CompResp `json:"compResp"`
 }
 
+// SourceCode used from browser to backend
+type SourceCode struct {
+	Path string `json:"path"`
+	Source string `json:"source"`
+}
+
+
 const (
 	defaultCodeDir    = "gosrc"
 	defaultSourceFile = "main.go"
@@ -35,7 +42,8 @@ func handleMessages(_ *astilectron.Window, m bootstrap.MessageIn) (payload inter
 		return nil, fmt.Errorf("Save function not implemented yet")
 	case "run":
 		// Unmarshal payload
-		var source string
+		var source SourceCode
+
 		if len(m.Payload) > 0 {
 			// Unmarshal payload
 			if err = json.Unmarshal(m.Payload, &source); err != nil {

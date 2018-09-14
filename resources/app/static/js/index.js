@@ -1,3 +1,4 @@
+const {app} = require('electron').remote
 let index = {
     about: function(message) {
         dialog.showMessageBox({"title": "About","message": message});
@@ -5,6 +6,8 @@ let index = {
     init: function() {
         // Init
         asticode.loader.init();
+        userPath = app.getPath("userData");
+        console.log("User path: "+ userPath);
         
         // Wait for astilectron to be ready
         document.addEventListener('astilectron-ready', function() {
@@ -21,6 +24,7 @@ let index = {
         if (typeof path !== "undefined") {
             message.payload = path
         }
+
 
         // Send message
         asticode.loader.show();
@@ -39,9 +43,14 @@ let index = {
         })
     },
     run: function() {
+
+        payload = {
+            "path": userPath,
+            "source":editor.session.getValue()
+        }
         // Create message
         let message = {"name": "run",
-            "payload": editor.session.getValue()
+            "payload": payload
         };
 
         // send sourcecode to backend for compilation
