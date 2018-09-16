@@ -1,32 +1,78 @@
 <html>
 	<head>
 		<meta charset="utf-8">
-		
+		<link rel="stylesheet" href="static/css/base.css" />
 	</head>
-	<!--<body id="gameWrapper"><script src="dynamic/js/cart.js"></script></body>-->
-	<body id="gameWrapper"></body>
+	<body id="gameWrapper" onload="setResizer()"><script type="text/javascript"></script>
+	<script type="text/javascript">
+		// this code is added so we can remove the resize() event listener added by ebiten code
+		// we hijack the addEventListener calls and store them in an array
+		var listeners = {};
+		var originalEventListener = window.addEventListener;
+		window.addEventListener = function(type, fn, options) {
+			if (!listeners[type])
+				listeners[type] = [];
+
+			listeners[type].push(fn);
+			return originalEventListener(type, fn, options);
+		}
+
+		var removeAllEventListener = function(type) {
+			if (!listeners[type] || !listeners[type].length)
+				return;
+
+			for (let i = 0; i < listeners[type].length; i++)
+				window.removeEventListener(type, listeners[type][i]);
+		}
+		//
+	</script>
 	<script src="static/js/game.js"></script>
 	<script type="text/javascript">
 		gameFuncs.init();
-		console.log("parent:" + parent.userPath);
-		var resizer = function () {
-			var W = H = 512;
+		function resizer () {
+			var W = H = 256;
 			var scale = Math.min(window.innerHeight/H, window.innerWidth/W);
-		
-			var canvas = document.getElementById('gameWrapper').childNodes[1];
-			if (canvas == undefined) {
+			// var gameWrapper = document.getElementById('gameWrapper');
+			// if (gameWrapper === "undefined" || gameWrapper === null) {
+			// 	console.log("resize-gameWrapper-null");
+            //     return;
+            // }
+			// var childNodes = gameWrapper.childNodes;
+			// console.log("resize-childNodes-null");
+			// if (childNodes === "undefined" || childNodes === null) {
+            //     return;
+			// }
+			
+			// var canvas = childNodes[childNodes.length-1]; // get last child
+			var canvasElements = document.getElementsByTagName("canvas");
+			if (typeof canvasElements === "undefined" || canvasElements.length===0) {
 				return;
 			}
+			var canvas = canvasElements[0];
+			console.log("There are " +canvasElements.length + " canvases");
 			canvas.width= W;
 			canvas.height= H;
-			canvas.style.position = "absolute";
-			canvas.style.width = (W * scale) + "px";
-			canvas.style.height = (H * scale) + "px";
+			canvas.id = "canvas-id";
+			if (typeof canvas.style === "undefined") {
+				return;
+			}
+			//canvas.style.position = "absolute";
+			var newWidth = (W * scale);
+			canvas.style.width = newWidth + "px";
+			var newHeight = (H * scale);
+			canvas.style.height = newHeight + "px";
 			canvas.style.left = (window.innerWidth * 0.5 - W * scale * 0.5) + "px";
 			canvas.style.top = (window.innerHeight * 0.5 - H * scale * 0.5) + "px";
+			console.log("resize-resized w:" + canvas.style.width + " h:"+ canvas.style.height + "win h:"+ window.innerHeight + "win w:" + window.innerWidth );
+			console.log("resize-resized newWidth:" + newWidth + " newHeight:"+ newHeight);
+			console.log("resize-resized left:" + canvas.style.left + " top:"+ canvas.style.top + "scale: "+ scale);
 		};
-
-		window.addEventListener('resize', resizer); 
-		resizer(); // initial resize
+		function setResizer() {
+			console.log("adding resize listener");
+			removeAllEventListener("resize");
+			window.addEventListener("resize", resizer); 
+			resizer(); // initial resize
+		};
 	</script>
+	</body>
 </html>

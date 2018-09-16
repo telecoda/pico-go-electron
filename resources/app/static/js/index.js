@@ -7,8 +7,7 @@ let index = {
         // Init
         asticode.loader.init();
         userPath = app.getPath("userData");
-        console.log("User path: "+ userPath);
-        
+
         // Wait for astilectron to be ready
         document.addEventListener('astilectron-ready', function() {
             // Listen

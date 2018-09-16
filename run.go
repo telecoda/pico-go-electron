@@ -78,11 +78,6 @@ func run(sourceCode SourceCode) (a Application, err error) {
 	}
 	defer src.Close()
 
-	// destDir,err := getDestDir()
-	// if err != nil {
-	// 	return
-	// }
-
 	fmt.Printf("TEMP: sourcePath: %s\n", sourceCode.Path)
 	destFilename := filepath.Join(sourceCode.Path,"Local Storage","cart.js")
 
@@ -100,8 +95,6 @@ func run(sourceCode SourceCode) (a Application, err error) {
 		err = fmt.Errorf("Failed to copy compiled cart js to target file - %s", err)
 		return
 	}
-
-	// err = fmt.Errorf("TEMP: Failed to copy compiled cart js to target file source: %s - dest: %s", cartName,destFilename)
 
 	return
 }

@@ -101,9 +101,19 @@
     <script type="text/javascript">
         document.getElementById("gameTab").addEventListener("click", function () {
             // get a reference to the embedded canvas created in the iframe page
-            var canvas = document.getElementById("gameFrame").contentDocument.getElementById("gameWrapper").childNodes[1];
+            var gameWrapper = document.getElementById('gameWrapper');
+			if (gameWrapper === "undefined" || gameWrapper === null) {
+                return;
+            }
+			var childNodes = gameWrapper.childNodes;
+			if (childNodes === "undefined" || childNodes === null) {
+                return;
+            }
+			var canvas = childNodes[childNodes.length-1]; // get last child
             // force focus on it so ebiten starts rendering frames
-            canvas.focus();
+            if (typeof canvas.focus != "undefined") {
+                canvas.focus();
+            }
         });
         document.getElementById("runButton").addEventListener("click", function () {
             index.run();
