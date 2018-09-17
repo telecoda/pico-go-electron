@@ -26,8 +26,8 @@ import (
 )
 
 const (
-	screenWidth  = 256
-	screenHeight = 256
+	screenWidth  = 128
+	screenHeight = 128
 )
 
 var (
@@ -71,7 +71,7 @@ func update(screen *ebiten.Image) error {
 
 func main() {
 	noiseImage = image.NewRGBA(image.Rect(0, 0, screenWidth, screenHeight))
-	if err := ebiten.Run(update, screenWidth, screenHeight, 2, "Noise (Ebiten Demo)"); err != nil {
+	if err := ebiten.Run(update, screenWidth, screenHeight, 1, "Noise (Ebiten Demo)"); err != nil {
 		log.Fatal(err)
 	}
 }
