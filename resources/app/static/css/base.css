@@ -14,10 +14,3 @@
     height: 100%;
     width: 100%;
 }
-
-canvas {
-    position: absolute;
-    height: 256px;
-    width: 256px;
-}
-

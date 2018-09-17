@@ -5,8 +5,15 @@
 	</head>
 	<body id="gameWrapper" onload="setResizer()"><script type="text/javascript"></script>
 	<script type="text/javascript">
-		// this code is added so we can remove the resize() event listener added by ebiten code
-		// we hijack the addEventListener calls and store them in an array
+		/* 
+			This code is added so we can remove the resize() event listener added by ebiten code
+			as soon as the cart.js code runs it adds its own resize handler that force the canvas
+			to remain a specific size. We want the canvas to scale based upon the <div> it is contained
+			inside.
+			
+			We hijack the addEventListener calls and store them in an array.
+			This allows us to remove ALL event listeners for a particular type and then add our own.
+		*/
 		var listeners = {};
 		var originalEventListener = window.addEventListener;
 		window.addEventListener = function(type, fn, options) {
@@ -30,33 +37,34 @@
 	<script type="text/javascript">
 		gameFuncs.init();
 		function resizer () {
-			var W = H = 256;
+			/*
+				This is the resize code that tries to scale the canvas to the largest possible size
+				within it's parent but maintain aspect ratio.
+			*/
+
+			var W = 320;
+			var H = 240;
+
+			// mult dimension by "deviceScale" ... 
+			var deviceScale = 2;
+
+			W = W * deviceScale;
+			H = H * deviceScale;
+
 			var scale = Math.min(window.innerHeight/H, window.innerWidth/W);
-			// var gameWrapper = document.getElementById('gameWrapper');
-			// if (gameWrapper === "undefined" || gameWrapper === null) {
-			// 	console.log("resize-gameWrapper-null");
-            //     return;
-            // }
-			// var childNodes = gameWrapper.childNodes;
-			// console.log("resize-childNodes-null");
-			// if (childNodes === "undefined" || childNodes === null) {
-            //     return;
-			// }
-			
-			// var canvas = childNodes[childNodes.length-1]; // get last child
+			// get a ref to canvas
 			var canvasElements = document.getElementsByTagName("canvas");
 			if (typeof canvasElements === "undefined" || canvasElements.length===0) {
 				return;
 			}
 			var canvas = canvasElements[0];
-			console.log("There are " +canvasElements.length + " canvases");
 			canvas.width= W;
 			canvas.height= H;
 			canvas.id = "canvas-id";
 			if (typeof canvas.style === "undefined") {
 				return;
 			}
-			//canvas.style.position = "absolute";
+			canvas.style.position = "absolute";
 			var newWidth = (W * scale);
 			canvas.style.width = newWidth + "px";
 			var newHeight = (H * scale);
@@ -66,9 +74,12 @@
 			console.log("resize-resized w:" + canvas.style.width + " h:"+ canvas.style.height + "win h:"+ window.innerHeight + "win w:" + window.innerWidth );
 			console.log("resize-resized newWidth:" + newWidth + " newHeight:"+ newHeight);
 			console.log("resize-resized left:" + canvas.style.left + " top:"+ canvas.style.top + "scale: "+ scale);
+
 		};
 		function setResizer() {
-			console.log("adding resize listener");
+			/*
+				This function removes the unwanted ebiten resize listener and adds our own instead
+			*/
 			removeAllEventListener("resize");
 			window.addEventListener("resize", resizer); 
 			resizer(); // initial resize

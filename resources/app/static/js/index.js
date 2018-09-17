@@ -6,6 +6,8 @@ let index = {
     init: function() {
         // Init
         asticode.loader.init();
+        // capture electron app "userData" variable 
+        // this is used as a location to host the compiled JS file.
         userPath = app.getPath("userData");
 
         // Wait for astilectron to be ready
@@ -53,8 +55,6 @@ let index = {
         };
 
         // send sourcecode to backend for compilation
-
-        // Send message
         asticode.loader.show();
         astilectron.sendMessage(message, function(message) {
             // Init
@@ -75,7 +75,6 @@ let index = {
                 for (var i = 0; i < errs.length; i++) {
                     annotations.push(errs[i]);
                     errorMessage += errs[i].text + "\n"
-                    //errorMessage += message.payload.compResp.raw;
                 }
                 editor.session.setAnnotations(annotations);
                 document.getElementById("compErrors").innerHTML =message.payload.compResp.raw;
