@@ -14,9 +14,29 @@ let index = {
         document.addEventListener('astilectron-ready', function() {
             // Listen
             index.listen();
+        
+            // call backend init
+            // Create message
+            let message = {"name": "init"};
+            if (typeof userPath !== "undefined") {
+                message.payload = userPath
+            }
+            // Send message
+            asticode.loader.show();
+            astilectron.sendMessage(message, function(message) {
+                // Init
+                asticode.loader.hide();
 
-            // Load initial code
-            index.load();
+                // Check error
+                if (message.name === "error") {
+                    dialog.showErrorBox("Init Error",message.payload);
+                    return
+                }
+            })
+
+            
+            // load initial source code
+            index.load(userPath);
         })
     },
     load: function(path) {
@@ -25,8 +45,6 @@ let index = {
         if (typeof path !== "undefined") {
             message.payload = path
         }
-
-
         // Send message
         asticode.loader.show();
         astilectron.sendMessage(message, function(message) {

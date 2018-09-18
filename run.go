@@ -21,7 +21,7 @@ type CompErr struct {
 
 // CompResp - compiler response
 type CompResp struct {
-	Raw string `json:"raw"`
+	Raw    string    `json:"raw"`
 	Errors []CompErr `json:"errors"`
 }
 
@@ -49,14 +49,14 @@ func run(sourceCode SourceCode) (a Application, err error) {
 	cartName := filepath.Join(dir, "cart.js")
 	// we use GOOS=linux to compile to JS even on windows...
 	cmd := exec.Command(gopherJS, "build", tmpfn, "-o", cartName)
-	cmd.Env = append(os.Environ(),"GOOS=linux")
+	cmd.Env = append(os.Environ(), "GOOS=linux")
 	//cmd := exec.Command("GOOS=linux",gopherJS, "build", tmpfn, "-o", cartName)
 	var out []byte
 	out, err = cmd.CombinedOutput()
 	if err != nil {
-		raw:= string(out)
-		fmt.Printf("TEMP: dir:%s-%s\n",dir, tmpfn)
-		fmt.Printf("TEMP: command:%s-%s\n",gopherJS, raw)
+		raw := string(out)
+		fmt.Printf("TEMP: dir:%s-%s\n", dir, tmpfn)
+		fmt.Printf("TEMP: command:%s-%s\n", gopherJS, raw)
 		compResp := &CompResp{
 			Raw: raw,
 		}
@@ -79,7 +79,7 @@ func run(sourceCode SourceCode) (a Application, err error) {
 	defer src.Close()
 
 	fmt.Printf("TEMP: sourcePath: %s\n", sourceCode.Path)
-	destFilename := filepath.Join(sourceCode.Path,"Local Storage","cart.js")
+	destFilename := filepath.Join(sourceCode.Path, "Local Storage", "cart.js")
 
 	dst, err = os.Create(destFilename)
 	if err != nil {
@@ -88,7 +88,7 @@ func run(sourceCode SourceCode) (a Application, err error) {
 		return
 	}
 	defer dst.Close()
-	fmt.Printf("TEMP: copying %s to %s\n",cartName,destFilename)
+	fmt.Printf("TEMP: copying %s to %s\n", cartName, destFilename)
 	_, err = io.Copy(dst, src)
 	if err != nil {
 		fmt.Printf("Failed to copy compiled cart js to target file - %s\n", err)

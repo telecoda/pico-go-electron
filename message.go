@@ -8,32 +8,46 @@ import (
 	"github.com/asticode/go-astilectron-bootstrap"
 )
 
-
-
 // Application represents the content of an applicaton
 type Application struct {
-	Path     string `json:"path"`
-	Source   string `json:"source"`
+	Path     string    `json:"path"`
+	Source   string    `json:"source"`
 	CompResp *CompResp `json:"compResp"`
 }
 
 // SourceCode used from browser to backend
 type SourceCode struct {
-	Path string `json:"path"`
+	Path   string `json:"path"`
 	Source string `json:"source"`
 }
-
-
-const (
-	defaultCodeDir    = "gosrc"
-	defaultSourceFile = "main.go"
-)
 
 // handleMessages handles messages
 func handleMessages(_ *astilectron.Window, m bootstrap.MessageIn) (payload interface{}, err error) {
 	switch m.Name {
+	case "init":
+		var path string
+		if len(m.Payload) > 0 {
+			// Unmarshal payload
+			if err = json.Unmarshal(m.Payload, &path); err != nil {
+				payload = err.Error()
+				return
+			}
+		}
+		payload, err = initBackend(path)
+		if err != nil {
+			payload = err.Error()
+		}
+		return
 	case "load":
-		payload, err = load("")
+		var path string
+		if len(m.Payload) > 0 {
+			// Unmarshal payload
+			if err = json.Unmarshal(m.Payload, &path); err != nil {
+				payload = err.Error()
+				return
+			}
+		}
+		payload, err = load(path)
 		if err != nil {
 			payload = err.Error()
 		}
@@ -51,7 +65,7 @@ func handleMessages(_ *astilectron.Window, m bootstrap.MessageIn) (payload inter
 				return
 			}
 		}
-		payload,err = run(source)
+		payload, err = run(source)
 		if err != nil {
 			payload = err.Error()
 		}

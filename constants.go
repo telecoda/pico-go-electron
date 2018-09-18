@@ -1,4 +1,16 @@
-// Copyright 2015 Hajime Hoshi
+package main
+
+const (
+	defaultCodeDir    = "gosrc"
+	defaultSourceFile = "main.go"
+	defaultCompileDir = "js"
+	defaultOutputFile = "cart.js"
+)
+
+const aboutBody = `Welcome on to pico-go
+The golang fantasy console.`
+
+const demoSrc = `// Copyright 2015 Hajime Hoshi
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -74,4 +86,4 @@ func main() {
 	if err := ebiten.Run(update, screenWidth, screenHeight, 1, "Noise (Ebiten Demo)"); err != nil {
 		log.Fatal(err)
 	}
-}
+}`
