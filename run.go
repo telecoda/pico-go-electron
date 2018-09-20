@@ -54,6 +54,10 @@ func run(sourceCode SourceCode) (a Application, err error) {
 	var out []byte
 	out, err = cmd.CombinedOutput()
 	if err != nil {
+		if out == nil {
+			err = fmt.Errorf("Failed to call gopherjs - %s", err)
+			return
+		}		
 		raw := string(out)
 		fmt.Printf("TEMP: dir:%s-%s\n", dir, tmpfn)
 		fmt.Printf("TEMP: command:%s-%s\n", gopherJS, raw)
