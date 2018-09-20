@@ -21,12 +21,12 @@ type CompErr struct {
 
 // CompResp - compiler response
 type CompResp struct {
-	Raw string `json:"raw"`
+	Raw    string    `json:"raw"`
 	Errors []CompErr `json:"errors"`
 }
 
 // run - compiles and executes latest code
-func run(source string) (a Application, err error) {
+func run(sourceCode SourceCode) (a Application, err error) {
 
 	// save source to file
 	dir, err := ioutil.TempDir("", "example")
@@ -38,7 +38,7 @@ func run(source string) (a Application, err error) {
 	defer os.RemoveAll(dir) // clean up
 
 	tmpfn := filepath.Join(dir, "main.go")
-	if err = ioutil.WriteFile(tmpfn, []byte(source), 0666); err != nil {
+	if err = ioutil.WriteFile(tmpfn, []byte(sourceCode.Source), 0666); err != nil {
 		err = fmt.Errorf("Failed to write source to to temporary dir - %s", err)
 		return
 	}
@@ -49,14 +49,18 @@ func run(source string) (a Application, err error) {
 	cartName := filepath.Join(dir, "cart.js")
 	// we use GOOS=linux to compile to JS even on windows...
 	cmd := exec.Command(gopherJS, "build", tmpfn, "-o", cartName)
-	cmd.Env = append(os.Environ(),"GOOS=linux")
+	cmd.Env = append(os.Environ(), "GOOS=linux")
 	//cmd := exec.Command("GOOS=linux",gopherJS, "build", tmpfn, "-o", cartName)
 	var out []byte
 	out, err = cmd.CombinedOutput()
 	if err != nil {
-		raw:= string(out)
-		fmt.Printf("TEMP: dir:%s-%s\n",dir, tmpfn)
-		fmt.Printf("TEMP: command:%s-%s\n",gopherJS, raw)
+		if out == nil {
+			err = fmt.Errorf("Failed to call gopherjs - %s", err)
+			return
+		}		
+		raw := string(out)
+		fmt.Printf("TEMP: dir:%s-%s\n", dir, tmpfn)
+		fmt.Printf("TEMP: command:%s-%s\n", gopherJS, raw)
 		compResp := &CompResp{
 			Raw: raw,
 		}
@@ -78,12 +82,8 @@ func run(source string) (a Application, err error) {
 	}
 	defer src.Close()
 
-	destDir,err := getDestDir()
-	if err != nil {
-		return
-	}
-
-	destFilename := filepath.Join(destDir, "cart.js")
+	fmt.Printf("TEMP: sourcePath: %s\n", sourceCode.Path)
+	destFilename := filepath.Join(sourceCode.Path, "Local Storage", "cart.js")
 
 	dst, err = os.Create(destFilename)
 	if err != nil {
@@ -92,15 +92,13 @@ func run(source string) (a Application, err error) {
 		return
 	}
 	defer dst.Close()
-	fmt.Printf("TEMP: copying %s to %s\n",cartName,destFilename)
+	fmt.Printf("TEMP: copying %s to %s\n", cartName, destFilename)
 	_, err = io.Copy(dst, src)
 	if err != nil {
 		fmt.Printf("Failed to copy compiled cart js to target file - %s\n", err)
 		err = fmt.Errorf("Failed to copy compiled cart js to target file - %s", err)
 		return
 	}
-
-	// err = fmt.Errorf("TEMP: Failed to copy compiled cart js to target file source: %s - dest: %s", cartName,destFilename)
 
 	return
 }

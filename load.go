@@ -5,19 +5,18 @@ import (
 	"io/ioutil"
 	"os"
 	"path/filepath"
+	"strings"
 )
 
 // loads sourcecode from a specific path
 func load(path string) (a Application, err error) {
 
-	wd,err := os.Executable()
-	if err != nil {
-		err = fmt.Errorf("Failed to get executable details: %s", err)
-		return
-	}
-	// If no path is provided, use the user's home dir
-	if len(path) == 0 {
-		path = filepath.Join(wd, "../resources/app/gosrc/main.go")
+	fmt.Printf("TEMP: path: %s\n", path)
+	// If doesn't end with a filename
+	// look in default location
+	if !strings.HasSuffix(path,".go") {
+		// this must be userData path..
+		path = filepath.Join(path,defaultCodeDir, defaultSourceFile)
 	}
 
 	f, err := os.Open(path)
@@ -34,8 +33,8 @@ func load(path string) (a Application, err error) {
 
 	// Init Application
 	a = Application{
-		Source:   string(src),
-		Path:     path,
+		Source: string(src),
+		Path:   path,
 	}
 
 	return

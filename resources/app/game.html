@@ -1,24 +1,89 @@
 <html>
 	<head>
 		<meta charset="utf-8">
+		<link rel="stylesheet" href="static/css/base.css" />
 	</head>
-	<body id="gameWrapper"><script src="dynamic/js/cart.js"></script></body>
+	<body id="gameWrapper" onload="setResizer()"><script type="text/javascript"></script>
 	<script type="text/javascript">
-	var resizer = function () {
-		var W = H = 512;
-		var scale = Math.min(window.innerHeight/H, window.innerWidth/W);
-	
-		var canvas = document.getElementById('gameWrapper').childNodes[1];
-		canvas.width= W;
-		canvas.height= H;
-		canvas.style.position = "absolute";
-		canvas.style.width = (W * scale) + "px";
-		canvas.style.height = (H * scale) + "px";
-		canvas.style.left = (window.innerWidth * 0.5 - W * scale * 0.5) + "px";
-		canvas.style.top = (window.innerHeight * 0.5 - H * scale * 0.5) + "px";
-	};
+		/* 
+			This code is added so we can remove the resize() event listener added by ebiten code
+			as soon as the cart.js code runs it adds its own resize handler that force the canvas
+			to remain a specific size. We want the canvas to scale based upon the <div> it is contained
+			inside.
+			
+			We hijack the addEventListener calls and store them in an array.
+			This allows us to remove ALL event listeners for a particular type and then add our own.
+		*/
+		var listeners = {};
+		var originalEventListener = window.addEventListener;
+		window.addEventListener = function(type, fn, options) {
+			if (!listeners[type])
+				listeners[type] = [];
 
-	window.addEventListener('resize', resizer); 
-	resizer(); // initial resize
+			listeners[type].push(fn);
+			return originalEventListener(type, fn, options);
+		}
+
+		var removeAllEventListener = function(type) {
+			if (!listeners[type] || !listeners[type].length)
+				return;
+
+			for (let i = 0; i < listeners[type].length; i++)
+				window.removeEventListener(type, listeners[type][i]);
+		}
+		//
 	</script>
+	<script src="static/js/game.js"></script>
+	<script type="text/javascript">
+		gameFuncs.init();
+		function resizer () {
+			/*
+				This is the resize code that tries to scale the canvas to the largest possible size
+				within it's parent but maintain aspect ratio.
+			*/
+
+			var W = 320;
+			var H = 240;
+
+			// mult dimension by "deviceScale" ... 
+			var deviceScale = 2;
+
+			W = W * deviceScale;
+			H = H * deviceScale;
+
+			var scale = Math.min(window.innerHeight/H, window.innerWidth/W);
+			// get a ref to canvas
+			var canvasElements = document.getElementsByTagName("canvas");
+			if (typeof canvasElements === "undefined" || canvasElements.length===0) {
+				return;
+			}
+			var canvas = canvasElements[0];
+			canvas.width= W;
+			canvas.height= H;
+			canvas.id = "canvas-id";
+			if (typeof canvas.style === "undefined") {
+				return;
+			}
+			canvas.style.position = "absolute";
+			var newWidth = (W * scale);
+			canvas.style.width = newWidth + "px";
+			var newHeight = (H * scale);
+			canvas.style.height = newHeight + "px";
+			canvas.style.left = (window.innerWidth * 0.5 - W * scale * 0.5) + "px";
+			canvas.style.top = (window.innerHeight * 0.5 - H * scale * 0.5) + "px";
+			console.log("resize-resized w:" + canvas.style.width + " h:"+ canvas.style.height + "win h:"+ window.innerHeight + "win w:" + window.innerWidth );
+			console.log("resize-resized newWidth:" + newWidth + " newHeight:"+ newHeight);
+			console.log("resize-resized left:" + canvas.style.left + " top:"+ canvas.style.top + "scale: "+ scale);
+
+		};
+		function setResizer() {
+			/*
+				This function removes the unwanted ebiten resize listener and adds our own instead
+			*/
+			removeAllEventListener("resize");
+			window.addEventListener("resize", resizer); 
+			resizer(); // initial resize
+		};
+	</script>
+	</body>
 </html>

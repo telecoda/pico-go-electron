@@ -11,10 +11,6 @@ import (
 	"github.com/pkg/errors"
 )
 
-// Constants
-const aboutBody = `Welcome on to pico-go
-The golang fantasy console.`
-
 // Vars
 var (
 	AppName string
