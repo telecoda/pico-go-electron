@@ -9,6 +9,7 @@ import (
 	"path/filepath"
 	"strconv"
 	"strings"
+	"syscall"
 )
 
 // CompErr - compiler errors
@@ -49,6 +50,7 @@ func run(sourceCode SourceCode) (a Application, err error) {
 	cartName := filepath.Join(dir, "cart.js")
 	// we use GOOS=linux to compile to JS even on windows...
 	cmd := exec.Command(gopherJS, "build", tmpfn, "-o", cartName)
+	cmd.SysProcAttr = &syscall.SysProcAttr{HideWindow: true}
 	cmd.Env = append(os.Environ(), "GOOS=linux")
 	//cmd := exec.Command("GOOS=linux",gopherJS, "build", tmpfn, "-o", cartName)
 	var out []byte
