@@ -94,6 +94,10 @@ let index = {
                     annotations.push(errs[i]);
                     errorMessage += errs[i].text + "\n"
                 }
+                // highlight first error line
+                editor.moveCursorToPosition(errs[0].row-1,0);
+                editor.moveCursorTo(errs[0].row,0);
+                editor.scrollToLine(errs[0].row-1);
                 editor.session.setAnnotations(annotations);
                 document.getElementById("compErrors").innerHTML =message.payload.compResp.raw;
                 dialog.showErrorBox("Compile Error",errorMessage);
