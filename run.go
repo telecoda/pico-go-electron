@@ -5,7 +5,6 @@ import (
 	"io"
 	"io/ioutil"
 	"os"
-	"os/exec"
 	"path/filepath"
 	"strconv"
 	"strings"
@@ -37,20 +36,18 @@ func run(sourceCode SourceCode) (a Application, err error) {
 
 	defer os.RemoveAll(dir) // clean up
 
-	tmpfn := filepath.Join(dir, "main.go")
-	if err = ioutil.WriteFile(tmpfn, []byte(sourceCode.Source), 0666); err != nil {
+	tmpFileName := filepath.Join(dir, "main.go")
+	if err = ioutil.WriteFile(tmpFileName, []byte(sourceCode.Source), 0666); err != nil {
 		err = fmt.Errorf("Failed to write source to to temporary dir - %s", err)
 		return
 	}
 
-	fmt.Printf("Writing to file: %s - %s\n", dir, tmpfn)
+	fmt.Printf("Writing to file: %s - %s\n", dir, tmpFileName)
 
 	// compile with GopherJS
-	cartName := filepath.Join(dir, "cart.js")
-	// we use GOOS=linux to compile to JS even on windows...
-	cmd := exec.Command(gopherJS, "build", tmpfn, "-o", cartName)
-	cmd.Env = append(os.Environ(), "GOOS=linux")
-	//cmd := exec.Command("GOOS=linux",gopherJS, "build", tmpfn, "-o", cartName)
+	outFile := filepath.Join(dir, "cart.js")
+
+	cmd := getBuildCmd(tmpFileName, outFile)
 	var out []byte
 	out, err = cmd.CombinedOutput()
 	if err != nil {
@@ -59,7 +56,7 @@ func run(sourceCode SourceCode) (a Application, err error) {
 			return
 		}		
 		raw := string(out)
-		fmt.Printf("TEMP: dir:%s-%s\n", dir, tmpfn)
+		fmt.Printf("TEMP: dir:%s-%s\n", dir, tmpFileName)
 		fmt.Printf("TEMP: command:%s-%s\n", gopherJS, raw)
 		compResp := &CompResp{
 			Raw: raw,
@@ -74,7 +71,7 @@ func run(sourceCode SourceCode) (a Application, err error) {
 
 	// copy compile code back
 	var src, dst *os.File
-	src, err = os.Open(cartName)
+	src, err = os.Open(outFile)
 	if err != nil {
 		fmt.Printf("Failed to open cart js file - %s\n", err)
 		err = fmt.Errorf("Failed to open cart js file - %s", err)
@@ -92,7 +89,7 @@ func run(sourceCode SourceCode) (a Application, err error) {
 		return
 	}
 	defer dst.Close()
-	fmt.Printf("TEMP: copying %s to %s\n", cartName, destFilename)
+	fmt.Printf("TEMP: copying %s to %s\n", outFile, destFilename)
 	_, err = io.Copy(dst, src)
 	if err != nil {
 		fmt.Printf("Failed to copy compiled cart js to target file - %s\n", err)
