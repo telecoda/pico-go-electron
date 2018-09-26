@@ -46,11 +46,8 @@
 			var W = 320;
 			var H = 240;
 
-			// mult dimension by "deviceScale" ... 
-			var deviceScale = 2;
-
-			W = W * deviceScale;
-			H = H * deviceScale;
+			W = W * devicePixelRatio;
+			H = H * devicePixelRatio;
 
 			var scale = Math.min(window.innerHeight/H, window.innerWidth/W);
 			// get a ref to canvas

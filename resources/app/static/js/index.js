@@ -106,6 +106,7 @@ let index = {
             
             // if no errors - code compiled successfully
             // switch to game tab
+            var deviceScale = message.payload.deviceScale;
             document.getElementById("gameFrame").contentWindow.location.reload();
             document.getElementById("gameTab").click();
             // refresh js
