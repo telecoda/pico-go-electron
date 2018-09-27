@@ -1,6 +1,8 @@
 package main
 
 import (
+	"bufio"
+	"bytes"
 	"fmt"
 	"io"
 	"io/ioutil"
@@ -8,6 +10,14 @@ import (
 	"path/filepath"
 	"strconv"
 	"strings"
+)
+
+const (
+	widthField  = "screenWidth"
+	heightField = "screenHeight"
+
+	defaultWidth  = 320
+	defaultHeight = 240
 )
 
 // CompErr - compiler errors
@@ -54,17 +64,14 @@ func run(sourceCode SourceCode) (a Application, err error) {
 		if out == nil {
 			err = fmt.Errorf("Failed to call gopherjs - %s", err)
 			return
-		}		
+		}
 		raw := string(out)
-		fmt.Printf("TEMP: dir:%s-%s\n", dir, tmpFileName)
-		fmt.Printf("TEMP: command:%s-%s\n", gopherJS, raw)
 		compResp := &CompResp{
 			Raw: raw,
 		}
 		// decode compiler error
 		compResp.Errors = getCompErrs(raw)
 		a.CompResp = compResp
-		//err = fmt.Errorf("Failed to compile source using GopherJS - %s", err)
 		err = nil
 		return
 	}
@@ -79,7 +86,6 @@ func run(sourceCode SourceCode) (a Application, err error) {
 	}
 	defer src.Close()
 
-	fmt.Printf("TEMP: sourcePath: %s\n", sourceCode.Path)
 	destFilename := filepath.Join(sourceCode.Path, "Local Storage", "cart.js")
 
 	dst, err = os.Create(destFilename)
@@ -89,13 +95,14 @@ func run(sourceCode SourceCode) (a Application, err error) {
 		return
 	}
 	defer dst.Close()
-	fmt.Printf("TEMP: copying %s to %s\n", outFile, destFilename)
 	_, err = io.Copy(dst, src)
 	if err != nil {
 		fmt.Printf("Failed to copy compiled cart js to target file - %s\n", err)
 		err = fmt.Errorf("Failed to copy compiled cart js to target file - %s", err)
 		return
 	}
+
+	a.ScreenWidth, a.ScreenHeight = getScreenDimensions(sourceCode.Source)
 
 	return
 }
@@ -149,4 +156,70 @@ func getCompErrs(output string) []CompErr {
 	}
 
 	return errs
+}
+
+// getScreenDimensions - inspects source code for declaration of screen dimensions to pass to javascript
+func getScreenDimensions(source string) (int, int) {
+
+	var width int
+	var height int
+
+	buf := bytes.NewBuffer([]byte(source))
+	r := bufio.NewReader(buf)
+
+	for {
+		line, err := r.ReadString('\n')
+		if err != nil {
+			break
+		}
+		if strings.Contains(line, widthField) && width == 0 {
+			width = getIntValue(line, widthField)
+		}
+		if strings.Contains(line, heightField) && height == 0 {
+			height = getIntValue(line, heightField)
+		}
+
+		if width != 0 && height != 0 {
+			break
+		}
+
+	}
+
+	// if sizes are not found, use sensible defaults
+	if width == 0 {
+		width = defaultWidth
+	}
+	if height == 0 {
+		height = defaultHeight
+	}
+
+	return width, height
+}
+
+// getIntValue - gets a integer value of a field base on a line in the source code
+func getIntValue(line, fieldname string) int {
+
+	// This code looks for declarations or assignments
+	// eg. screenWidth := 320
+	// or. screenWidth = 320
+
+	trimmed := strings.TrimSpace(line)
+	trimmed = strings.Replace(trimmed,"	","",-1) // remove tabs  
+	replaced := strings.Replace(trimmed, "var "+fieldname, "", 1)
+	replaced = strings.Replace(replaced, "const "+fieldname, "", 1)
+	replaced = strings.Replace(replaced, fieldname, "", 1)
+	replaced = strings.Replace(replaced, ":=", "", 1)
+	replaced = strings.Replace(replaced, "=", "", 1)
+	noComments := strings.Split(replaced, "//")
+	intStr := strings.Split(noComments[0], "/*")
+
+	// We "should" just have an integer value as a string now
+	finalStr := strings.TrimSpace(intStr[0])
+
+	i, err := strconv.ParseInt(finalStr, 10, 64)
+	if err != nil {
+		return 0
+	}
+
+	return int(i)
 }

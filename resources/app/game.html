@@ -1,6 +1,7 @@
 <html>
 	<head>
 		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<link rel="stylesheet" href="static/css/base.css" />
 	</head>
 	<body id="gameWrapper" onload="setResizer()"><script type="text/javascript"></script>
@@ -42,14 +43,11 @@
 				within it's parent but maintain aspect ratio.
 			*/
 
-			var W = 320;
-			var H = 240;
+			var W = parent.screenWidth;
+			var H = parent.screenHeight;
 
-			// mult dimension by "deviceScale" ... 
-			var deviceScale = 2;
-
-			W = W * deviceScale;
-			H = H * deviceScale;
+			W = W * devicePixelRatio;
+			H = H * devicePixelRatio;
 
 			var scale = Math.min(window.innerHeight/H, window.innerWidth/W);
 			// get a ref to canvas

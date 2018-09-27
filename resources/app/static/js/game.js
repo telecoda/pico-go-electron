@@ -19,7 +19,7 @@ let gameFuncs = {
                 script_element[0].innerText="";
                 script_element[0].src = cart_src;
             }
-        } 
+        }
     }
 };
 

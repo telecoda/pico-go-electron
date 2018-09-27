@@ -106,6 +106,8 @@ let index = {
             
             // if no errors - code compiled successfully
             // switch to game tab
+            screenWidth = message.payload.screenWidth;
+            screenHeight = message.payload.screenHeight;
             document.getElementById("gameFrame").contentWindow.location.reload();
             document.getElementById("gameTab").click();
             // refresh js
