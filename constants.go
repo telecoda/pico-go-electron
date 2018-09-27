@@ -24,8 +24,6 @@ const demoSrc = `// Copyright 2015 Hajime Hoshi
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// +build example jsgo
-
 package main
 
 import (

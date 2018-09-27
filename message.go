@@ -10,9 +10,11 @@ import (
 
 // Application represents the content of an applicaton
 type Application struct {
-	Path     string    `json:"path"`
-	Source   string    `json:"source"`
-	CompResp *CompResp `json:"compResp"`
+	Path         string    `json:"path"`
+	Source       string    `json:"source"`
+	CompResp     *CompResp `json:"compResp"`
+	ScreenWidth  int       `json:"screenWidth"`
+	ScreenHeight int       `json:"screenHeight"`
 }
 
 // SourceCode used from browser to backend

@@ -11,7 +11,6 @@ import (
 // loads sourcecode from a specific path
 func load(path string) (a Application, err error) {
 
-	fmt.Printf("TEMP: path: %s\n", path)
 	// If doesn't end with a filename
 	// look in default location
 	if !strings.HasSuffix(path, ".go") {
