@@ -47,6 +47,10 @@ let index = {
         document.getElementById("path").innerHTML = "<new>";
         editor.session.setValue(payload)
     },
+    // open menu clicked
+    openMenu: function(message) {
+        dialog.showMessageBox({"title": "Open","message": message});
+    },
     // load - call backend to load source from path and init editor
     load: function(path) {
         // Create message
@@ -135,6 +139,10 @@ let index = {
                 case "new":
                     index.newMenu(message.payload);
                     return {payload: "new clicked!"};
+                    break;
+                case "open":
+                    index.openMenu(message.payload);
+                    return {payload: "open clicked!"};
                     break;
             }
         });

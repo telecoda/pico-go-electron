@@ -48,7 +48,6 @@ func main() {
 									astilog.Error(errors.Wrap(err, "unmarshaling payload failed"))
 									return
 								}
-								astilog.Infof("About modal has been displayed and payload is %s!", s)
 							}); err != nil {
 								astilog.Error(errors.Wrap(err, "sending about event failed"))
 							}
@@ -73,7 +72,24 @@ func main() {
 										return
 									}	
 								}
-								astilog.Infof("New file message payload is %s!", s)
+							}); err != nil {
+								astilog.Error(errors.Wrap(err, "sending new event failed"))
+							}
+							return
+						},
+					},
+					{
+						Label: astilectron.PtrStr("Open"),
+						OnClick: func(e astilectron.Event) (deleteListener bool) {
+							if err := bootstrap.SendMessage(w, "open", demoSrc, func(m *bootstrap.MessageIn) {
+								// Unmarshal payload
+								var s string
+								if m != nil {
+									if err := json.Unmarshal(m.Payload, &s); err != nil {
+										astilog.Error(errors.Wrap(err, "unmarshaling payload failed"))
+										return
+									}	
+								}
 							}); err != nil {
 								astilog.Error(errors.Wrap(err, "sending new event failed"))
 							}
