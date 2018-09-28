@@ -52,8 +52,6 @@ func run(sourceCode SourceCode) (a Application, err error) {
 		return
 	}
 
-	fmt.Printf("Writing to file: %s - %s\n", dir, tmpFileName)
-
 	// compile with GopherJS
 	outFile := filepath.Join(dir, "cart.js")
 

@@ -2,7 +2,6 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
 
 	"github.com/asticode/go-astilectron"
 	"github.com/asticode/go-astilectron-bootstrap"
@@ -54,8 +53,6 @@ func handleMessages(_ *astilectron.Window, m bootstrap.MessageIn) (payload inter
 			payload = err.Error()
 		}
 		return
-	case "save":
-		return nil, fmt.Errorf("Save function not implemented yet")
 	case "run":
 		// Unmarshal payload
 		var source SourceCode

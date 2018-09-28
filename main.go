@@ -2,7 +2,6 @@ package main
 
 import (
 	"flag"
-
 	"encoding/json"
 
 	"github.com/asticode/go-astilectron"
@@ -37,7 +36,7 @@ func main() {
 		Debug: *debug,
 		MenuOptions: []*astilectron.MenuItemOptions{
 			&astilectron.MenuItemOptions{
-				Label: astilectron.PtrStr("File"),
+				Label: astilectron.PtrStr("Pico-go"),
 				SubMenu: []*astilectron.MenuItemOptions{
 					{
 						Label: astilectron.PtrStr("About"),
@@ -57,6 +56,30 @@ func main() {
 						},
 					},
 					{Role: astilectron.MenuItemRoleClose},
+				},
+			},
+			&astilectron.MenuItemOptions{
+				Label: astilectron.PtrStr("File"),
+				SubMenu: []*astilectron.MenuItemOptions{
+					{
+						Label: astilectron.PtrStr("New"),
+						OnClick: func(e astilectron.Event) (deleteListener bool) {
+							if err := bootstrap.SendMessage(w, "new", demoSrc, func(m *bootstrap.MessageIn) {
+								// Unmarshal payload
+								var s string
+								if m != nil {
+									if err := json.Unmarshal(m.Payload, &s); err != nil {
+										astilog.Error(errors.Wrap(err, "unmarshaling payload failed"))
+										return
+									}	
+								}
+								astilog.Infof("New file message payload is %s!", s)
+							}); err != nil {
+								astilog.Error(errors.Wrap(err, "sending new event failed"))
+							}
+							return
+						},
+					},
 				},
 			},
 			&astilectron.MenuItemOptions{

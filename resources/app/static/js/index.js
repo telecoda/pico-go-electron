@@ -1,8 +1,7 @@
 const {app} = require('electron').remote
 let index = {
-    about: function(message) {
-        dialog.showMessageBox({"title": "About","message": message});
-    },
+
+    // init - called during application start, invokes backend initialisation
     init: function() {
         // Init
         asticode.loader.init();
@@ -39,6 +38,16 @@ let index = {
             index.load(userPath);
         })
     },
+    // about menu clicked
+    aboutMenu: function(message) {
+        dialog.showMessageBox({"title": "About","message": message});
+    },
+    // new menu clicked
+    newMenu: function(payload) {
+        document.getElementById("path").innerHTML = "<new>";
+        editor.session.setValue(payload)
+    },
+    // load - call backend to load source from path and init editor
     load: function(path) {
         // Create message
         let message = {"name": "load"};
@@ -57,10 +66,11 @@ let index = {
                 return
             }
 
-            document.getElementById("path").innerHTML = "path: " +message.payload.path;
+            document.getElementById("path").innerHTML = message.payload.path;
             editor.session.setValue(message.payload.source)
         })
     },
+    // run - call to backend to compile and run current sourcecode
     run: function() {
 
         payload = {
@@ -113,12 +123,18 @@ let index = {
             // refresh js
         })
     },
+
+    // meno option listener
     listen: function() {
         astilectron.onMessage(function(message) {
             switch (message.name) {
                 case "about":
-                    index.about(message.payload);
-                    return {payload: "payload"};
+                    index.aboutMenu(message.payload);
+                    return {payload: "about clicked!"};
+                    break;
+                case "new":
+                    index.newMenu(message.payload);
+                    return {payload: "new clicked!"};
                     break;
             }
         });
