@@ -16,6 +16,7 @@ var (
 	BuiltAt string
 	debug   = flag.Bool("d", false, "enables the debug mode")
 	w       *astilectron.Window
+	saveEnabled *bool
 )
 
 func main() {
@@ -61,6 +62,7 @@ func main() {
 				Label: astilectron.PtrStr("File"),
 				SubMenu: []*astilectron.MenuItemOptions{
 					{
+						Accelerator: astilectron.NewAccelerator("Command", "n"),
 						Label: astilectron.PtrStr("New"),
 						OnClick: func(e astilectron.Event) (deleteListener bool) {
 							if err := bootstrap.SendMessage(w, "new", demoSrc, func(m *bootstrap.MessageIn) {
@@ -77,11 +79,13 @@ func main() {
 							}
 							return
 						},
+						Type: astilectron.MenuItemTypeCheckbox,
 					},
 					{
+						Accelerator: astilectron.NewAccelerator("Command", "o"),
 						Label: astilectron.PtrStr("Open"),
 						OnClick: func(e astilectron.Event) (deleteListener bool) {
-							if err := bootstrap.SendMessage(w, "open", demoSrc, func(m *bootstrap.MessageIn) {
+							if err := bootstrap.SendMessage(w, "open", "open this", func(m *bootstrap.MessageIn) {
 								// Unmarshal payload
 								var s string
 								if m != nil {
@@ -91,7 +95,46 @@ func main() {
 									}	
 								}
 							}); err != nil {
-								astilog.Error(errors.Wrap(err, "sending new event failed"))
+								astilog.Error(errors.Wrap(err, "sending open event failed"))
+							}
+							return
+						},
+					},
+					{
+						Accelerator: astilectron.NewAccelerator("Command", "s"),
+						Label: astilectron.PtrStr("Save"),
+						OnClick: func(e astilectron.Event) (deleteListener bool) {
+							if err := bootstrap.SendMessage(w, "save", "save this", func(m *bootstrap.MessageIn) {
+								// Unmarshal payload
+								var s string
+								if m != nil {
+									if err := json.Unmarshal(m.Payload, &s); err != nil {
+										astilog.Error(errors.Wrap(err, "unmarshaling payload failed"))
+										return
+									}	
+								}
+							}); err != nil {
+								astilog.Error(errors.Wrap(err, "sending save event failed"))
+							}
+							return
+						},
+						Enabled: saveEnabled,
+					},
+					{
+						Accelerator: astilectron.NewAccelerator("Command", "+s"),
+						Label: astilectron.PtrStr("Save As..."),
+						OnClick: func(e astilectron.Event) (deleteListener bool) {
+							if err := bootstrap.SendMessage(w, "saveAs", "saveAs this", func(m *bootstrap.MessageIn) {
+								// Unmarshal payload
+								var s string
+								if m != nil {
+									if err := json.Unmarshal(m.Payload, &s); err != nil {
+										astilog.Error(errors.Wrap(err, "unmarshaling payload failed"))
+										return
+									}	
+								}
+							}); err != nil {
+								astilog.Error(errors.Wrap(err, "sending saveAs event failed"))
 							}
 							return
 						},

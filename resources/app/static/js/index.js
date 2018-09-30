@@ -49,14 +49,32 @@ let index = {
     },
     // open menu clicked
     openMenu: function(message) {
-        dialog.showMessageBox({"title": "Open","message": message});
+        dialog.showOpenDialog({"title": "Select sourcefile","message": message});
+    },
+    // save menu clicked
+    saveMenu: function(message) {
+        if (typeof saveFilename !== "undefined") {
+            this.save(saveFilename);
+        } else {
+            this.saveAsMenu();
+        }
+    },
+    // saveAs menu clicked
+    saveAsMenu: function() {
+        saveFilename = dialog.showSaveDialog({"title": "Select file to save as","filters": [{"name":"go files","extensions":["go"]}]});
+        if (typeof saveFilename !== "undefined") {
+            this.save(saveFilename);
+        }
     },
     // load - call backend to load source from path and init editor
     load: function(path) {
         // Create message
         let message = {"name": "load"};
         if (typeof path !== "undefined") {
-            message.payload = path
+            payload = {
+                "path": path,
+            }
+            message.payload = payload
         }
         // Send message
         asticode.loader.show();
@@ -128,6 +146,32 @@ let index = {
         })
     },
 
+    // save - saves sourcecode to path
+    save: function(path) {
+        // Create message
+        let message = {"name": "save"};
+        if (typeof path !== "undefined") {
+            payload = {
+                "path": path,
+                "source":editor.session.getValue()
+            }
+            message.payload = payload
+        }
+        // Send message
+        asticode.loader.show();
+        astilectron.sendMessage(message, function(message) {
+            // Init
+            asticode.loader.hide();
+
+            // Check error
+            if (message.name === "error") {
+                dialog.showErrorBox("Save Error",message.payload);
+                return
+            }
+            document.getElementById("path").innerHTML = message.payload.path;
+        })
+    },
+
     // meno option listener
     listen: function() {
         astilectron.onMessage(function(message) {
@@ -143,6 +187,14 @@ let index = {
                 case "open":
                     index.openMenu(message.payload);
                     return {payload: "open clicked!"};
+                    break;
+                case "save":
+                    index.saveMenu(message.payload);
+                    return {payload: "save clicked!"};
+                    break;
+                case "saveAs":
+                    index.saveAsMenu(message.payload);
+                    return {payload: "saveAs clicked!"};
                     break;
             }
         });

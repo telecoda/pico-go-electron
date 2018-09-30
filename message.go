@@ -40,22 +40,22 @@ func handleMessages(_ *astilectron.Window, m bootstrap.MessageIn) (payload inter
 		}
 		return
 	case "load":
-		var path string
+		source :=SourceCode{}
 		if len(m.Payload) > 0 {
 			// Unmarshal payload
-			if err = json.Unmarshal(m.Payload, &path); err != nil {
+			if err = json.Unmarshal(m.Payload, &source); err != nil {
 				payload = err.Error()
 				return
 			}
 		}
-		payload, err = load(path)
+		payload, err = load(source.Path)
 		if err != nil {
 			payload = err.Error()
 		}
 		return
 	case "run":
 		// Unmarshal payload
-		var source SourceCode
+		source :=SourceCode{}
 
 		if len(m.Payload) > 0 {
 			// Unmarshal payload
@@ -68,6 +68,23 @@ func handleMessages(_ *astilectron.Window, m bootstrap.MessageIn) (payload inter
 		if err != nil {
 			payload = err.Error()
 		}
+		return
+	case "save":
+		// Unmarshal payload
+		source :=SourceCode{}
+
+		if len(m.Payload) > 0 {
+			// Unmarshal payload
+			if err = json.Unmarshal(m.Payload, &source); err != nil {
+				payload = err.Error()
+				return
+			}
+		}
+		payload, err = save(source)
+		if err != nil {
+			payload = err.Error()
+		}
+		return
 	}
 	return
 }
