@@ -32,10 +32,6 @@ let index = {
                     return
                 }
             })
-
-            
-            // 
-            //index.load(userPath);
         })
     },
     // about menu clicked
@@ -44,7 +40,7 @@ let index = {
     },
     // new menu clicked
     newMenu: function(payload) {
-        document.getElementById("path").innerHTML = "<new>";
+        document.title = "<untitled>";
         editor.session.setValue(payload)
     },
     // open menu clicked
@@ -92,7 +88,7 @@ let index = {
                 return
             }
 
-            document.getElementById("path").innerHTML = message.payload.path;
+            document.title = message.payload.path;
             editor.session.setValue(message.payload.source)
         })
     },
@@ -172,7 +168,7 @@ let index = {
                 dialog.showErrorBox("Save Error",message.payload);
                 return
             }
-            document.getElementById("path").innerHTML = message.payload.path;
+            document.title = message.payload.path;
         })
     },
 

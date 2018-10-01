@@ -16,38 +16,34 @@
 
     <div>
 
-        <!-- Nav tabs -->
-        <ul class="nav nav-pills" role="tablist">
-            <li role="presentation" class="active">
-                <a href="#codeeditor" aria-controls="codeeditor" role="tab" data-toggle="tab">Code</a>
-            </li>
-            <li role="presentation">
-                <a href="#game" id="gameTab" aria-controls="game" role="game" data-toggle="tab">Game</a>
-            </li>
-        </ul>
+        <div class="row">
+            <div class="col-2">
+                <img class="logo" src="./assets/logo.png">
+            </div>
+            <div class="col-9 navTab">
+                <!-- Nav tabs -->
+                <ul class="nav nav-pills" role="tablist">
+                    <li role="nav-item" class="active navTab">
+                        <a href="#codeeditor" aria-controls="codeeditor" data-toggle="tab">Code</a>
+                    </li>
+                    <li role="nav-item" class="navTab">
+                        <a href="#game" id="gameTab" aria-controls="game" data-toggle="tab">Game</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-1">
+                <button id="runButton" type="button" class="btn btn-primary btn-lg btn-danger runButton">Run</button>
+            </div>
+        </div>
 
         <!-- Tab panes -->
         <div class="tab-content">
             <!-- Code editor panel -->
             <div role="tabpanel" class="tab-pane active" id="codeeditor">
                 <div class="no-gutters">
-                    <div class="row">
-                        <div class="col">Path:</div>
-                        <div class="col-10" id="path">not loaded</div>
-                    </div>
-                    <div class="row">
+                    <div class="h-100 row">
                         <div class="col">
-                            <div id="editor">package main import "fmt" func main() { fmt.Println("Hello world") }
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col">Controls:</div>
-                    </div>
-                    <div class="row">
-                        <div class="col-10"></div>
-                        <div class="col-2">
-                            <button id="runButton" type="button" class="btn btn-primary btn-lg btn-danger">Run</button>
+                            <div id="editor"></div>
                         </div>
                     </div>
                     <div class="row">
@@ -62,7 +58,6 @@
                 </div>
             </div>
         </div>
-
     </div>
 
     
@@ -79,11 +74,14 @@
         var editor = ace.edit("editor");
         editor.setTheme("ace/theme/monokai");
         editor.setOptions({
-            enableBasicAutocompletion: true
+            enableBasicAutocompletion: true,
+            autoScrollEditorIntoView : true,
+            maxLines : 1000
         });
         editor.session.setMode("ace/mode/golang");
         // load initial source code
         editor.session.setValue("Welcome to pico-go, select <New> from file menu to get started");
+        document.title = "<untitled>";
     </script>
     <script type="text/javascript" src="static/lib/jquery-2.2.4/jquery-min.js"></script>
     <script>window.jQuery = window.$ = module.exports</script>
