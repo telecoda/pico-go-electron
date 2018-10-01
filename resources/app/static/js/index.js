@@ -34,8 +34,8 @@ let index = {
             })
 
             
-            // load initial source code
-            index.load(userPath);
+            // 
+            //index.load(userPath);
         })
     },
     // about menu clicked
@@ -49,30 +49,34 @@ let index = {
     },
     // open menu clicked
     openMenu: function(message) {
-        dialog.showOpenDialog({"title": "Select sourcefile","message": message});
+        filenames = dialog.showOpenDialog({"title": "Select sourcefile","message": message});
+        if (typeof filenames !== "undefined" && filenames.length >0)  {
+            filename = filenames[0];
+            this.load(filenames[0]);
+        }
     },
     // save menu clicked
     saveMenu: function(message) {
-        if (typeof saveFilename !== "undefined") {
-            this.save(saveFilename);
+        if (typeof filename !== "undefined") {
+            this.save(filename);
         } else {
             this.saveAsMenu();
         }
     },
     // saveAs menu clicked
     saveAsMenu: function() {
-        saveFilename = dialog.showSaveDialog({"title": "Select file to save as","filters": [{"name":"go files","extensions":["go"]}]});
-        if (typeof saveFilename !== "undefined") {
-            this.save(saveFilename);
+        filename = dialog.showSaveDialog({"title": "Select file to save as","filters": [{"name":"go files","extensions":["go"]}]});
+        if (typeof filename !== "undefined") {
+            this.save(filename);
         }
     },
     // load - call backend to load source from path and init editor
-    load: function(path) {
+    load: function(filename) {
         // Create message
         let message = {"name": "load"};
-        if (typeof path !== "undefined") {
+        if (typeof filename !== "undefined") {
             payload = {
-                "path": path,
+                "path": filename,
             }
             message.payload = payload
         }
@@ -146,13 +150,13 @@ let index = {
         })
     },
 
-    // save - saves sourcecode to path
-    save: function(path) {
+    // save - saves sourcecode to filename
+    save: function(filename) {
         // Create message
         let message = {"name": "save"};
-        if (typeof path !== "undefined") {
+        if (typeof filename !== "undefined") {
             payload = {
-                "path": path,
+                "path": filename,
                 "source":editor.session.getValue()
             }
             message.payload = payload

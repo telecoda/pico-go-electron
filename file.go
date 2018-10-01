@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
-	"path/filepath"
 	"strings"
 )
 
@@ -14,8 +13,8 @@ func load(path string) (a Application, err error) {
 	// If doesn't end with a filename
 	// look in default location
 	if !strings.HasSuffix(path, ".go") {
-		// this must be userData path..
-		path = filepath.Join(path, defaultCodeDir, defaultSourceFile)
+		err = fmt.Errorf("Failed to open file: %s. File MUST bit a .go file", path)
+		return
 	}
 
 	f, err := os.Open(path)

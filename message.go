@@ -2,7 +2,7 @@ package main
 
 import (
 	"encoding/json"
-
+	"fmt"
 	"github.com/asticode/go-astilectron"
 	"github.com/asticode/go-astilectron-bootstrap"
 )
@@ -44,7 +44,7 @@ func handleMessages(_ *astilectron.Window, m bootstrap.MessageIn) (payload inter
 		if len(m.Payload) > 0 {
 			// Unmarshal payload
 			if err = json.Unmarshal(m.Payload, &source); err != nil {
-				payload = err.Error()
+				payload = fmt.Sprintf("Failed to unmarshal message: %s - %s", string(m.Payload),err.Error())
 				return
 			}
 		}
@@ -60,7 +60,7 @@ func handleMessages(_ *astilectron.Window, m bootstrap.MessageIn) (payload inter
 		if len(m.Payload) > 0 {
 			// Unmarshal payload
 			if err = json.Unmarshal(m.Payload, &source); err != nil {
-				payload = err.Error()
+				payload = fmt.Sprintf("Failed to unmarshal message: %s - %s", string(m.Payload),err.Error())
 				return
 			}
 		}
@@ -76,7 +76,7 @@ func handleMessages(_ *astilectron.Window, m bootstrap.MessageIn) (payload inter
 		if len(m.Payload) > 0 {
 			// Unmarshal payload
 			if err = json.Unmarshal(m.Payload, &source); err != nil {
-				payload = err.Error()
+				payload = fmt.Sprintf("Failed to unmarshal message: %s - %s", string(m.Payload),err.Error())
 				return
 			}
 		}
