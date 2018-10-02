@@ -51,6 +51,10 @@ let index = {
             this.load(filenames[0]);
         }
     },
+    // run menu clicked
+    runMenu: function(message) {
+        this.run();
+    },
     // save menu clicked
     saveMenu: function(message) {
         if (typeof filename !== "undefined") {
@@ -89,6 +93,7 @@ let index = {
             }
 
             document.title = message.payload.path;
+            editor.session.setMode("ace/mode/golang");
             editor.session.setValue(message.payload.source)
         })
     },
@@ -187,6 +192,10 @@ let index = {
                 case "open":
                     index.openMenu(message.payload);
                     return {payload: "open clicked!"};
+                    break;
+                case "run":
+                    index.runMenu(message.payload);
+                    return {payload: "run clicked!"};
                     break;
                 case "save":
                     index.saveMenu(message.payload);

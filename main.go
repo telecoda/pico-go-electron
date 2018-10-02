@@ -62,7 +62,7 @@ func main() {
 				Label: astilectron.PtrStr("File"),
 				SubMenu: []*astilectron.MenuItemOptions{
 					{
-						Accelerator: astilectron.NewAccelerator("Command", "n"),
+						Accelerator: &astilectron.Accelerator{"CmdOrCtrl+N"},
 						Label: astilectron.PtrStr("New"),
 						OnClick: func(e astilectron.Event) (deleteListener bool) {
 							if err := bootstrap.SendMessage(w, "new", demoSrc, func(m *bootstrap.MessageIn) {
@@ -82,7 +82,7 @@ func main() {
 						Type: astilectron.MenuItemTypeCheckbox,
 					},
 					{
-						Accelerator: astilectron.NewAccelerator("Command", "o"),
+						Accelerator: &astilectron.Accelerator{"CmdOrCtrl+O"},
 						Label: astilectron.PtrStr("Open"),
 						OnClick: func(e astilectron.Event) (deleteListener bool) {
 							if err := bootstrap.SendMessage(w, "open", "open this", func(m *bootstrap.MessageIn) {
@@ -101,7 +101,7 @@ func main() {
 						},
 					},
 					{
-						Accelerator: astilectron.NewAccelerator("Command", "s"),
+						Accelerator: &astilectron.Accelerator{"CmdOrCtrl+R"},
 						Label: astilectron.PtrStr("Save"),
 						OnClick: func(e astilectron.Event) (deleteListener bool) {
 							if err := bootstrap.SendMessage(w, "save", "save this", func(m *bootstrap.MessageIn) {
@@ -121,7 +121,7 @@ func main() {
 						Enabled: saveEnabled,
 					},
 					{
-						Accelerator: astilectron.NewAccelerator("Command", "+s"),
+						Accelerator: &astilectron.Accelerator{"Shift+CmdOrCtrl+S"},
 						Label: astilectron.PtrStr("Save As..."),
 						OnClick: func(e astilectron.Event) (deleteListener bool) {
 							if err := bootstrap.SendMessage(w, "saveAs", "saveAs this", func(m *bootstrap.MessageIn) {
@@ -161,6 +161,30 @@ func main() {
 					},
 				},
 			},
+			&astilectron.MenuItemOptions{
+				Label: astilectron.PtrStr("Run"),
+				SubMenu: []*astilectron.MenuItemOptions{
+					{
+						Accelerator: &astilectron.Accelerator{"CmdOrCtrl+R"},
+						Label: astilectron.PtrStr("Run"),
+						OnClick: func(e astilectron.Event) (deleteListener bool) {
+							if err := bootstrap.SendMessage(w, "run", "run code", func(m *bootstrap.MessageIn) {
+								// Unmarshal payload
+								var s string
+								if m != nil {
+									if err := json.Unmarshal(m.Payload, &s); err != nil {
+										astilog.Error(errors.Wrap(err, "unmarshaling payload failed"))
+										return
+									}	
+								}
+							}); err != nil {
+								astilog.Error(errors.Wrap(err, "sending run event failed"))
+							}
+							return
+						},
+					},
+				},
+			},
 		},
 		OnWait: func(_ *astilectron.Astilectron, ws []*astilectron.Window, _ *astilectron.Menu, _ *astilectron.Tray, _ *astilectron.Menu) error {
 			w = ws[0]
@@ -179,8 +203,8 @@ func main() {
 			Options: &astilectron.WindowOptions{
 				BackgroundColor: astilectron.PtrStr("#333"),
 				Center:          astilectron.PtrBool(true),
-				Height:          astilectron.PtrInt(850),
-				Width:           astilectron.PtrInt(850),
+				Height:          astilectron.PtrInt(720),
+				Width:           astilectron.PtrInt(960),
 			},
 		}},
 	}); err != nil {

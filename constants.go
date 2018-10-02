@@ -7,8 +7,7 @@ const (
 	defaultOutputFile = "cart.js"
 )
 
-const aboutBody = `Welcome on to pico-go
-The golang fantasy console.`
+const aboutBody = "Welcome on to `pico-go`\n\nThe golang fantasy console.\n\nby @telecoda\n"
 
 const demoSrc = `// Copyright 2015 Hajime Hoshi
 //

@@ -11,16 +11,13 @@
     <link rel="fonts" href="static/lib/bootstrap-3.3.7-dist/fonts/glyphicons-halflings-regular.ttf">
     <link rel="stylesheet" href="static/css/base.css" />
 </head>
-
 <body>
-
-    <div>
-
+    <div class="container no-gutters mainDiv">
         <div class="row">
             <div class="col-2">
                 <img class="logo" src="./assets/logo.png">
             </div>
-            <div class="col-9 navTab">
+            <div class="col-8">
                 <!-- Nav tabs -->
                 <ul class="nav nav-pills" role="tablist">
                     <li role="nav-item" class="active navTab">
@@ -31,25 +28,20 @@
                     </li>
                 </ul>
             </div>
-            <div class="col-1">
+            <div class="col-2">
                 <button id="runButton" type="button" class="btn btn-primary btn-lg btn-danger runButton">Run</button>
             </div>
         </div>
-
         <!-- Tab panes -->
         <div class="tab-content">
             <!-- Code editor panel -->
             <div role="tabpanel" class="tab-pane active" id="codeeditor">
-                <div class="no-gutters">
-                    <div class="h-100 row">
-                        <div class="col">
-                            <div id="editor"></div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col pre-scrollable" id="compErrors">No errors</div>
+                <div class="h-100 row">
+                    <div class="col-12">
+                        <div id="editor"></div>
                     </div>
                 </div>
+                <div class="row"><div class="col-12 pre-scrollable errors" id="compErrors">No errors</div></div>
             </div>
             <!-- Game panel -->
             <div role="tabpanel" class="tab-pane" id="game">
@@ -59,12 +51,8 @@
             </div>
         </div>
     </div>
-
-    
-
     <script src="static/js/index.js"></script>
     <script src="static/lib/astiloader/astiloader.js"></script>
-
     <script type="text/javascript">
         index.init();
     </script>
@@ -76,11 +64,12 @@
         editor.setOptions({
             enableBasicAutocompletion: true,
             autoScrollEditorIntoView : true,
+            showPrintMargin: false,
             maxLines : 1000
         });
         editor.session.setMode("ace/mode/golang");
         // load initial source code
-        editor.session.setValue("Welcome to pico-go, select <New> from file menu to get started");
+        editor.session.setValue("Welcome to `pico-go` by @telecoda\n\nselect `New` from file menu to get started\n");
         document.title = "<untitled>";
     </script>
     <script type="text/javascript" src="static/lib/jquery-2.2.4/jquery-min.js"></script>
@@ -107,7 +96,5 @@
             index.run();
         });
     </script>
-
 </body>
-
 </html>

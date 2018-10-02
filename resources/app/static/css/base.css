@@ -4,6 +4,7 @@
 
 #editor {
     position: relative;
+    width: 100%;
     min-height: 400px;
     max-height: 100%;
 }
@@ -15,8 +16,55 @@
     width: 100%;
 }
 
+.mainDiv {
+    padding-left: 0px;
+    padding-right: 0px;
+    max-width: 100%;
+}
+
+.row {
+    margin-left: 0px;
+    margin-right: 0px;
+}
+
+/* nav */
+.btn-danger {
+  background-color: #ff004d;
+  border-color: #b92c28;
+}
+
+.btn-danger:hover,
+.btn-danger:focus {
+  background-color: red;
+  background-position: 0 -15px;
+}
+.btn-danger:active,
+.btn-danger.active {
+  background-color: red;
+  border-color: #b92c28;
+}
+
+.nav-pills>li.active>a {
+    background-color: #20aeff;
+    color: #fff;
+}
+
+.nav-pills>li>a {
+    background-color: #21668e;
+    color: #aaa;
+}
+
+.errors {
+    color: #ff004d;
+    font-size: large;
+    width: 100%;
+    overflow-x: auto;
+    overflow-y: auto;
+}
+
 .logo {
-    height: 48px;
+    /* height: 48px; */
+    max-width: 114px;
     margin-left: 4px;
     margin-top: 4px;
     margin-bottom: 4px;
@@ -24,7 +72,7 @@
 
 .navTab {
     height: 48px;
-    margin-top: 4px;
+    margin-top: 8px;
     margin-bottom: 4px;
 }
 
@@ -32,6 +80,5 @@
     height: 34px;
     margin-top: 8px;
     margin-bottom: 4px;
-    padding-right: 8px;
     text-align: center;
 }
