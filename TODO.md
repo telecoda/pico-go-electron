@@ -7,5 +7,7 @@ This is a list of the last things which need fixing for the MVP to be released
 - more examples
 - export source menu option
 - more unit tests
+- better build docs
+- project logo
 
 bugs: ?
