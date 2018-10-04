@@ -96,6 +96,10 @@ let index = {
             document.title = message.payload.path;
             editor.session.setMode("ace/mode/golang");
             editor.session.setValue(message.payload.source)
+
+            // switch to code tab
+            document.getElementById("codeTab").click();
+
         })
     },
     // run - call to backend to compile and run current sourcecode
