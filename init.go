@@ -16,7 +16,6 @@ func initBackend(path string) (a Application, err error) {
 
 		- Check supporting libraries / apps are installed
 		- Copy demo sourcecode into working directory
-
 	*/
 
 	// Init Application
@@ -24,7 +23,32 @@ func initBackend(path string) (a Application, err error) {
 		Path: path,
 	}
 
-	fmt.Printf("TEMP: setting up resources at: %s\n", path)
+	fmt.Printf("Setting up resources at: %s\n", path)
+
+	// check prerequisites are installed
+
+	// check for Go itself
+	goPath := getGoPath()
+	if goPath == "" {
+		err = fmt.Errorf("Unable to find GOPATH environment variable, please set one")
+		return
+	}
+
+	// check for GopherJS
+	cmd := getVersionCmd()
+	err = cmd.Run()
+	if err != nil {
+		err = fmt.Errorf("Unable to find `gopherjs` command\n\nERROR: %s\n\nPlease install using `go get -u github.com/gopherjs/gopherjs`", err)
+		return
+	}
+
+	// check for Ebiten sourcecode
+	ebitenPath := filepath.Join(goPath, "src", ebitenRepo)
+	_, err = os.Stat(ebitenPath)
+	if err != nil {
+		err = fmt.Errorf("Unable to find `ebiten` source\n\nERROR: %s\n\nPlease install using `go install %s ", err, ebitenRepo)
+		return
+	}
 
 	// create dirs if they don't exist
 	defaultCodePath := filepath.Join(path, defaultCodeDir)

@@ -1,8 +1,8 @@
 package main
 
 import (
-	"flag"
 	"encoding/json"
+	"flag"
 
 	"github.com/asticode/go-astilectron"
 	"github.com/asticode/go-astilectron-bootstrap"
@@ -12,10 +12,10 @@ import (
 
 // Vars
 var (
-	AppName string
-	BuiltAt string
-	debug   = flag.Bool("d", false, "enables the debug mode")
-	w       *astilectron.Window
+	AppName     string
+	BuiltAt     string
+	debug       = flag.Bool("d", false, "enables the debug mode")
+	w           *astilectron.Window
 	saveEnabled *bool
 )
 
@@ -63,7 +63,7 @@ func main() {
 				SubMenu: []*astilectron.MenuItemOptions{
 					{
 						Accelerator: &astilectron.Accelerator{"CmdOrCtrl+N"},
-						Label: astilectron.PtrStr("New"),
+						Label:       astilectron.PtrStr("New"),
 						OnClick: func(e astilectron.Event) (deleteListener bool) {
 							if err := bootstrap.SendMessage(w, "new", demoSrc, func(m *bootstrap.MessageIn) {
 								// Unmarshal payload
@@ -72,7 +72,7 @@ func main() {
 									if err := json.Unmarshal(m.Payload, &s); err != nil {
 										astilog.Error(errors.Wrap(err, "unmarshaling payload failed"))
 										return
-									}	
+									}
 								}
 							}); err != nil {
 								astilog.Error(errors.Wrap(err, "sending new event failed"))
@@ -83,7 +83,7 @@ func main() {
 					},
 					{
 						Accelerator: &astilectron.Accelerator{"CmdOrCtrl+O"},
-						Label: astilectron.PtrStr("Open"),
+						Label:       astilectron.PtrStr("Open"),
 						OnClick: func(e astilectron.Event) (deleteListener bool) {
 							if err := bootstrap.SendMessage(w, "open", "open this", func(m *bootstrap.MessageIn) {
 								// Unmarshal payload
@@ -92,7 +92,7 @@ func main() {
 									if err := json.Unmarshal(m.Payload, &s); err != nil {
 										astilog.Error(errors.Wrap(err, "unmarshaling payload failed"))
 										return
-									}	
+									}
 								}
 							}); err != nil {
 								astilog.Error(errors.Wrap(err, "sending open event failed"))
@@ -102,7 +102,7 @@ func main() {
 					},
 					{
 						Accelerator: &astilectron.Accelerator{"CmdOrCtrl+R"},
-						Label: astilectron.PtrStr("Save"),
+						Label:       astilectron.PtrStr("Save"),
 						OnClick: func(e astilectron.Event) (deleteListener bool) {
 							if err := bootstrap.SendMessage(w, "save", "save this", func(m *bootstrap.MessageIn) {
 								// Unmarshal payload
@@ -111,7 +111,7 @@ func main() {
 									if err := json.Unmarshal(m.Payload, &s); err != nil {
 										astilog.Error(errors.Wrap(err, "unmarshaling payload failed"))
 										return
-									}	
+									}
 								}
 							}); err != nil {
 								astilog.Error(errors.Wrap(err, "sending save event failed"))
@@ -122,7 +122,7 @@ func main() {
 					},
 					{
 						Accelerator: &astilectron.Accelerator{"Shift+CmdOrCtrl+S"},
-						Label: astilectron.PtrStr("Save As..."),
+						Label:       astilectron.PtrStr("Save As..."),
 						OnClick: func(e astilectron.Event) (deleteListener bool) {
 							if err := bootstrap.SendMessage(w, "saveAs", "saveAs this", func(m *bootstrap.MessageIn) {
 								// Unmarshal payload
@@ -131,7 +131,7 @@ func main() {
 									if err := json.Unmarshal(m.Payload, &s); err != nil {
 										astilog.Error(errors.Wrap(err, "unmarshaling payload failed"))
 										return
-									}	
+									}
 								}
 							}); err != nil {
 								astilog.Error(errors.Wrap(err, "sending saveAs event failed"))
@@ -166,7 +166,7 @@ func main() {
 				SubMenu: []*astilectron.MenuItemOptions{
 					{
 						Accelerator: &astilectron.Accelerator{"CmdOrCtrl+R"},
-						Label: astilectron.PtrStr("Run"),
+						Label:       astilectron.PtrStr("Run"),
 						OnClick: func(e astilectron.Event) (deleteListener bool) {
 							if err := bootstrap.SendMessage(w, "run", "run code", func(m *bootstrap.MessageIn) {
 								// Unmarshal payload
@@ -175,7 +175,7 @@ func main() {
 									if err := json.Unmarshal(m.Payload, &s); err != nil {
 										astilog.Error(errors.Wrap(err, "unmarshaling payload failed"))
 										return
-									}	
+									}
 								}
 							}); err != nil {
 								astilog.Error(errors.Wrap(err, "sending run event failed"))

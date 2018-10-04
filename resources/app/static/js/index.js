@@ -29,6 +29,7 @@ let index = {
                 // Check error
                 if (message.name === "error") {
                     dialog.showErrorBox("Init Error",message.payload);
+                    app.quit()
                     return
                 }
             })

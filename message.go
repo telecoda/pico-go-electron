@@ -40,11 +40,11 @@ func handleMessages(_ *astilectron.Window, m bootstrap.MessageIn) (payload inter
 		}
 		return
 	case "load":
-		source :=SourceCode{}
+		source := SourceCode{}
 		if len(m.Payload) > 0 {
 			// Unmarshal payload
 			if err = json.Unmarshal(m.Payload, &source); err != nil {
-				payload = fmt.Sprintf("Failed to unmarshal message: %s - %s", string(m.Payload),err.Error())
+				payload = fmt.Sprintf("Failed to unmarshal message: %s - %s", string(m.Payload), err.Error())
 				return
 			}
 		}
@@ -55,12 +55,12 @@ func handleMessages(_ *astilectron.Window, m bootstrap.MessageIn) (payload inter
 		return
 	case "run":
 		// Unmarshal payload
-		source :=SourceCode{}
+		source := SourceCode{}
 
 		if len(m.Payload) > 0 {
 			// Unmarshal payload
 			if err = json.Unmarshal(m.Payload, &source); err != nil {
-				payload = fmt.Sprintf("Failed to unmarshal message: %s - %s", string(m.Payload),err.Error())
+				payload = fmt.Sprintf("Failed to unmarshal message: %s - %s", string(m.Payload), err.Error())
 				return
 			}
 		}
@@ -71,12 +71,12 @@ func handleMessages(_ *astilectron.Window, m bootstrap.MessageIn) (payload inter
 		return
 	case "save":
 		// Unmarshal payload
-		source :=SourceCode{}
+		source := SourceCode{}
 
 		if len(m.Payload) > 0 {
 			// Unmarshal payload
 			if err = json.Unmarshal(m.Payload, &source); err != nil {
-				payload = fmt.Sprintf("Failed to unmarshal message: %s - %s", string(m.Payload),err.Error())
+				payload = fmt.Sprintf("Failed to unmarshal message: %s - %s", string(m.Payload), err.Error())
 				return
 			}
 		}

@@ -5,6 +5,7 @@ const (
 	defaultSourceFile = "main.go"
 	defaultCompileDir = "js"
 	defaultOutputFile = "cart.js"
+	ebitenRepo        = "github.com/hajimehoshi/ebiten"
 )
 
 const aboutBody = "Welcome on to `pico-go`\n\nThe golang fantasy console.\n\nby @telecoda\n"

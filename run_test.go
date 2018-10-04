@@ -156,19 +156,19 @@ func Test_getScreenDimensions(t *testing.T) {
 		source string
 	}
 	tests := []struct {
-		name  string
-		args  args
+		name       string
+		args       args
 		wantWidth  int
 		wantHeight int
 	}{
 		{
 			name: "simple declaration",
 			args: args{
-				source:      `	screenWidth := 321
+				source: `	screenWidth := 321
 				screenHeight := 256
 				`,
 			},
-			wantWidth: 321,
+			wantWidth:  321,
 			wantHeight: 256,
 		},
 	}
