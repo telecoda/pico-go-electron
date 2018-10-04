@@ -101,7 +101,7 @@ func main() {
 						},
 					},
 					{
-						Accelerator: &astilectron.Accelerator{"CmdOrCtrl+R"},
+						Accelerator: &astilectron.Accelerator{"CmdOrCtrl+S"},
 						Label:       astilectron.PtrStr("Save"),
 						OnClick: func(e astilectron.Event) (deleteListener bool) {
 							if err := bootstrap.SendMessage(w, "save", "save this", func(m *bootstrap.MessageIn) {
