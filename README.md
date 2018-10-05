@@ -42,8 +42,12 @@ Head on over to the development guide and get started writing your own games and
 
 [developer guide](./docs/DEV-GUIDE.md)
 
+Or if your are looking for inspiration check out the [examples](./docs/EXAMPLES.md)
+
+![image](./docs/images/ebiten-flappy-demo.png)
+
 # History
-The idea originally started in my [pico-go](https://github.com/telecoda/pico-go) repo but I found the external dependencies too complex/limiting for getting developers quickly productive on multiple platforms.
+
 
 # Standing on the shoulders of giants
 
