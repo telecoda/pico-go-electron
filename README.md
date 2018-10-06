@@ -42,12 +42,12 @@ Head on over to the development guide and get started writing your own games and
 
 [developer guide](./docs/DEV-GUIDE.md)
 
-Or if your are looking for inspiration check out the [examples](./docs/EXAMPLES.md)
+Or if your are looking for inspiration check out the [examples](./examples/EXAMPLES.md)
 
 ![image](./docs/images/ebiten-flappy-demo.png)
 
 # History
-
+Find a little about the background of this project [here](./docs/HISTORY.md)
 
 # Standing on the shoulders of giants
 

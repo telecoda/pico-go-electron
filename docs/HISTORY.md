@@ -2,7 +2,7 @@
 
 This is where you find out how pico-go (electron) came to be.
 
-TODO: write this up..
+TODO: write this up properly....
 
 go-game
 OpenGL
@@ -42,4 +42,4 @@ working out where to put files when compiling
 overriding resize event handlers
 
 
-probably more hilarity will ensure
+probably more hilarity will ensue
