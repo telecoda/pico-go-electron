@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>pico-go documentation</title>
+    
+      <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="generator" content="Hugo 0.49" />
+<title>install :: pico-go documentation</title>
+<link rel="shortcut icon" href="../images/favicon.png" type="image/x-icon" />
+<link href="../css/font-awesome.min.css" rel="stylesheet">
+<link href="../css/nucleus.css" rel="stylesheet">
+<link href="../theme-picogo/style.css" rel="stylesheet">
+
+<link rel="stylesheet" href="../css/bootstrap.min.css">
+<script src="../js/jquery-2.x.min.js"></script>
+<script type="text/javascript">
+      var baseurl = ".\/";
+</script>
+<meta name="description" content="">
+
+
+
+    
+  </head>
+  <body data-url="install/install.html">
+    
+      <header>
+  <div class="logo">
+    
+	
+  
+    <a class="baselink" href="./">pico-go documentation</a>
+  
+
+  </div>
+  <div class="burger"><a href="javascript:void(0);" style="font-size:15px;">&#9776;</a></div>
+</header>
+<article>
+  <aside>
+    <ul class="menu">
+          <li data-nav-id="/./" class="dd-item">
+          <a href="../index.html">
+            <i class="fa fa-fw fa-home"></i>
+          </a>
+          </li>
+    <li data-nav-id="install.html" class="dd-item parent haschildren
+        ">
+      <div>
+      <a href="install.html">Installs</a>
+            <i class="fa fa-angle-down fa-lg category-icon"></i>
+      </div>
+        <ul>
+      <li data-nav-id="install/install.html" class="dd-item active">
+        <div>
+          <a href="install/install.html">
+            install
+          </a>
+        </div>
+    </li>
+        </ul>
+    </li>
+
+
+
+
+    </ul>
+    <section>
+    </section>
+  </aside>
+  <section class="page">
+    
+    <div class="nav-select">
+      <center>Navigation : 
+        <select onchange="javascript:location.href = this.value;">
+          
+    <option value="install.html" >
+   Installs</option> 
+      <option value="install/install.html"  selected>- install</option>
+  
+
+
+
+        </select>
+      </center>
+    </div>
+      <div>
+        <div class="searchbox">
+          <input data-search-input id="search-by" type="text" placeholder="Search...">
+        </div>
+        <script type="text/javascript" src="../js/lunr.min.js"></script>
+        <script type="text/javascript" src="../js/auto-complete.js"></script>
+        <link href="../css/auto-complete.css" rel="stylesheet">
+        <script type="text/javascript">
+          
+              var baseurl = ".\/";
+          
+        </script>
+        <script type="text/javascript" src="../js/search.js"></script>
+      </div>
+    
+
+    <h1>install</h1>
+    
+    
+    
+    
+
+<h1 id="pico-go-electron-installation">pico-go-electron Installation</h1>
+
+<p>These are the instructions to get the project up and running.  Please contact me or raise a PR if you have issues building and running pico-go on your chosen platform. (Currently it has been tested on OSX and Windows).</p>
+
+<h2 id="step-1-installation">Step 1: installation</h2>
+
+<p>Run the following commands:</p>
+
+<pre><code>$ go get -u github.com/telecoda/pico-go-electron/...
+$ rm $GOPATH/src/github.com/telecoda/pico-go-electron/bind.go
+</code></pre>
+
+<p>on Windows:</p>
+
+<pre><code>$ rm %GOPATH%/src/github.com/telecoda/pico-go-electron/bind.go
+</code></pre>
+
+<h2 id="step-2-install-the-prerequisites">Step 2: install the prerequisites</h2>
+
+<p>Run the following command:</p>
+
+<pre><code>$ go get -u github.com/asticode/go-astilectron-bundler/...
+$ go get -u github.com/gopherjs/gopherjs
+$ go get -u github.com/gopherjs/gopherwasm/js
+$ go get -u github.com/hajimehoshi/ebiten
+</code></pre>
+
+<p>And don&rsquo;t forget to add <code>$GOPATH/bin</code> to your <code>$PATH</code>.</p>
+
+<h2 id="step-3-bundle-the-app-for-your-current-environment">Step 3: bundle the app for your current environment</h2>
+
+<p>Run the following commands:</p>
+
+<pre><code>$ cd $GOPATH/src/github.com/telecoda/pico-go-electron
+$ astilectron-bundler -v
+</code></pre>
+
+<p>on Windows:</p>
+
+<pre><code>$ cd %GOPATH%/src/github.com/telecoda/pico-go-electron
+$ astilectron-bundler.exe -v
+</code></pre>
+
+<h2 id="step-4-test-the-app">Step 4: test the app</h2>
+
+<p>The result is in the <code>output/&lt;your os&gt;-&lt;your arch&gt;</code> folder and is waiting for you to test it!</p>
+
+<h2 id="step-5-bundle-the-app-for-more-environments">Step 5: bundle the app for more environments</h2>
+
+<p>To bundle the app for more environments, add an <code>environments</code> key to the bundler configuration (<code>bundler.json</code>):</p>
+
+<pre><code class="language-json">&quot;environments&quot;: [
+  {&quot;arch&quot;: &quot;amd64&quot;, &quot;os&quot;: &quot;linux&quot;},
+  {&quot;arch&quot;: &quot;386&quot;, &quot;os&quot;: &quot;windows&quot;}
+]
+</code></pre>
+
+<p>and repeat <strong>step 3</strong>.</p>
+
+<h1 id="developing-pico-go-itself">Developing pico-go itself</h1>
+
+<p>The instructions above are for creating a fully fledged native Electron app for your operating system. However if you wish to tinker with <code>pico-go-electron</code> yourself and just run a simple go binary there is a far easier way to do things.</p>
+
+<p>Providing you already have all the necesary prerequistes installed when you are in the project root directory type:</p>
+
+<pre><code>go build
+</code></pre>
+
+<p>To run the app</p>
+
+<pre><code>./pico-go-electron -d
+</code></pre>
+
+<p>or on Windows</p>
+
+<pre><code>pico-go-electron.exe -d
+</code></pre>
+
+<p>The <code>-d</code> flag enables debug mode which allows you to start the chrome developer tools if you are planning to tinker with the javascript.  There will be a debug option on the applications main menu.</p>
+
+
+    
+    
+        <div class="chevrons">
+    <div id="navigation">
+<a class="nav nav-prev" href="install.html" title="Installs"> <i class="fa fa-chevron-left"></i><label>Installs</label></a>
+    </div>
+  </div>
+
+  </section>
+</article>
+
+<footer>
+
+<div class="footline">
+    
+
+    
+
+  
+    <div class="date">
+        <i class='fa fa-calendar'></i> Last update on 06/10/2018
+    </div>
+    
+
+  </div>
+
+
+	<div>
+
+
+  
+    <p>pico-go docs</p>
+
+  
+
+
+
+	</div>
+</footer>
+
+<script src="../js/clipboard.min.js"></script>
+
+<link href="../css/featherlight.min.css" rel="stylesheet">
+<script src="../js/featherlight.min.js"></script>
+
+
+
+<script src="../theme-picogo/script.js"></script>
+
+    
+
+    
+    
+
+    
+  </body>
+</html>

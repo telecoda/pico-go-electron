@@ -1,0 +1,14 @@
+baseurl = "./"
+relativeURLs = true
+uglyurls = true
+title = "pico-go documentation"
+languageCode = "en-us"
+theme = "hugo-theme-docdock"
+
+[params]
+themeStyle = "picogo"
+
+DefaultContentLanguage = "en"
+[outputs]
+home = [ "HTML", "RSS", "JSON"]
+

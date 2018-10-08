@@ -1,0 +1,43 @@
+[
+{
+	"uri": "./",
+	"title": "index",
+	"tags": [],
+	"description": "",
+	"content": " here are some docs this is the pico-go content\n"
+},
+{
+	"uri": "./install/install.html",
+	"title": "install",
+	"tags": [],
+	"description": "",
+	"content": " pico-go-electron Installation These are the instructions to get the project up and running. Please contact me or raise a PR if you have issues building and running pico-go on your chosen platform. (Currently it has been tested on OSX and Windows).\nStep 1: installation Run the following commands:\n$ go get -u github.com/telecoda/pico-go-electron/... $ rm $GOPATH/src/github.com/telecoda/pico-go-electron/bind.go  on Windows:\n$ rm %GOPATH%/src/github.com/telecoda/pico-go-electron/bind.go  Step 2: install the prerequisites Run the following command:\n$ go get -u github.com/asticode/go-astilectron-bundler/... $ go get -u github.com/gopherjs/gopherjs $ go get -u github.com/gopherjs/gopherwasm/js $ go get -u github.com/hajimehoshi/ebiten  And don\u0026rsquo;t forget to add $GOPATH/bin to your $PATH.\nStep 3: bundle the app for your current environment Run the following commands:\n$ cd $GOPATH/src/github.com/telecoda/pico-go-electron $ astilectron-bundler -v  on Windows:\n$ cd %GOPATH%/src/github.com/telecoda/pico-go-electron $ astilectron-bundler.exe -v  Step 4: test the app The result is in the output/\u0026lt;your os\u0026gt;-\u0026lt;your arch\u0026gt; folder and is waiting for you to test it!\nStep 5: bundle the app for more environments To bundle the app for more environments, add an environments key to the bundler configuration (bundler.json):\n\u0026quot;environments\u0026quot;: [ {\u0026quot;arch\u0026quot;: \u0026quot;amd64\u0026quot;, \u0026quot;os\u0026quot;: \u0026quot;linux\u0026quot;}, {\u0026quot;arch\u0026quot;: \u0026quot;386\u0026quot;, \u0026quot;os\u0026quot;: \u0026quot;windows\u0026quot;} ]  and repeat step 3.\nDeveloping pico-go itself The instructions above are for creating a fully fledged native Electron app for your operating system. However if you wish to tinker with pico-go-electron yourself and just run a simple go binary there is a far easier way to do things.\nProviding you already have all the necesary prerequistes installed when you are in the project root directory type:\ngo build  To run the app\n./pico-go-electron -d  or on Windows\npico-go-electron.exe -d  The -d flag enables debug mode which allows you to start the chrome developer tools if you are planning to tinker with the javascript. There will be a debug option on the applications main menu.\n"
+},
+{
+	"uri": "./_footer.html",
+	"title": "",
+	"tags": [],
+	"description": "",
+	"content": "pico-go docs\n"
+},
+{
+	"uri": "./categories.html",
+	"title": "Categories",
+	"tags": [],
+	"description": "",
+	"content": ""
+},
+{
+	"uri": "./install.html",
+	"title": "Installs",
+	"tags": [],
+	"description": "",
+	"content": ""
+},
+{
+	"uri": "./tags.html",
+	"title": "Tags",
+	"tags": [],
+	"description": "",
+	"content": ""
+}]

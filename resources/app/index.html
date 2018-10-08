@@ -26,6 +26,9 @@
                     <li role="nav-item" class="navTab">
                         <a href="#game" id="gameTab" aria-controls="game" data-toggle="tab">Game</a>
                     </li>
+                    <li role="nav-item" class="navTab">
+                        <a href="#docs" id="docsTab" aria-controls="docs" data-toggle="tab">Docs</a>
+                    </li>
                 </ul>
             </div>
             <div class="col-2">
@@ -49,6 +52,12 @@
                     <iframe id="gameFrame" src="game.html"></iframe>
                 </div>
             </div>
+            <!-- Docs panel -->
+            <div role="tabpanel" class="tab-pane" id="docs">
+                <div id="docsDiv">
+                    <iframe id="docsFrame" src="./docs/index.html"></iframe>
+                </div>
+            </div>
         </div>
     </div>
     <script src="static/js/index.js"></script>
@@ -63,6 +72,7 @@
         editor.setTheme("ace/theme/monokai");
         editor.setOptions({
             enableBasicAutocompletion: true,
+            enableLiveAutocompletion: true,
             autoScrollEditorIntoView : true,
             showPrintMargin: false,
             maxLines : 1000
@@ -71,6 +81,7 @@
         // load initial source code
         editor.session.setValue("Welcome to `pico-go` by @telecoda\n\nselect `New` from file menu to get started\n");
         document.title = "<untitled>";
+        app.focus();
     </script>
     <script type="text/javascript" src="static/lib/jquery-2.2.4/jquery-min.js"></script>
     <script>window.jQuery = window.$ = module.exports</script>

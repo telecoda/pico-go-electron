@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Installs on pico-go documentation</title>
+    <link>./install.html</link>
+    <description>Recent content in Installs on pico-go documentation</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sat, 06 Oct 2018 16:26:07 +0100</lastBuildDate>
+    
+	<atom:link href="./install/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>install</title>
+      <link>./install/install.html</link>
+      <pubDate>Sat, 06 Oct 2018 16:26:07 +0100</pubDate>
+      
+      <guid>./install/install.html</guid>
+      <description>pico-go-electron Installation These are the instructions to get the project up and running. Please contact me or raise a PR if you have issues building and running pico-go on your chosen platform. (Currently it has been tested on OSX and Windows).
+Step 1: installation Run the following commands:
+$ go get -u github.com/telecoda/pico-go-electron/... $ rm $GOPATH/src/github.com/telecoda/pico-go-electron/bind.go  on Windows:
+$ rm %GOPATH%/src/github.com/telecoda/pico-go-electron/bind.go  Step 2: install the prerequisites Run the following command:</description>
+    </item>
+    
+  </channel>
+</rss>
