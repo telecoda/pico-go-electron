@@ -5,6 +5,8 @@ date = "2018-10-06T16:26:07+01:00"
 
 +++
 
-# here are some docs
+![image](logo-large.png)
 
-this is the pico-go content
+Welcome to pico-go the game and demoscene development tool for Go developers.
+
+Powered by [hugo](https://gohugo.io/)

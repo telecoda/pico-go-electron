@@ -6,7 +6,7 @@
       <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 <meta name="generator" content="Hugo 0.49" />
-<title> :: pico-go documentation</title>
+<title>Examples :: pico-go documentation</title>
 <link rel="shortcut icon" href="./images/favicon.png" type="image/x-icon" />
 <link href="./css/font-awesome.min.css" rel="stylesheet">
 <link href="./css/nucleus.css" rel="stylesheet">
@@ -23,7 +23,7 @@
 
     
   </head>
-  <body data-url="/_footer.html">
+  <body data-url="/example.html">
     
       <header>
   <div class="logo">
@@ -59,10 +59,11 @@
     </li>
         </ul>
     </li>
-    <li data-nav-id="/example.html" class="dd-item haschildren
+    <li data-nav-id="/example.html" class="dd-item parent active haschildren
         ">
       <div>
-      <a href="./example.html">Examples</a><i class="fa fa-angle-right fa-lg category-icon"></i>
+      <a href="./example.html">Examples</a>
+            <i class="fa fa-angle-down fa-lg category-icon"></i>
       </div>
         <ul>
       <li data-nav-id="/example/overview.html" class="dd-item">
@@ -97,8 +98,11 @@
           
     <option value="/dev-doc.html" >
    Dev docs</option>
-    <option value="/example.html" >
-   Examples</option>
+    <option value="/example.html"  selected>
+   Examples</option> 
+      <option value="/example/overview.html" >- overview</option>
+      <option value="/example/demo-01.html" >- simple</option>
+  
 
 
 
@@ -121,18 +125,82 @@
       </div>
     
 
-    <h1></h1>
+    <h1>Examples</h1>
     
     
     
-    <p>pico-go docs</p>
+
+
+
+<div class="extra-pagination inner">
+<nav class="pagination" role="navigation">
+	
+	<span class="page-number">Page 1 of 1</span>
+	
+</nav>
+
+</div>
+
+
+   <article class="post example">
+    <header class="post-header">
+        <h2 class="post-title"><a href="./example/overview.html">overview</a></h2>
+    </header>
+    <section class="post-excerpt">
+        <p>Examples The examples folder contains small example projects for pico-go.
+demo-01 This is the bare bones source used by the &ldquo;New&rdquo; menu option to help get you started.
+demo-01
+More More examples coming soon
+Meanwhile You can use most of the ebiten examples too.
+Just trying opening a file from $GOPATH/src/github.com/hajimehoshi/ebiten/examples
+The only code you may need to change is the scale factor when running ebiten. Set the value to 1 instead of 2 on some of the demos and we&rsquo;ll handle the scaling for you. <a class="read-more" href="./example/overview.html">&raquo;</a></p>
+    </section>
+    <footer class=" footline" >
+         
+        
+
+        
+        
+
+    </footer>
+</article>
+
+   <article class="post example">
+    <header class="post-header">
+        <h2 class="post-title"><a href="./example/demo-01.html">simple</a></h2>
+    </header>
+    <section class="post-excerpt">
+        <p>demo-01 This is a simple project to demonstrate how to develop using pico-go.
+/* This is a simple demo project to show you how to use pico-go Copyright 2018 @telecoda */ package main import ( &#34;fmt&#34; &#34;log&#34; &#34;image/color&#34; &#34;github.com/hajimehoshi/ebiten&#34; &#34;github.com/hajimehoshi/ebiten/ebitenutil&#34; ) const ( // define these vars to be used in javascript canvas scaling code 	screenWidth = 320 screenHeight = 240 ) var blue = color.RGBA{R: 33, G: 174, B: 255, A: 255} // update - this method is called 60 time a second func update(screen *ebiten. <a class="read-more" href="./example/demo-01.html">&raquo;</a></p>
+    </section>
+    <footer class=" footline" >
+         
+        
+
+        
+        
+
+    </footer>
+</article>
+
+
+<div style="margin-bottom:2rem"></div>
+
+<nav class="pagination" role="navigation">
+	
+	<span class="page-number">Page 1 of 1</span>
+	
+</nav>
+
+
 
 
     
     
         <div class="chevrons">
     <div id="navigation">
-<a class="nav nav-next" href="./dev-doc.html" title="Dev docs" style="margin-right: 0px;"><label>Dev docs</label><i class="fa fa-chevron-right"></i></a></div>
+<a class="nav nav-prev" href="./dev-doc/start.html" title="start"> <i class="fa fa-chevron-left"></i><label>start</label></a>
+    <a class="nav nav-next" href="./example/overview.html" title="overview" style="margin-right: 0px;"><label>overview</label><i class="fa fa-chevron-right"></i></a></div>
   </div>
 
   </section>

@@ -66,6 +66,16 @@ https://electronjs.org/
 
 Build cross platform desktop apps with JavaScript, HTML, and CSS
 
+## hugo
+https://gohugo.io/
+
+Static site generator. Transforms markdown files into the embedded docs inside pico-go
+
+### hugo theme docDock
+
+https://themes.gohugo.io/docdock/
+
+
 ## go-astilecton
 https://github.com/asticode/go-astilectron
 

@@ -3,32 +3,43 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
-    <loc>./</loc>
+    <loc>/example/overview.html</loc>
+  </url>
+  
+  <url>
+    <loc>/example/demo-01.html</loc>
+  </url>
+  
+  <url>
+    <loc>/dev-doc/start.html</loc>
+  </url>
+  
+  <url>
+    <loc>/</loc>
     <lastmod>2018-10-06T16:26:07+01:00</lastmod>
   </url>
   
   <url>
-    <loc>./install/install.html</loc>
-    <lastmod>2018-10-06T16:26:07+01:00</lastmod>
+    <loc>/_footer.html</loc>
   </url>
   
   <url>
-    <loc>./_footer.html</loc>
-  </url>
-  
-  <url>
-    <loc>./categories.html</loc>
+    <loc>/categories.html</loc>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>./install.html</loc>
-    <lastmod>2018-10-06T16:26:07+01:00</lastmod>
+    <loc>/dev-doc.html</loc>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>./tags.html</loc>
+    <loc>/example.html</loc>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/tags.html</loc>
     <priority>0</priority>
   </url>
   

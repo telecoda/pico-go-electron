@@ -30,7 +30,7 @@ header {
   -webkit-box-align: center;
   -ms-flex-align: center;
   align-items: center;
-  background-color: #000;
+  background-color: #222;
   color: #fff;
   display: -webkit-box;
   display: -ms-flexbox;
@@ -78,7 +78,7 @@ header {
     header nav.shortcuts li a:active,
     header nav.shortcuts li a:focus,
     header nav.shortcuts li a:hover {
-      background-color: #222222; }
+      background-color: #444; }
     header nav.shortcuts li a {
       -webkit-box-align: center;
       -ms-flex-align: center;
@@ -93,7 +93,7 @@ header {
         margin-bottom: 0rem; }
 
 article > aside {
-  background-color: #000;
+  background-color: #222;
   bottom: 0;
   box-sizing: border-box;
   display: -webkit-box;
@@ -133,7 +133,7 @@ article > aside {
       article > aside .menu .dd-item.active > ul {
         display: block; }
       article > aside .menu .dd-item.active > div {
-        background-color: #222222; }
+        background-color: #444; }
         article > aside .menu .dd-item.active > div * {
           font-weight: bold;
           border-bottom: dotted 1px red; }
@@ -160,17 +160,17 @@ article > aside {
           padding: 0 0rem;
           text-decoration: none; }
           article > aside .menu .dd-item div a:hover, article > aside .menu .dd-item div a:focus, article > aside .menu .dd-item div a:active {
-            background-color: #222222;
+            background-color: #444;
             border-radius: .2rem;
             padding: 0 0rem; }
         article > aside .menu .dd-item div i.category-icon:active,
         article > aside .menu .dd-item div i.category-icon:focus,
         article > aside .menu .dd-item div i.category-icon:hover {
-          background-color: #222222;
+          background-color: #444;
           border-radius: .2rem;
           padding: 0 0rem; }
       article > aside .menu .dd-item li {
-        border-left: 1px solid #222222; }
+        border-left: 1px solid #444; }
   article > aside section {
     margin: 2rem 0rem; }
 
@@ -191,7 +191,7 @@ html {
   font-size: 14px; }
 
 body {
-  background-color: #000;
+  background-color: #222;
   color: #fff;
   display: -webkit-box;
   display: -ms-flexbox;
@@ -225,7 +225,7 @@ section strong {
   font-weight: 500; }
 
 .nav-select {
-  background: #000000;
+  background: #222;
   display: none; }
 
 .searchbox {
@@ -236,8 +236,8 @@ section strong {
   text-align: center; }
 
 .searchbox input {
-  border: 1px solid #000000;
-  background-color: #222222;
+  border: 1px solid #222;
+  background-color: #444;
   color: #ffffff;
   display: inline-block;
   font-size: 14px;
@@ -324,7 +324,7 @@ article section.page {
     margin-bottom: 2em;
     border-collapse: collapse;
     border-spacing: 0;
-    border: 1px solid #000000; }
+    border: 1px solid #222; }
     article section.page table th,
     article section.page table td {
       padding: 0.25rem 0.75rem; }
@@ -334,14 +334,14 @@ article section.page {
       vertical-align: middle;
       text-align: center;
       font-weight: 800;
-      background: #000000;
+      background: #222;
       color: black;
-      border-bottom: 2px solid #000000; }
+      border-bottom: 2px solid #222; }
     article section.page table td {
       padding: 0.5rem;
       vertical-align: middle;
-      border-bottom: 1px solid #000000;
-      border: 1px solid #000000;
+      border-bottom: 1px solid #222;
+      border: 1px solid #222;
       color: #ffffff; }
     article section.page table td:first-child code {
       background-color: transparent;
@@ -353,7 +353,7 @@ article section.page {
     display: block;
     text-align: center; }
     article section.page img.border {
-      border: 2px solid #000000 !important;
+      border: 2px solid #222 !important;
       padding: 2px; }
     article section.page img.shadow {
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); }
@@ -366,7 +366,7 @@ article section.page {
       margin: 0 !important;
       vertical-align: bottom; }
   article section.page code {
-    font-family: 'Courier New', Courier, monospace; }
+    font:10px/normal 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro', monospace; }
   article section.page p > code,
   article section.page li code,
   article section.page table code {

@@ -15,7 +15,7 @@
 <link rel="stylesheet" href="./css/bootstrap.min.css">
 <script src="./js/jquery-2.x.min.js"></script>
 <script type="text/javascript">
-      var baseurl = ".\/";
+      var baseurl = "\/";
 </script>
 <meta name="description" content="">
 
@@ -39,21 +39,43 @@
 <article>
   <aside>
     <ul class="menu">
-          <li data-nav-id="/./" class="dd-item">
+          <li data-nav-id="/" class="dd-item">
           <a href="./index.html">
             <i class="fa fa-fw fa-home"></i>
           </a>
           </li>
-    <li data-nav-id="install.html" class="dd-item haschildren
+    <li data-nav-id="/dev-doc.html" class="dd-item haschildren
         ">
       <div>
-      <a href="install.html">Installs</a><i class="fa fa-angle-right fa-lg category-icon"></i>
+      <a href="./dev-doc.html">Dev docs</a><i class="fa fa-angle-right fa-lg category-icon"></i>
       </div>
         <ul>
-      <li data-nav-id="install/install.html" class="dd-item">
+      <li data-nav-id="/dev-doc/start.html" class="dd-item">
         <div>
-          <a href="install/install.html">
-            install
+          <a href="./dev-doc/start.html">
+            start
+          </a>
+        </div>
+    </li>
+        </ul>
+    </li>
+    <li data-nav-id="/example.html" class="dd-item haschildren
+        ">
+      <div>
+      <a href="./example.html">Examples</a><i class="fa fa-angle-right fa-lg category-icon"></i>
+      </div>
+        <ul>
+      <li data-nav-id="/example/overview.html" class="dd-item">
+        <div>
+          <a href="./example/overview.html">
+            overview
+          </a>
+        </div>
+    </li>
+      <li data-nav-id="/example/demo-01.html" class="dd-item">
+        <div>
+          <a href="./example/demo-01.html">
+            simple
           </a>
         </div>
     </li>
@@ -73,8 +95,10 @@
       <center>Navigation : 
         <select onchange="javascript:location.href = this.value;">
           
-    <option value="install.html" >
-   Installs</option>
+    <option value="/dev-doc.html" >
+   Dev docs</option>
+    <option value="/example.html" >
+   Examples</option>
 
 
 
@@ -90,7 +114,7 @@
         <link href="./css/auto-complete.css" rel="stylesheet">
         <script type="text/javascript">
           
-              var baseurl = ".\/";
+              var baseurl = "\/";
           
         </script>
         <script type="text/javascript" src="./js/search.js"></script>

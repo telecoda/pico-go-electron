@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>index on pico-go documentation</title>
-    <link>/</link>
-    <description>Recent content in index on pico-go documentation</description>
+    <title>Examples on pico-go documentation</title>
+    <link>/example.html</link>
+    <description>Recent content in Examples on pico-go documentation</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sat, 06 Oct 2018 16:26:07 +0100</lastBuildDate>
     
-	<atom:link href="/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="/example/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
@@ -34,24 +33,6 @@ The only code you may need to change is the scale factor when running ebiten. Se
       <guid>/example/demo-01.html</guid>
       <description>demo-01 This is a simple project to demonstrate how to develop using pico-go.
 /* This is a simple demo project to show you how to use pico-go Copyright 2018 @telecoda */ package main import ( &amp;#34;fmt&amp;#34; &amp;#34;log&amp;#34; &amp;#34;image/color&amp;#34; &amp;#34;github.com/hajimehoshi/ebiten&amp;#34; &amp;#34;github.com/hajimehoshi/ebiten/ebitenutil&amp;#34; ) const ( // define these vars to be used in javascript canvas scaling code 	screenWidth = 320 screenHeight = 240 ) var blue = color.RGBA{R: 33, G: 174, B: 255, A: 255} // update - this method is called 60 time a second func update(screen *ebiten.</description>
-    </item>
-    
-    <item>
-      <title>start</title>
-      <link>/dev-doc/start.html</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>/dev-doc/start.html</guid>
-      <description>Getting started blah blah.</description>
-    </item>
-    
-    <item>
-      <title></title>
-      <link>/_footer.html</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>/_footer.html</guid>
-      <description>pico-go docs</description>
     </item>
     
   </channel>
