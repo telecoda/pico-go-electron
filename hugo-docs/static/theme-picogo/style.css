@@ -365,8 +365,8 @@ article section.page {
       display: inline !important;
       margin: 0 !important;
       vertical-align: bottom; }
-  article section.page code {
-    font:10px/normal 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro', monospace; }
+  /* article section.page code {
+    font:10px/normal 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro', monospace; } */
   article section.page p > code,
   article section.page li code,
   article section.page table code {

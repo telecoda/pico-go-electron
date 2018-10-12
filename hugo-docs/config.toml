@@ -6,13 +6,8 @@ languageCode = "en-us"
 theme = "hugo-theme-docdock"
 DefaultContentLanguage = "en"
 
-pygmentsStyle = "monokai"
-pygmentscodefences = true
-pygmentsUseClassic=true
-
 [params]
 themeStyle = "picogo"
-
 
 [blackfriday]
   hrefTargetBlank = true # open the external links in a new window

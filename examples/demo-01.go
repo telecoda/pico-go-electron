@@ -1,10 +1,11 @@
+package main
+
 /*
 	This is a simple demo project to show you how to use pico-go
 
 	Copyright 2018 @telecoda
 
 */
-package main
 
 import (
 	"fmt"
