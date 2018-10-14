@@ -6,7 +6,7 @@
       <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 <meta name="generator" content="Hugo 0.49" />
-<title>Examples :: pico-go documentation</title>
+<title>examples :: pico-go documentation</title>
 <link rel="shortcut icon" href="./images/favicon.png" type="image/x-icon" />
 <link href="./css/font-awesome.min.css" rel="stylesheet">
 <link href="./css/nucleus.css" rel="stylesheet">
@@ -30,7 +30,7 @@
     
 	
   
-    <a class="baselink" href="./">pico-go documentation</a>
+    <a class="baselink" href="./index.html">pico-go documentation</a>
   
 
   </div>
@@ -44,39 +44,36 @@
             <i class="fa fa-fw fa-home"></i>
           </a>
           </li>
-    <li data-nav-id="/dev-doc.html" class="dd-item haschildren
+    <li data-nav-id="/about.html" class="dd-item
         ">
       <div>
-      <a href="./dev-doc.html">Dev docs</a><i class="fa fa-angle-right fa-lg category-icon"></i>
+      <a href="./about.html">about</a>
       </div>
-        <ul>
-      <li data-nav-id="/dev-doc/start.html" class="dd-item">
-        <div>
-          <a href="./dev-doc/start.html">
-            start
-          </a>
-        </div>
     </li>
-        </ul>
+    <li data-nav-id="/dev-doc.html" class="dd-item
+        ">
+      <div>
+      <a href="./dev-doc.html">dev docs</a>
+      </div>
     </li>
     <li data-nav-id="/example.html" class="dd-item parent active haschildren
         ">
       <div>
-      <a href="./example.html">Examples</a>
+      <a href="./example.html">examples</a>
             <i class="fa fa-angle-down fa-lg category-icon"></i>
       </div>
         <ul>
-      <li data-nav-id="/example/overview.html" class="dd-item">
-        <div>
-          <a href="./example/overview.html">
-            overview
-          </a>
-        </div>
-    </li>
       <li data-nav-id="/example/demo-01.html" class="dd-item">
         <div>
           <a href="./example/demo-01.html">
-            simple
+            demo-01
+          </a>
+        </div>
+    </li>
+      <li data-nav-id="/example/ebiten.html" class="dd-item">
+        <div>
+          <a href="./example/ebiten.html">
+            ebiten
           </a>
         </div>
     </li>
@@ -96,12 +93,14 @@
       <center>Navigation : 
         <select onchange="javascript:location.href = this.value;">
           
+    <option value="/about.html" >
+   about</option>
     <option value="/dev-doc.html" >
-   Dev docs</option>
+   dev docs</option>
     <option value="/example.html"  selected>
-   Examples</option> 
-      <option value="/example/overview.html" >- overview</option>
-      <option value="/example/demo-01.html" >- simple</option>
+   examples</option> 
+      <option value="/example/demo-01.html" >- demo-01</option>
+      <option value="/example/ebiten.html" >- ebiten</option>
   
 
 
@@ -109,89 +108,18 @@
         </select>
       </center>
     </div>
-      <div>
-        <div class="searchbox">
-          <input data-search-input id="search-by" type="text" placeholder="Search...">
-        </div>
-        <script type="text/javascript" src="./js/lunr.min.js"></script>
-        <script type="text/javascript" src="./js/auto-complete.js"></script>
-        <link href="./css/auto-complete.css" rel="stylesheet">
-        <script type="text/javascript">
-          
-              var baseurl = "\/";
-          
-        </script>
-        <script type="text/javascript" src="./js/search.js"></script>
-      </div>
     
 
-    <h1>Examples</h1>
+    <h1>examples</h1>
     
     
     
 
 
 
-<div class="extra-pagination inner">
-<nav class="pagination" role="navigation">
-	
-	<span class="page-number">Page 1 of 1</span>
-	
-</nav>
+<h1 id="examples">Examples</h1>
 
-</div>
-
-
-   <article class="post example">
-    <header class="post-header">
-        <h2 class="post-title"><a href="./example/overview.html">overview</a></h2>
-    </header>
-    <section class="post-excerpt">
-        <p>Examples The examples folder contains small example projects for pico-go.
-demo-01 This is the bare bones source used by the &ldquo;New&rdquo; menu option to help get you started.
-demo-01
-More More examples coming soon
-Meanwhile You can use most of the ebiten examples too.
-Just trying opening a file from $GOPATH/src/github.com/hajimehoshi/ebiten/examples
-The only code you may need to change is the scale factor when running ebiten. Set the value to 1 instead of 2 on some of the demos and we&rsquo;ll handle the scaling for you. <a class="read-more" href="./example/overview.html">&raquo;</a></p>
-    </section>
-    <footer class=" footline" >
-         
-        
-
-        
-        
-
-    </footer>
-</article>
-
-   <article class="post example">
-    <header class="post-header">
-        <h2 class="post-title"><a href="./example/demo-01.html">simple</a></h2>
-    </header>
-    <section class="post-excerpt">
-        <p>demo-01 This is a simple project to demonstrate how to develop using pico-go.
-/* This is a simple demo project to show you how to use pico-go Copyright 2018 @telecoda */ package main import ( &#34;fmt&#34; &#34;log&#34; &#34;image/color&#34; &#34;github.com/hajimehoshi/ebiten&#34; &#34;github.com/hajimehoshi/ebiten/ebitenutil&#34; ) const ( // define these vars to be used in javascript canvas scaling code 	screenWidth = 320 screenHeight = 240 ) var blue = color.RGBA{R: 33, G: 174, B: 255, A: 255} // update - this method is called 60 time a second func update(screen *ebiten. <a class="read-more" href="./example/demo-01.html">&raquo;</a></p>
-    </section>
-    <footer class=" footline" >
-         
-        
-
-        
-        
-
-    </footer>
-</article>
-
-
-<div style="margin-bottom:2rem"></div>
-
-<nav class="pagination" role="navigation">
-	
-	<span class="page-number">Page 1 of 1</span>
-	
-</nav>
-
+<p>These are short code examples of how to use <code>pico-go</code>.</p>
 
 
 
@@ -199,8 +127,8 @@ The only code you may need to change is the scale factor when running ebiten. Se
     
         <div class="chevrons">
     <div id="navigation">
-<a class="nav nav-prev" href="./dev-doc/start.html" title="start"> <i class="fa fa-chevron-left"></i><label>start</label></a>
-    <a class="nav nav-next" href="./example/overview.html" title="overview" style="margin-right: 0px;"><label>overview</label><i class="fa fa-chevron-right"></i></a></div>
+<a class="nav nav-prev" href="./dev-doc.html" title="dev docs"> <i class="fa fa-chevron-left"></i><label>dev docs</label></a>
+    <a class="nav nav-next" href="./example/demo-01.html" title="demo-01" style="margin-right: 0px;"><label>demo-01</label><i class="fa fa-chevron-right"></i></a></div>
   </div>
 
   </section>

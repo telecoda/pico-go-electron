@@ -6,7 +6,7 @@
       <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 <meta name="generator" content="Hugo 0.49" />
-<title>simple :: pico-go documentation</title>
+<title>demo-01 :: pico-go documentation</title>
 <link rel="shortcut icon" href="../images/favicon.png" type="image/x-icon" />
 <link href="../css/font-awesome.min.css" rel="stylesheet">
 <link href="../css/nucleus.css" rel="stylesheet">
@@ -30,7 +30,7 @@
     
 	
   
-    <a class="baselink" href="../">pico-go documentation</a>
+    <a class="baselink" href="../index.html">pico-go documentation</a>
   
 
   </div>
@@ -44,39 +44,36 @@
             <i class="fa fa-fw fa-home"></i>
           </a>
           </li>
-    <li data-nav-id="/dev-doc.html" class="dd-item haschildren
+    <li data-nav-id="/about.html" class="dd-item
         ">
       <div>
-      <a href="../dev-doc.html">Dev docs</a><i class="fa fa-angle-right fa-lg category-icon"></i>
+      <a href="../about.html">about</a>
       </div>
-        <ul>
-      <li data-nav-id="/dev-doc/start.html" class="dd-item">
-        <div>
-          <a href="../dev-doc/start.html">
-            start
-          </a>
-        </div>
     </li>
-        </ul>
+    <li data-nav-id="/dev-doc.html" class="dd-item
+        ">
+      <div>
+      <a href="../dev-doc.html">dev docs</a>
+      </div>
     </li>
     <li data-nav-id="/example.html" class="dd-item parent haschildren
         ">
       <div>
-      <a href="../example.html">Examples</a>
+      <a href="../example.html">examples</a>
             <i class="fa fa-angle-down fa-lg category-icon"></i>
       </div>
         <ul>
-      <li data-nav-id="/example/overview.html" class="dd-item">
-        <div>
-          <a href="../example/overview.html">
-            overview
-          </a>
-        </div>
-    </li>
       <li data-nav-id="/example/demo-01.html" class="dd-item active">
         <div>
           <a href="../example/demo-01.html">
-            simple
+            demo-01
+          </a>
+        </div>
+    </li>
+      <li data-nav-id="/example/ebiten.html" class="dd-item">
+        <div>
+          <a href="../example/ebiten.html">
+            ebiten
           </a>
         </div>
     </li>
@@ -96,12 +93,14 @@
       <center>Navigation : 
         <select onchange="javascript:location.href = this.value;">
           
+    <option value="/about.html" >
+   about</option>
     <option value="/dev-doc.html" >
-   Dev docs</option>
+   dev docs</option>
     <option value="/example.html" >
-   Examples</option> 
-      <option value="/example/overview.html" >- overview</option>
-      <option value="/example/demo-01.html"  selected>- simple</option>
+   examples</option> 
+      <option value="/example/demo-01.html"  selected>- demo-01</option>
+      <option value="/example/ebiten.html" >- ebiten</option>
   
 
 
@@ -109,23 +108,9 @@
         </select>
       </center>
     </div>
-      <div>
-        <div class="searchbox">
-          <input data-search-input id="search-by" type="text" placeholder="Search...">
-        </div>
-        <script type="text/javascript" src="../js/lunr.min.js"></script>
-        <script type="text/javascript" src="../js/auto-complete.js"></script>
-        <link href="../css/auto-complete.css" rel="stylesheet">
-        <script type="text/javascript">
-          
-              var baseurl = "\/";
-          
-        </script>
-        <script type="text/javascript" src="../js/search.js"></script>
-      </div>
     
 
-    <h1>simple</h1>
+    <h1>demo-01</h1>
     
     
     
@@ -135,16 +120,20 @@
 
 <p>This is a simple project to demonstrate how to develop using pico-go.</p>
 
+<h2 id="example-output">example output</h2>
 
+<p><img src="demo-01.png" alt="image" /></p>
 
+<h2 id="sourcecode">sourcecode</h2>
 
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#75715e">/*
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
+
+<span style="color:#75715e">/*
 </span><span style="color:#75715e">	This is a simple demo project to show you how to use pico-go
 </span><span style="color:#75715e">
 </span><span style="color:#75715e">	Copyright 2018 @telecoda
 </span><span style="color:#75715e">
 </span><span style="color:#75715e">*/</span>
-<span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
 
 <span style="color:#f92672">import</span> (
 	<span style="color:#e6db74">&#34;fmt&#34;</span>
@@ -187,13 +176,12 @@
 }</code></pre></div>
 
 
-
     
     
         <div class="chevrons">
     <div id="navigation">
-<a class="nav nav-prev" href="../example/overview.html" title="overview"> <i class="fa fa-chevron-left"></i><label>overview</label></a>
-    <a class="nav nav-next" href="../dev-doc.html" title="Dev docs" style="margin-right: 0px;"><label>Dev docs</label><i class="fa fa-chevron-right"></i></a></div>
+<a class="nav nav-prev" href="../example.html" title="examples"> <i class="fa fa-chevron-left"></i><label>examples</label></a>
+    <a class="nav nav-next" href="../example/ebiten.html" title="ebiten" style="margin-right: 0px;"><label>ebiten</label><i class="fa fa-chevron-right"></i></a></div>
   </div>
 
   </section>

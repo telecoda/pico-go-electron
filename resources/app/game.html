@@ -36,7 +36,9 @@
 	</script>
 	<script src="static/js/game.js"></script>
 	<script type="text/javascript">
-		gameFuncs.init();
+		if (typeof gameFuncs!= 'undefined') {
+			gameFuncs.init();
+		}
 		function resizer () {
 			/*
 				This is the resize code that tries to scale the canvas to the largest possible size

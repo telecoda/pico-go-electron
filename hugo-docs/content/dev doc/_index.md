@@ -1,7 +1,7 @@
 +++
-title = "start"
+title = "dev docs"
 description = ""
-weight = 10
+weight = 2
 
 +++
 

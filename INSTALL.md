@@ -57,7 +57,7 @@ and repeat **step 3**.
 
 The instructions above are for creating a fully fledged native Electron app for your operating system. However if you wish to tinker with `pico-go-electron` yourself and just run a simple go binary there is a far easier way to do things.
 
-Providing you already have all the necesary prerequistes installed when you are in the project root directory type:
+Providing you already have all the necessary prerequistes installed when you are in the project root directory type:
 
     go build
 
@@ -70,3 +70,16 @@ or on Windows
     pico-go-electron.exe -d
 
 The `-d` flag enables debug mode which allows you to start the chrome developer tools if you are planning to tinker with the javascript.  There will be a debug option on the applications main menu.
+
+# Updating the docs
+
+To update the embedded docs you will need https://gohugo.io/ installed.
+
+Edit the markdown in the `hugo-docs/content` folder and then regenerate them using:
+
+    go generate ./...
+
+To edit the docs and have them rendered live in a browser window. Run the hugo server in the hugo-docs directory.
+
+    cd hugo-docs
+    hugo server -v

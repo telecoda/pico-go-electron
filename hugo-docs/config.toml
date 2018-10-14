@@ -5,9 +5,12 @@ title = "pico-go documentation"
 languageCode = "en-us"
 theme = "hugo-theme-docdock"
 DefaultContentLanguage = "en"
+pygmentsStyle = "monokai"
+
 
 [params]
 themeStyle = "picogo"
+disableSearch = true
 
 [blackfriday]
   hrefTargetBlank = true # open the external links in a new window

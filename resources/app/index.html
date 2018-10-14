@@ -83,7 +83,8 @@
         editor.session.setValue("Welcome to `pico-go` by @telecoda\n\nselect `New` from file menu to get started\n");
         document.title = "<untitled>";
         window.onload = function() {
-  document.getElementById("editor").focus();
+            console.log("Focusing editor");
+            document.getElementById("editor").focus();
         };
     </script>
     <script type="text/javascript" src="static/lib/jquery-2.2.4/jquery-min.js"></script>

@@ -1,13 +1,9 @@
 +++
-title = "overview"
+title = "examples"
 draft = false
-weight = 1
+weight = 3
 
 +++
 # Examples
 
-The `examples` folder contains small example projects for pico-go.
-
-
-## Meanwhile
-
+These are short code examples of how to use `pico-go`.
