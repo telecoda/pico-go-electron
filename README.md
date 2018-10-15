@@ -42,12 +42,12 @@ Head on over to the development guide and get started writing your own games and
 
 [developer guide](./docs/content/dev%20doc/_index.md)
 
-Or if your are looking for inspiration check out the [examples](./examples/EXAMPLES.md)
+Or if your are looking for inspiration check out the [examples](./docs/content/example)
 
-![image](./docs/context/example/ebiten.png)
+![image](./docs/content/example/ebiten/ebiten.png)
 
 # History
-Find a little about the background of this project [here](./docs/HISTORY.md)
+Find a little about the background of this project [here](./docs/content/about/history.md)
 
 # Standing on the shoulders of giants
 
