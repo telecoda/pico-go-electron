@@ -3,7 +3,6 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-
 	"github.com/asticode/go-astilectron"
 	"github.com/asticode/go-astilectron-bootstrap"
 )
@@ -41,29 +40,27 @@ func handleMessages(_ *astilectron.Window, m bootstrap.MessageIn) (payload inter
 		}
 		return
 	case "load":
-		var path string
+		source := SourceCode{}
 		if len(m.Payload) > 0 {
 			// Unmarshal payload
-			if err = json.Unmarshal(m.Payload, &path); err != nil {
-				payload = err.Error()
+			if err = json.Unmarshal(m.Payload, &source); err != nil {
+				payload = fmt.Sprintf("Failed to unmarshal message: %s - %s", string(m.Payload), err.Error())
 				return
 			}
 		}
-		payload, err = load(path)
+		payload, err = load(source.Path)
 		if err != nil {
 			payload = err.Error()
 		}
 		return
-	case "save":
-		return nil, fmt.Errorf("Save function not implemented yet")
 	case "run":
 		// Unmarshal payload
-		var source SourceCode
+		source := SourceCode{}
 
 		if len(m.Payload) > 0 {
 			// Unmarshal payload
 			if err = json.Unmarshal(m.Payload, &source); err != nil {
-				payload = err.Error()
+				payload = fmt.Sprintf("Failed to unmarshal message: %s - %s", string(m.Payload), err.Error())
 				return
 			}
 		}
@@ -71,6 +68,23 @@ func handleMessages(_ *astilectron.Window, m bootstrap.MessageIn) (payload inter
 		if err != nil {
 			payload = err.Error()
 		}
+		return
+	case "save":
+		// Unmarshal payload
+		source := SourceCode{}
+
+		if len(m.Payload) > 0 {
+			// Unmarshal payload
+			if err = json.Unmarshal(m.Payload, &source); err != nil {
+				payload = fmt.Sprintf("Failed to unmarshal message: %s - %s", string(m.Payload), err.Error())
+				return
+			}
+		}
+		payload, err = save(source)
+		if err != nil {
+			payload = err.Error()
+		}
+		return
 	}
 	return
 }

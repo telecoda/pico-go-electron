@@ -12,7 +12,7 @@ const (
 )
 
 func getBuildCmd(sourceFile, outFile string) *exec.Cmd {
-	cmd := exec.Command(gopherJS, "build", sourceFile, "-o", outFile)
+	cmd := exec.Command(getGopherJSPath(), "build", sourceFile, "-o", outFile)
 	cmd.Env = append(os.Environ(), "GOOS=linux")
 	return cmd
 }

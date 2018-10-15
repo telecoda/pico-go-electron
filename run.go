@@ -52,8 +52,6 @@ func run(sourceCode SourceCode) (a Application, err error) {
 		return
 	}
 
-	fmt.Printf("Writing to file: %s - %s\n", dir, tmpFileName)
-
 	// compile with GopherJS
 	outFile := filepath.Join(dir, "cart.js")
 
@@ -204,7 +202,7 @@ func getIntValue(line, fieldname string) int {
 	// or. screenWidth = 320
 
 	trimmed := strings.TrimSpace(line)
-	trimmed = strings.Replace(trimmed,"	","",-1) // remove tabs  
+	trimmed = strings.Replace(trimmed, "	", "", -1) // remove tabs
 	replaced := strings.Replace(trimmed, "var "+fieldname, "", 1)
 	replaced = strings.Replace(replaced, "const "+fieldname, "", 1)
 	replaced = strings.Replace(replaced, fieldname, "", 1)

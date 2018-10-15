@@ -12,8 +12,24 @@ let elements = {};
 let menus = {};
 let quittingApp = false;
 
+// Single instance
+let lastWindow = null;
+if (process.argv[3] === "true") {
+    let shouldQuit = app.makeSingleInstance(function(commandLine, workingDirectory) {
+    // Someone tried to run a second instance, we should focus our window.
+    if (lastWindow) {
+      if (lastWindow.isMinimized()) lastWindow.restore();
+        lastWindow.focus();
+    }
+  });
+
+  if (shouldQuit) {
+    app.quit();
+  }
+}
+
 // Command line switches
-let idx = 3;
+let idx = 4;
 for (let i = idx; i < process.argv.length; i++) {
     let s = process.argv[i].replace(/^[\-]+/g,"");
     let v;
@@ -368,24 +384,37 @@ function trayCreate(json) {
 // windowCreate creates a new window
 function windowCreate(json) {
     elements[json.targetID] = new BrowserWindow(json.windowOptions)
+    if (typeof json.windowOptions.proxy !== "undefined") {
+        elements[json.targetID].webContents.session.setProxy(json.windowOptions.proxy, function() {
+            windowCreateFinish(json)
+        })
+    } else {
+        windowCreateFinish(json)
+    }
+}
+
+// windowCreateFinish finishes creating a new window
+function windowCreateFinish(json) {
     elements[json.targetID].setMenu(null)
-    elements[json.targetID].loadURL(json.url);
+    elements[json.targetID].loadURL(json.url, (typeof json.windowOptions.load !== "undefined" ? json.windowOptions.load :  {}));
     elements[json.targetID].on('blur', () => { client.write(json.targetID, consts.eventNames.windowEventBlur) })
     elements[json.targetID].on('close', (e) => {
-        if (typeof json.windowOptions.messageBoxOnClose !== "undefined") {
-            let buttonId = dialog.showMessageBox(null, json.windowOptions.messageBoxOnClose)
-            if (typeof json.windowOptions.messageBoxOnClose.confirmId !== "undefined" && json.windowOptions.messageBoxOnClose.confirmId !== buttonId) {
-                e.preventDefault()
-                return
+        if (typeof json.windowOptions.custom !== "undefined") {
+            if (typeof json.windowOptions.custom.messageBoxOnClose !== "undefined") {
+                let buttonId = dialog.showMessageBox(null, json.windowOptions.custom.messageBoxOnClose)
+                if (typeof json.windowOptions.custom.messageBoxOnClose.confirmId !== "undefined" && json.windowOptions.custom.messageBoxOnClose.confirmId !== buttonId) {
+                    e.preventDefault()
+                    return
+                }
             }
-        }
-        if (!quittingApp) {
-            if (json.windowOptions.minimizeOnClose) {
-                e.preventDefault();
-                elements[json.targetID].minimize();
-            } else if (json.windowOptions.hideOnClose) {
-                e.preventDefault();
-                elements[json.targetID].hide();
+            if (!quittingApp) {
+                if (json.windowOptions.custom.minimizeOnClose) {
+                    e.preventDefault();
+                    elements[json.targetID].minimize();
+                } else if (json.windowOptions.custom.hideOnClose) {
+                    e.preventDefault();
+                    elements[json.targetID].hide();
+                }
             }
         }
     })
@@ -428,14 +457,16 @@ function windowCreate(json) {
                 counters: {},
                 registerCallback: function(k, e, c, n) {
                     e.targetID = '`+ json.targetID +`';
-                    if (typeof astilectron.counters[k] === "undefined") {
-                        astilectron.counters[k] = 1;
+                    if (typeof c !== "undefined") {
+                        if (typeof astilectron.counters[k] === "undefined") {
+                            astilectron.counters[k] = 1;
+                        }
+                        e.callbackId = String(astilectron.counters[k]++);
+                        if (typeof astilectron.callbacks[k] === "undefined") {
+                            astilectron.callbacks[k] = {};
+                        }
+                        astilectron.callbacks[k][e.callbackId] = c;
                     }
-                    e.callbackId = String(astilectron.counters[k]++);
-                    if (typeof astilectron.callbacks[k] === "undefined") {
-                        astilectron.callbacks[k] = {};
-                    }
-                    astilectron.callbacks[k][e.callbackId] = c;
                     ipcRenderer.send(n, e);
                 },
                 executeCallback: function(k, message, args) {
@@ -464,7 +495,8 @@ function windowCreate(json) {
             });
             ipcRenderer.on('`+ consts.eventNames.ipcCmdLog+`', function(event, message) {
                 console.log(message)
-            })
+            });
+            ` + (typeof json.windowOptions.custom !== "undefined" && typeof json.windowOptions.custom.script !== "undefined" ? json.windowOptions.custom.script : "") + `
             document.dispatchEvent(new Event('astilectron-ready'))`
         )
         sessionCreate(elements[json.targetID].webContents, json.sessionId)
@@ -485,6 +517,7 @@ function windowCreate(json) {
             url: url
         })
     })
+    lastWindow = elements[json.targetID]
 }
 
 function registerCallback(json, k, e, n, c) {

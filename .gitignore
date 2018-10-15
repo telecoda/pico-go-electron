@@ -6,3 +6,4 @@ bind_darwin_amd64.go
 bind_windows_amd64.go
 # ignore output assets
 output/*
+.vscode

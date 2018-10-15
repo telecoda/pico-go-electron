@@ -1,9 +1,10 @@
 package main
 
 import (
-	"flag"
-
 	"encoding/json"
+	"flag"
+	"fmt"
+	"time"
 
 	"github.com/asticode/go-astilectron"
 	"github.com/asticode/go-astilectron-bootstrap"
@@ -13,10 +14,11 @@ import (
 
 // Vars
 var (
-	AppName string
-	BuiltAt string
-	debug   = flag.Bool("d", false, "enables the debug mode")
-	w       *astilectron.Window
+	AppName     string
+	BuiltAt     string
+	debug       = flag.Bool("d", false, "enables the debug mode")
+	w           *astilectron.Window
+	saveEnabled *bool
 )
 
 func main() {
@@ -37,7 +39,7 @@ func main() {
 		Debug: *debug,
 		MenuOptions: []*astilectron.MenuItemOptions{
 			&astilectron.MenuItemOptions{
-				Label: astilectron.PtrStr("File"),
+				Label: astilectron.PtrStr("Pico-go"),
 				SubMenu: []*astilectron.MenuItemOptions{
 					{
 						Label: astilectron.PtrStr("About"),
@@ -49,7 +51,6 @@ func main() {
 									astilog.Error(errors.Wrap(err, "unmarshaling payload failed"))
 									return
 								}
-								astilog.Infof("About modal has been displayed and payload is %s!", s)
 							}); err != nil {
 								astilog.Error(errors.Wrap(err, "sending about event failed"))
 							}
@@ -57,6 +58,88 @@ func main() {
 						},
 					},
 					{Role: astilectron.MenuItemRoleClose},
+				},
+			},
+			&astilectron.MenuItemOptions{
+				Label: astilectron.PtrStr("File"),
+				SubMenu: []*astilectron.MenuItemOptions{
+					{
+						Accelerator: &astilectron.Accelerator{"CmdOrCtrl+N"},
+						Label:       astilectron.PtrStr("New"),
+						OnClick: func(e astilectron.Event) (deleteListener bool) {
+							if err := bootstrap.SendMessage(w, "new", demoSrc, func(m *bootstrap.MessageIn) {
+								// Unmarshal payload
+								var s string
+								if m != nil {
+									if err := json.Unmarshal(m.Payload, &s); err != nil {
+										astilog.Error(errors.Wrap(err, "unmarshaling payload failed"))
+										return
+									}
+								}
+							}); err != nil {
+								astilog.Error(errors.Wrap(err, "sending new event failed"))
+							}
+							return
+						},
+					},
+					{
+						Accelerator: &astilectron.Accelerator{"CmdOrCtrl+O"},
+						Label:       astilectron.PtrStr("Open"),
+						OnClick: func(e astilectron.Event) (deleteListener bool) {
+							if err := bootstrap.SendMessage(w, "open", "open this", func(m *bootstrap.MessageIn) {
+								// Unmarshal payload
+								var s string
+								if m != nil {
+									if err := json.Unmarshal(m.Payload, &s); err != nil {
+										astilog.Error(errors.Wrap(err, "unmarshaling payload failed"))
+										return
+									}
+								}
+							}); err != nil {
+								astilog.Error(errors.Wrap(err, "sending open event failed"))
+							}
+							return
+						},
+					},
+					{
+						Accelerator: &astilectron.Accelerator{"CmdOrCtrl+S"},
+						Label:       astilectron.PtrStr("Save"),
+						OnClick: func(e astilectron.Event) (deleteListener bool) {
+							if err := bootstrap.SendMessage(w, "save", "save this", func(m *bootstrap.MessageIn) {
+								// Unmarshal payload
+								var s string
+								if m != nil {
+									if err := json.Unmarshal(m.Payload, &s); err != nil {
+										astilog.Error(errors.Wrap(err, "unmarshaling payload failed"))
+										return
+									}
+								}
+							}); err != nil {
+								astilog.Error(errors.Wrap(err, "sending save event failed"))
+							}
+							return
+						},
+						Enabled: saveEnabled,
+					},
+					{
+						Accelerator: &astilectron.Accelerator{"Shift+CmdOrCtrl+S"},
+						Label:       astilectron.PtrStr("Save As..."),
+						OnClick: func(e astilectron.Event) (deleteListener bool) {
+							if err := bootstrap.SendMessage(w, "saveAs", "saveAs this", func(m *bootstrap.MessageIn) {
+								// Unmarshal payload
+								var s string
+								if m != nil {
+									if err := json.Unmarshal(m.Payload, &s); err != nil {
+										astilog.Error(errors.Wrap(err, "unmarshaling payload failed"))
+										return
+									}
+								}
+							}); err != nil {
+								astilog.Error(errors.Wrap(err, "sending saveAs event failed"))
+							}
+							return
+						},
+					},
 				},
 			},
 			&astilectron.MenuItemOptions{
@@ -79,15 +162,37 @@ func main() {
 					},
 				},
 			},
+			&astilectron.MenuItemOptions{
+				Label: astilectron.PtrStr("Run"),
+				SubMenu: []*astilectron.MenuItemOptions{
+					{
+						Accelerator: &astilectron.Accelerator{"CmdOrCtrl+R"},
+						Label:       astilectron.PtrStr("Run"),
+						OnClick: func(e astilectron.Event) (deleteListener bool) {
+							if err := bootstrap.SendMessage(w, "run", "run code", func(m *bootstrap.MessageIn) {
+								// Unmarshal payload
+								var s string
+								if m != nil {
+									if err := json.Unmarshal(m.Payload, &s); err != nil {
+										astilog.Error(errors.Wrap(err, "unmarshaling payload failed"))
+										return
+									}
+								}
+							}); err != nil {
+								astilog.Error(errors.Wrap(err, "sending run event failed"))
+							}
+							return
+						},
+					},
+				},
+			},
 		},
-		OnWait: func(_ *astilectron.Astilectron, ws []*astilectron.Window, _ *astilectron.Menu, _ *astilectron.Tray, _ *astilectron.Menu) error {
+		OnWait: func(_ *astilectron.Astilectron, ws []*astilectron.Window, m *astilectron.Menu, _ *astilectron.Tray, _ *astilectron.Menu) error {
 			w = ws[0]
-			// go func() {
-			// 	time.Sleep(5 * time.Second)
-			// 	if err := bootstrap.SendMessage(w, "check.out.menu", "Don't forget to check out the menu!"); err != nil {
-			// 		astilog.Error(errors.Wrap(err, "sending check.out.menu event failed"))
-			// 	}
-			// }()
+			go func() {
+				time.Sleep(5 * time.Second)
+				fmt.Printf("TEMP: w: #%v\n",w)
+			}()
 			return nil
 		},
 		RestoreAssets: RestoreAssets,
@@ -97,8 +202,8 @@ func main() {
 			Options: &astilectron.WindowOptions{
 				BackgroundColor: astilectron.PtrStr("#333"),
 				Center:          astilectron.PtrBool(true),
-				Height:          astilectron.PtrInt(850),
-				Width:           astilectron.PtrInt(850),
+				Height:          astilectron.PtrInt(720),
+				Width:           astilectron.PtrInt(960),
 			},
 		}},
 	}); err != nil {
