@@ -18,7 +18,7 @@ Select `New` from the file menu or press `CMD+N` and the editor will be filled w
 
 Click `run` and the code will be compiled and the window will change to an awe-inspiring game window.
 
-![image](./docs/content/example/demo-01.png)
+![image](./docs/content/example/demo-01/demo-01.png)
 
 ## What actually happens
 
