@@ -13,10 +13,10 @@
     
     <item>
       <title>demo-01</title>
-      <link>/example/demo-01.html</link>
+      <link>/example/demo-01/demo-01.html</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>/example/demo-01.html</guid>
+      <guid>/example/demo-01/demo-01.html</guid>
       <description>demo-01 This is a simple project to demonstrate how to develop using pico-go.
 example output sourcecode package main /* This is a simple demo project to show you how to use pico-go Copyright 2018 @telecoda */ import ( &amp;#34;fmt&amp;#34; &amp;#34;log&amp;#34; &amp;#34;image/color&amp;#34; &amp;#34;github.com/hajimehoshi/ebiten&amp;#34; &amp;#34;github.com/hajimehoshi/ebiten/ebitenutil&amp;#34; ) const ( // define these vars to be used in javascript canvas scaling code 	screenWidth = 320 screenHeight = 240 ) var blue = color.</description>
     </item>
@@ -41,6 +41,26 @@ func main() { if err := ebiten.Run(update, screenWidth, screenHeight, 2, &amp;#3
       
       <guid>/_footer.html</guid>
       <description>pico-go docs</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>/about/history.html</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/about/history.html</guid>
+      <description>pico-go Development history This is where you find out how pico-go (electron) came to be.
+TODO: write this up properly&amp;hellip;.
+go-game OpenGL
+pico8!
+pico-go
+The idea originally started in my pico-go repo but I found the external dependencies too complex/limiting for getting developers quickly productive on multiple platforms.
+OpenGL
+-&amp;gt; ebiten
+pico-go-electron
+endless css/js wrangling
+cross platform ballache
+embedded resources in Windows vs filesystem on OSX still need to test on linux</description>
     </item>
     
   </channel>

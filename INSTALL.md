@@ -75,11 +75,11 @@ The `-d` flag enables debug mode which allows you to start the chrome developer 
 
 To update the embedded docs you will need https://gohugo.io/ installed.
 
-Edit the markdown in the `hugo-docs/content` folder and then regenerate them using:
+Edit the markdown in the `docs/content` folder and then regenerate them using:
 
     go generate ./...
 
-To edit the docs and have them rendered live in a browser window. Run the hugo server in the hugo-docs directory.
+To edit the docs and have them rendered live in a browser window. Run the hugo server in the docs directory.
 
-    cd hugo-docs
+    cd docs
     hugo server -v

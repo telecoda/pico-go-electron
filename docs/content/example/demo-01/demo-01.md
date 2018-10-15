@@ -14,7 +14,7 @@ This is a simple project to demonstrate how to develop using pico-go.
 ## sourcecode
 
 {{< highlight go >}}
-{{% readfile file="/examples/demo-01.go" %}}
+{{% readfile file="/example/demo-01/demo-01.go" %}}
 {{< / highlight >}} 
 
 

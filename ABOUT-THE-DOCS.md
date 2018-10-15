@@ -2,7 +2,7 @@
 
 The pico-go in app documentation is powered by hugo.
 
-To maintain the in app docs, edit the markdown files here in the [hugo-docs/content](./hugo-docs/content) folder.
+To maintain the in app docs, edit the markdown files here in the [docs/content](./docs/content) folder.
 
 ## Generating the docs
 
@@ -16,7 +16,7 @@ In the root dir of the project
 
 You can use `hugo` to edit the docs dynamically whilst developing content.
 
-In the `hugo-docs` dir type:
+In the `docs` dir type:
 
     hugo server
 

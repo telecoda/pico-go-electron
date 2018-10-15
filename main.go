@@ -3,7 +3,6 @@ package main
 import (
 	"encoding/json"
 	"flag"
-	"fmt"
 	"time"
 
 	"github.com/asticode/go-astilectron"
@@ -191,7 +190,6 @@ func main() {
 			w = ws[0]
 			go func() {
 				time.Sleep(5 * time.Second)
-				fmt.Printf("TEMP: w: #%v\n",w)
 			}()
 			return nil
 		},

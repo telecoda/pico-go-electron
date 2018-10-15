@@ -7,7 +7,7 @@
   </url>
   
   <url>
-    <loc>/example/demo-01.html</loc>
+    <loc>/example/demo-01/demo-01.html</loc>
   </url>
   
   <url>
@@ -29,6 +29,10 @@
   
   <url>
     <loc>/_footer.html</loc>
+  </url>
+  
+  <url>
+    <loc>/about/history.html</loc>
   </url>
   
   <url>

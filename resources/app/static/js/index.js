@@ -13,6 +13,7 @@ let index = {
         document.addEventListener('astilectron-ready', function() {
             // Listen
             index.listen();
+            app.focus();
         
             // call backend init
             // Create message

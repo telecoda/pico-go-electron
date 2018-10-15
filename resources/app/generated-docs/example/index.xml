@@ -12,10 +12,10 @@
     
     <item>
       <title>demo-01</title>
-      <link>/example/demo-01.html</link>
+      <link>/example/demo-01/demo-01.html</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>/example/demo-01.html</guid>
+      <guid>/example/demo-01/demo-01.html</guid>
       <description>demo-01 This is a simple project to demonstrate how to develop using pico-go.
 example output sourcecode package main /* This is a simple demo project to show you how to use pico-go Copyright 2018 @telecoda */ import ( &amp;#34;fmt&amp;#34; &amp;#34;log&amp;#34; &amp;#34;image/color&amp;#34; &amp;#34;github.com/hajimehoshi/ebiten&amp;#34; &amp;#34;github.com/hajimehoshi/ebiten/ebitenutil&amp;#34; ) const ( // define these vars to be used in javascript canvas scaling code 	screenWidth = 320 screenHeight = 240 ) var blue = color.</description>
     </item>

@@ -1,14 +1,14 @@
 # pico-go-electron
 
-![image](./docs/images/logo-large.png)
+![image](./docs/content/about/logo-large.png)
 
 pigo-go is a standalone (offline) gamedev tool using Go.  It is for developing simple games / demos like the [pico8 console](https://www.lexaloffle.com/pico-8.php) but instead of coding in Lua you use Go.
 
-![image](./docs/images/editor.png)
+![image](./docs/content/about/editor.png)
 
 # Installation
 
-To get started follow the installation instructions [here.](./docs/INSTALL.md)
+To get started follow the installation instructions [here.](./INSTALL.md)
 
 # Getting started
 
@@ -18,7 +18,7 @@ Select `New` from the file menu or press `CMD+N` and the editor will be filled w
 
 Click `run` and the code will be compiled and the window will change to an awe-inspiring game window.
 
-![image](./docs/images/demo-01.png)
+![image](./docs/content/example/demo-01.png)
 
 ## What actually happens
 
@@ -40,11 +40,11 @@ When you hit `run` the Go code this is what happens:
 
 Head on over to the development guide and get started writing your own games and demos.
 
-[developer guide](./docs/DEV-GUIDE.md)
+[developer guide](./docs/content/dev%20doc/_index.md)
 
 Or if your are looking for inspiration check out the [examples](./examples/EXAMPLES.md)
 
-![image](./docs/images/ebiten-flappy-demo.png)
+![image](./docs/context/example/ebiten.png)
 
 # History
 Find a little about the background of this project [here](./docs/HISTORY.md)
