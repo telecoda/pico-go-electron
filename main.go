@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"flag"
+	"fmt"
 	"time"
 
 	"github.com/asticode/go-astilectron"
@@ -186,11 +187,11 @@ func main() {
 				},
 			},
 		},
-		OnWait: func(_ *astilectron.Astilectron, ws []*astilectron.Window, _ *astilectron.Menu, _ *astilectron.Tray, _ *astilectron.Menu) error {
+		OnWait: func(_ *astilectron.Astilectron, ws []*astilectron.Window, m *astilectron.Menu, _ *astilectron.Tray, _ *astilectron.Menu) error {
 			w = ws[0]
 			go func() {
 				time.Sleep(5 * time.Second)
-				//w.Focus()
+				fmt.Printf("TEMP: w: #%v\n",w)
 			}()
 			return nil
 		},
