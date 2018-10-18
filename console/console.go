@@ -31,10 +31,8 @@ const (
 	_spriteWidth    = 8
 	_spriteHeight   = 8
 	_spritesPerLine = 16
-	//_charWidth      = 4
-	//_charHeight     = 6
-	_maxCmdLen   = 254
-	_cursorFlash = time.Duration(500 * time.Millisecond)
+	_maxCmdLen      = 254
+	_cursorFlash    = time.Duration(500 * time.Millisecond)
 )
 
 const (
@@ -58,8 +56,7 @@ type console struct {
 
 	currentMode   ModeType
 	secondaryMode ModeType
-	//modes         map[ModeType]Mode
-	hasQuit bool
+	hasQuit       bool
 
 	// files
 	baseDir    string
@@ -103,11 +100,6 @@ func NewConsole(consoleType ConsoleType) (Console, error) {
 
 	// init font
 	f := bytes.NewReader(fonts.Font_ttf)
-
-	// f, err := ebitenutil.OpenFile(fontPath)
-	// if err != nil {
-	// 	log.Fatal(err)
-	// }
 
 	b, err := ioutil.ReadAll(f)
 	if err != nil {
@@ -192,13 +184,7 @@ func NewConsole(consoleType ConsoleType) (Console, error) {
 	return _console, nil
 }
 
-// func (c *console) GetWindow() *sdl.Window {
-// 	return c.window
-// }
-
 func (c *console) GetBounds() image.Rectangle {
-	// TODO
-	//	return c.screen.Bounds()
 	return image.Rect(0, 0, 0, 0)
 }
 
@@ -225,11 +211,12 @@ func (c *console) Run() error {
 
 	c.cart.initPb(pb)
 
-	//go c.saveState()
-
 	// poll events
 	endFrame = time.Now() // init end frame
 	startFrame = time.Now()
+
+	// init the cart
+	c.cart.Init()
 
 	return ebiten.Run(c.update, c.Config.ConsoleWidth, c.Config.ConsoleHeight, 1, "pico-go")
 }
@@ -342,46 +329,12 @@ func (c *console) mouseClicked(x, y int32) {
 
 }
 
-// saveState - saves console state periodically
-func (c *console) saveState() {
-
-	// ticker := time.NewTicker(1 * time.Second)
-
-	// for {
-	// 	select {
-	// 	case <-ticker.C:
-	// 		// save state
-	// 		c.state.SaveState(c)
-
-	// 	}
-	// }
-}
-
 func (c *console) Quit() {
 	c.hasQuit = true
 }
 
-// toggleCLI - toggle between CLI and secondary mode
-// func (c *console) toggleCLI() {
-// 	switch c.currentMode {
-// 	case CLI:
-// 		c.SetMode(c.secondaryMode)
-// 	case RUNTIME:
-// 		if mode, ok := c.modes[c.currentMode]; ok {
-// 			runtime := mode.(*runtime)
-// 			runtime.Stop()
-// 			c.SetMode(CLI)
-// 		}
-
-// 	default:
-// 		c.secondaryMode = c.currentMode
-// 		c.SetMode(CLI)
-// 	}
-// }
-
 // Destroy cleans up any resources at end
 func (c *console) Destroy() {
-	//c.window.Destroy()
 }
 
 // saveScreenshot - saves a screenshot of current frame

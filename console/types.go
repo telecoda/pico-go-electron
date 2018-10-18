@@ -33,7 +33,7 @@ type Clearer interface {
 
 type Drawer interface {
 	Color(colorID Color) // Set drawing color (colour!!!)
-	// drawing primatives
+	// drawing primitives
 	Circle(x, y, r int)
 	CircleWithColor(x, y, r int, colorID Color)
 	CircleFill(x, y, r int)

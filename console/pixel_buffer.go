@@ -29,9 +29,8 @@ type pixelBuffer struct {
 	gc           *gg.Context     // graphics context
 	psRect       image.Rectangle // rect of pixelSurface
 	renderRect   image.Rectangle // rect on main window that pixelbuffer is rendered into
-	//renderer     *sdl.Renderer
-	fps        int
-	timeBudget int64
+	fps          int
+	timeBudget   int64
 }
 
 type pos struct {
@@ -51,10 +50,6 @@ func newPixelBuffer(cfg Config) (PixelBuffer, error) {
 
 	p.timeBudget = time.Duration(1*time.Second).Nanoseconds() / int64(p.fps)
 
-	// ps, err := sdl.CreateRGBSurface(0, int32(cfg.ConsoleWidth), int32(cfg.ConsoleHeight), 8, 0, 0, 0, 0)
-	// if err != nil {
-	// 	return nil, err
-	// }
 	p.psRect = image.Rect(0, 0, cfg.ConsoleWidth, cfg.ConsoleHeight)
 	p.renderRect = image.Rect(0, 0, cfg.ConsoleWidth, cfg.ConsoleHeight)
 	ps := image.NewRGBA(p.psRect)
@@ -76,8 +71,6 @@ func newPixelBuffer(cfg Config) (PixelBuffer, error) {
 	}
 	p.screen = screen
 	p.pixelSurface = ps
-	// p.psRect = &sdl.Rect{X: 0, Y: 0, W: p.pixelSurface.W, H: p.pixelSurface.H}
-	// p.renderRect = &sdl.Rect{X: 0, Y: 0, W: p.pixelSurface.W, H: p.pixelSurface.H}
 
 	p.textCursor.x = 0
 	p.textCursor.y = 0
@@ -87,14 +80,7 @@ func newPixelBuffer(cfg Config) (PixelBuffer, error) {
 	p.charCols = cfg.ConsoleWidth / _console.Config.fontWidth
 	p.charRows = cfg.ConsoleHeight / _console.Config.fontHeight
 
-	// p.renderer, err = sdl.CreateSoftwareRenderer(p.pixelSurface)
-	// if err != nil {
-	// 	return nil, err
-	// }
 	p.gc = gg.NewContextForRGBA(ps)
-	// if err := p.gc.LoadFontFace("/Library/Fonts/Arial.ttf", 6); err != nil {
-	// 	panic(err)
-	// }
 	p.gc.SetFontFace(_console.font)
 	p.gc.SetLineWidth(1)
 	p.gc.Identity()
@@ -137,99 +123,6 @@ func (p *pixelBuffer) Cursor(x, y int) {
 // Flip - copy offscreen buffer to onscreen buffer
 func (p *pixelBuffer) Flip() error {
 
-	// tex, err := _console.renderer.CreateTextureFromSurface(p.pixelSurface)
-	// if err != nil {
-	// 	return err
-	// }
-	// defer tex.Destroy()
-
-	// calc how big to render on window
-	// winW, winH := _console.window.GetSize()
-
-	// // clear window
-	// fullRect := &sdl.Rect{X: 0, Y: 0, W: int32(winW), H: int32(winH)}
-	// rgba, _ := p.palette.GetRGBA(_console.BorderColor)
-	// _console.renderer.SetDrawColor(rgba.R, rgba.G, rgba.B, rgba.A)
-	// _console.renderer.FillRect(fullRect)
-
-	// //var renderRect sdl.Rect
-	// x1 := int32(0)
-	// y1 := int32(0)
-
-	// // sW, sH - screen width + height
-	// sW := int32(winW)
-	// sH := int32(winH)
-
-	// // aspect ratio
-	// ratio := float64(_console.ConsoleHeight) / float64(_console.ConsoleWidth)
-
-	// // maintain aspect ratio even on resize
-	// if winW == winH {
-	// 	// same dimensions (no padding)
-	// 	sW = int32(winW)
-	// 	sH = int32(float64(winH) * ratio)
-	// }
-
-	// if winW < winH {
-	// 	y1 = 0
-	// 	sH = int32(float64(winW) * ratio)
-	// 	sW = int32(winW)
-	// 	diff := (winH - int(sH)) / 2
-	// 	y1 = int32(diff)
-	// 	if diff < 0 {
-	// 		y1 = 0
-	// 		sW = int32(float64(winH) * ratio)
-	// 		sH = int32(winH)
-	// 		diff := (winW - int(sW)) / 2
-	// 		x1 = int32(diff)
-	// 	}
-	// }
-
-	// if winW > winH {
-	// 	x1 = 0
-	// 	sH = int32(winH)
-	// 	sW = int32(float64(winH) / ratio)
-	// 	diff := (winW - int(sW)) / 2
-	// 	x1 = int32(diff)
-	// 	if diff < 0 {
-	// 		x1 = 0
-	// 		sW = int32(winW)
-	// 		sH = int32(float64(winW) * ratio)
-	// 		diff := (winH - int(sH)) / 2
-	// 		y1 = int32(diff)
-	// 	}
-	// }
-
-	// x1 += int32(_console.BorderWidth)
-	// y1 += int32(_console.BorderWidth)
-	// sH -= int32(_console.BorderWidth * 2)
-	// sW -= int32(_console.BorderWidth * 2)
-
-	// p.renderRect.X = x1
-	// p.renderRect.Y = y1
-	// p.renderRect.W = sW
-	// p.renderRect.H = sH
-
-	// // copy and scale offscreen buffer
-	// _console.renderer.Copy(tex, p.psRect, p.renderRect)
-
-	// _console.renderer.Present()
-
-	// TODO update ebiten screen
-
-	// update
-	// func update(screen *ebiten.Image) error {
-
-	// 	if ebiten.IsRunningSlowly() {
-	// 		return nil
-	// 	}
-	// 	screen.ReplacePixels(_console.pixelBuffer..Pix)
-	// 	ebitenutil.DebugPrint(screen, fmt.Sprintf("FPS: %f", ebiten.CurrentFPS()))
-	// 	return nil
-	// }
-
-	// p.lockFps()
-
 	// record frame
 	//_console.recorder.AddFrame(p.GetFrame(), p)
 
@@ -237,40 +130,6 @@ func (p *pixelBuffer) Flip() error {
 	startFrame = time.Now()
 
 	return nil
-}
-
-// func update(screen *ebiten.Image) error {
-
-// 	if ebiten.IsRunningSlowly() {
-// 		return nil
-// 	}
-// 	screen.ReplacePixels(_console.pixelBuffer..Pix)
-// 	ebitenutil.DebugPrint(screen, fmt.Sprintf("FPS: %f", ebiten.CurrentFPS()))
-// 	return nil
-// }
-
-// lockFps - locks rendering to a steady framerate
-func (p *pixelBuffer) lockFps() float64 {
-
-	var timeBudget = p.timeBudget
-	now := time.Now()
-	// calc time to process frame so since start
-	procTime := now.Sub(startFrame)
-
-	// delay for remainder of time budget (based on fps)
-	delay := time.Duration(timeBudget - procTime.Nanoseconds())
-	if delay > 0 {
-		// TODO
-		//sdl.Delay(uint32(delay / 1000000))
-	}
-
-	// calc actual fps being achieved
-	endFrame = time.Now()
-	frameTime := endFrame.Sub(startFrame)
-
-	endFrame = time.Now()
-
-	return float64(time.Second) / float64(frameTime.Nanoseconds())
 }
 
 func (p *pixelBuffer) getPixelBuffer() *pixelBuffer {
@@ -295,7 +154,7 @@ func pixelToChar(pixelPos pos) pos {
 	}
 }
 
-// ScrolUpLLine - scrolls display up a single line
+// ScrollUpLine - scrolls display up a single line
 func (p *pixelBuffer) ScrollUpLine() {
 
 	// to scroll the screen up a line we need to copy the bottom part of the image
@@ -412,10 +271,6 @@ func (p *pixelBuffer) CircleFill(x, y, r int) {
 // CircleFillWithColor - fill circle with color
 func (p *pixelBuffer) CircleFillWithColor(x0, y0, r int, colorID Color) {
 	p.fgColor = colorID
-	// rgba, _ := p.palette.GetRGBA(p.fgColor)
-	// p.gc.SetRGBA255(int(rgba.R), int(rgba.G), int(rgba.B), int(rgba.A))
-	// p.gc.DrawCircle(float64(x), float64(y), float64(r))
-	// p.gc.Fill()
 
 	x := 0
 	y := r
@@ -579,7 +434,6 @@ func (p *pixelBuffer) LineWithColor(x1, y1, x2, y2 int, colorID Color) {
 
 func (p *pixelBuffer) setFGColor(colorID Color) {
 	p.fgColor = colorID
-	//	p.gc.SetColor(p.palette.GetColor(colorID))
 	c := p.palette.GetColor(colorID)
 	r, g, b, _ := c.RGBA()
 	p.gc.SetRGB255(int(r), int(g), int(b))

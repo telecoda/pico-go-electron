@@ -33,21 +33,6 @@ var noSandbox bool
 var servicePipeToken string
 var lang string
 
-func init() {
-	// flag.BoolVar(&optVerbose, "v", false, "verbose logging")
-	// flag.IntVar(&screenshotScale, "screenshot_scale", 3, "scale of screenshots")
-	// flag.IntVar(&gifScale, "gif_scale", 2, "scale of gif captures.")
-	// flag.IntVar(&gifLength, "gif_len", 10, "set the maximum gif length in seconds (1..120)")
-
-	// // electron flags we never use but need to be accepted
-	// flag.BoolVar(&noSandbox, "no-sandbox", false, "N/A")
-	// flag.StringVar(&servicePipeToken, "service-pipe-token", "", "N/A")
-	// flag.StringVar(&lang, "lang", "", "N/A")
-
-	// // TODO - stop using flags for now, we might need a different approach...
-	// //flag.Parse()
-}
-
 func NewConfig(consoleType ConsoleType) Config {
 	switch consoleType {
 	case PICO8:
