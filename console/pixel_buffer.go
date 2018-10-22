@@ -8,6 +8,8 @@ import (
 	"time"
 
 	drawx "golang.org/x/image/draw"
+	"golang.org/x/image/font"
+	"golang.org/x/image/math/fixed"
 
 	"github.com/fogleman/gg"
 	"github.com/hajimehoshi/ebiten"
@@ -24,7 +26,7 @@ type pixelBuffer struct {
 	palette      *palette
 	charCols     int
 	charRows     int
-	pixelSurface *image.RGBA // offscreen pixel buffer
+	pixelSurface *image.Paletted // offscreen pixel buffer
 	screen       *ebiten.Image
 	gc           *gg.Context     // graphics context
 	psRect       image.Rectangle // rect of pixelSurface
@@ -52,7 +54,9 @@ func newPixelBuffer(cfg Config) (PixelBuffer, error) {
 
 	p.psRect = image.Rect(0, 0, cfg.ConsoleWidth, cfg.ConsoleHeight)
 	p.renderRect = image.Rect(0, 0, cfg.ConsoleWidth, cfg.ConsoleHeight)
-	ps := image.NewRGBA(p.psRect)
+	//	ps := image.NewRGBA(p.psRect)
+
+	ps := image.NewPaletted(p.psRect, cfg.palette.colors)
 
 	if ps == nil {
 		return nil, fmt.Errorf("Surface is nil")
@@ -60,9 +64,9 @@ func newPixelBuffer(cfg Config) (PixelBuffer, error) {
 
 	p.palette = cfg.palette
 
-	if err := setSurfacePalette(p.palette, ps); err != nil {
-		return nil, err
-	}
+	// if err := setSurfacePalette(p.palette, ps); err != nil {
+	// 	return nil, err
+	// }
 
 	var err error
 	screen, err := ebiten.NewImageFromImage(ps, ebiten.FilterNearest)
@@ -80,7 +84,8 @@ func newPixelBuffer(cfg Config) (PixelBuffer, error) {
 	p.charCols = cfg.ConsoleWidth / _console.Config.fontWidth
 	p.charRows = cfg.ConsoleHeight / _console.Config.fontHeight
 
-	p.gc = gg.NewContextForRGBA(ps)
+	p.gc = gg.NewContextForImage(ps)
+	//	p.gc = gg.NewContextForRGBA(ps)
 	p.gc.SetFontFace(_console.font)
 	p.gc.SetLineWidth(1)
 	p.gc.Identity()
@@ -89,7 +94,7 @@ func newPixelBuffer(cfg Config) (PixelBuffer, error) {
 	return p, nil
 }
 
-func (p *pixelBuffer) GetFrame() *image.RGBA {
+func (p *pixelBuffer) GetFrame() *image.Paletted {
 	return p.pixelSurface
 }
 
@@ -196,9 +201,22 @@ func (p *pixelBuffer) PrintAt(str string, x, y int) {
 func (p *pixelBuffer) PrintAtWithColor(str string, x, y int, colorID Color) {
 	p.fgColor = colorID
 
-	if str != "" {
-		p.gc.SetColor(_console.palette.GetColor(colorID))
-		p.gc.DrawString(str, float64(x), float64(y+_console.fontHeight/2))
+	if str != "" && p.gc != nil {
+		// p.gc.SetColor(_console.palette.GetColor(colorID))
+		//p.gc.SetColor(color.White)
+		//p.gc.DrawString(str, float64(x), float64(y+_console.fontHeight/2))
+
+		col := _console.palette.colors[colorID]
+		point := fixed.Point26_6{X: fixed.Int26_6(x * 64), Y: fixed.Int26_6(y * 64)}
+
+		d := &font.Drawer{
+			Dst:  p.pixelSurface,
+			Src:  image.NewUniform(col),
+			Face: _console.font,
+			Dot:  point,
+		}
+		d.DrawString(str)
+
 	}
 
 	// save print pos
@@ -436,7 +454,9 @@ func (p *pixelBuffer) setFGColor(colorID Color) {
 	p.fgColor = colorID
 	c := p.palette.GetColor(colorID)
 	r, g, b, _ := c.RGBA()
-	p.gc.SetRGB255(int(r), int(g), int(b))
+	if p.gc != nil {
+		p.gc.SetRGB255(int(r), int(g), int(b))
+	}
 }
 
 // PGet - pixel get
@@ -535,6 +555,7 @@ func (p *pixelBuffer) sprite(n, x, y, w, h, dw, dh int, rot float64, flipX, flip
 		SrcMask:  _console.sprites[userSpriteMask1],
 		SrcMaskP: image.Point{0, 0},
 	}
+
 	drawx.NearestNeighbor.Scale(p.pixelSurface, screenRect, _console.sprites[userSpriteBank1], spriteSrcRect, drawx.Over, options)
 
 }

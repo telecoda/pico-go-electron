@@ -295,7 +295,7 @@ func (p *palette) GetColorID(rgba rgba) Color {
 func (p *palette) GetColor(colorID Color) color.Color {
 	return p.colors[colorID]
 }
-func setSurfacePalette(palette Paletter, surface *image.RGBA) error {
+func setSurfacePalette(palette Paletter, surface *image.Paletted) error {
 	// TODO all this ---v
 	// p, err := sdl.AllocPalette(TOTAL_COLORS)
 	// if err != nil {

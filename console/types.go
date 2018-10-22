@@ -132,7 +132,7 @@ type Runtime interface {
 type PixelBuffer interface {
 	Flip() error // Copy graphics buffer to screen
 	Destroy()
-	GetFrame() *image.RGBA
+	GetFrame() *image.Paletted
 	PicoGraphicsAPI
 	getPixelBuffer() *pixelBuffer
 }

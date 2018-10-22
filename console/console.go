@@ -238,7 +238,26 @@ func (c *console) update(screen *ebiten.Image) error {
 
 	pb := cpb.getPixelBuffer()
 
-	screen.ReplacePixels(pb.pixelSurface.Pix)
+	// convert paletted image to RGBA
+
+	pix := make([]uint8, 65536)
+
+	b := 0
+	for _, palPix := range pb.pixelSurface.Pix {
+		// lookup color
+		rgba := c.palette.colorMap[Color(palPix)]
+		pix[b] = rgba.R
+		b++
+		pix[b] = rgba.G
+		b++
+		pix[b] = rgba.B
+		b++
+		pix[b] = rgba.A
+		b++
+	}
+
+	//screen.ReplacePixels(pb.pixelSurface.Pix)
+	screen.ReplacePixels(pix)
 
 	ebitenutil.DebugPrint(screen, fmt.Sprintf("FPS: %f", ebiten.CurrentFPS()))
 
