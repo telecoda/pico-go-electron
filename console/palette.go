@@ -8,7 +8,7 @@ import (
 
 // PICO8 - colors
 const (
-	PICO8_BLACK Color = iota
+	PICO8_BLACK ColorID = iota
 	PICO8_DARK_BLUE
 	PICO8_DARK_PURPLE
 	PICO8_DARK_GREEN
@@ -28,7 +28,7 @@ const (
 
 // TIC80 - colors
 const (
-	TIC80_BLACK Color = iota
+	TIC80_BLACK ColorID = iota
 	TIC80_DARK_RED
 	TIC80_DARK_BLUE
 	TIC80_DARK_GRAY
@@ -48,7 +48,7 @@ const (
 
 // ZX Spectrum - colors
 const (
-	ZX_BLACK Color = iota
+	ZX_BLACK ColorID = iota
 	ZX_BLUE
 	ZX_RED
 	ZX_MAGENTA
@@ -68,7 +68,7 @@ const (
 
 // Commodore 64 - colors
 const (
-	C64_BLACK Color = iota
+	C64_BLACK ColorID = iota
 	C64_WHITE
 	C64_RED
 	C64_CYAN
@@ -94,8 +94,8 @@ type rgba struct {
 }
 
 type palette struct {
-	colorMap       map[Color]rgba
-	rgbaMap        map[uint32]Color
+	colorMap       map[ColorID]rgba
+	rgbaMap        map[uint32]ColorID
 	colors         []color.Color
 	originalColors []color.Color
 }
@@ -129,7 +129,6 @@ func newPico8Palette() *palette {
 	p.originalColors[PICO8_LIGHT_GRAY] = color.RGBA{R: 194, G: 195, B: 199, A: 255}
 	p.originalColors[PICO8_WHITE] = color.RGBA{R: 255, G: 241, B: 232, A: 255}
 	p.originalColors[PICO8_RED] = color.RGBA{R: 255, G: 0, B: 77, A: 255}
-	//p.originalColors[PICO8_RED] = color.RGBA{R: 255, G: 0, B: 0, A: 255}
 	p.originalColors[PICO8_ORANGE] = color.RGBA{R: 255, G: 163, B: 0, A: 255}
 	p.originalColors[PICO8_YELLOW] = color.RGBA{R: 255, G: 236, B: 39, A: 255}
 	p.originalColors[PICO8_GREEN] = color.RGBA{R: 0, G: 228, B: 54, A: 255}
@@ -253,21 +252,21 @@ func (r rgba) toIndex() uint32 {
 
 func (p *palette) updateColorMaps() {
 	// create a mpa of the colors
-	p.colorMap = make(map[Color]rgba, len(p.colors))
-	p.rgbaMap = make(map[uint32]Color, len(p.colors))
+	p.colorMap = make(map[ColorID]rgba, len(p.colors))
+	p.rgbaMap = make(map[uint32]ColorID, len(p.colors))
 	for i, c := range p.colors {
 		if c != nil {
 			r, g, b, a := c.RGBA()
 			color := rgba{R: uint8(r), G: uint8(g), B: uint8(b), A: uint8(a)}
-			p.colorMap[Color(i)] = color
-			p.rgbaMap[color.toIndex()] = Color(i)
+			p.colorMap[ColorID(i)] = color
+			p.rgbaMap[color.toIndex()] = ColorID(i)
 		}
 	}
 
 }
 
 // getRGBA - returns color as Color and uint32
-func (p *palette) GetRGBA(color Color) (rgba, uint32) {
+func (p *palette) GetRGBA(color ColorID) (rgba, uint32) {
 	// lookup color
 	var c rgba
 	var ok bool
@@ -282,7 +281,7 @@ func (p *palette) GetRGBA(color Color) (rgba, uint32) {
 }
 
 // GetColorID - find color from rgba
-func (p *palette) GetColorID(rgba rgba) Color {
+func (p *palette) GetColorID(rgba rgba) ColorID {
 	// lookup color using rgba
 	if colorID, ok := p.rgbaMap[rgba.toIndex()]; ok {
 		return colorID
@@ -292,17 +291,11 @@ func (p *palette) GetColorID(rgba rgba) Color {
 }
 
 // GetColor - find color from ID
-func (p *palette) GetColor(colorID Color) color.Color {
+func (p *palette) GetColor(colorID ColorID) color.Color {
 	return p.colors[colorID]
 }
 func setSurfacePalette(palette Paletter, surface *image.Paletted) error {
-	// TODO all this ---v
-	// p, err := sdl.AllocPalette(TOTAL_COLORS)
-	// if err != nil {
-	// 	return err
-	// }
-	// p.SetColors(palette.GetColors())
-	// return surface.SetPalette(p)
+	surface.Palette = palette.GetColors()
 	return nil
 }
 
@@ -315,20 +308,19 @@ func (p *palette) PaletteReset() {
 }
 
 func (p *palette) PaletteCopy() Paletter {
-	// p2 := _console.originalPalette
-	// for i, c := range p.colors {
-	// 	p2.colors[i] = c
-	// }
-	// p2.updateColorMaps()
-	// return p2
-	return nil
+	p2 := _console.originalPalette
+	for i, c := range p.colors {
+		p2.colors[i] = c
+	}
+	p2.updateColorMaps()
+	return p2
 }
 
 func (p *palette) GetColors() []color.Color {
 	return p.colors
 }
 
-func (p *palette) MapColor(fromColor Color, toColor Color) error {
+func (p *palette) MapColor(fromColor ColorID, toColor ColorID) error {
 	// valid request
 	if fromColor < 0 || int(fromColor) > len(p.colors)-1 {
 		return fmt.Errorf("Error mapping color - fromColour outside range: %d", fromColor)
@@ -345,7 +337,7 @@ func (p *palette) MapColor(fromColor Color, toColor Color) error {
 	return nil
 }
 
-func (p *palette) SetTransparent(color Color, enabled bool) error {
+func (p *palette) SetTransparent(color ColorID, enabled bool) error {
 
 	fromIdx := int(color)
 

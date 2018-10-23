@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"fmt"
 	"image"
+	"image/color"
 	_ "image/png"
 	"io/ioutil"
 	"log"
@@ -36,9 +37,8 @@ const (
 )
 
 const (
-	systemSpriteBank = 0
-	userSpriteBank1  = 1
-	userSpriteMask1  = 2
+	userSpriteBank1 = 0
+	userSpriteMask1 = 1
 )
 
 type Console interface {
@@ -68,8 +68,7 @@ type console struct {
 	pImage *image.Paletted
 
 	font              font.Face
-	logo              *image.RGBA
-	sprites           []*image.RGBA
+	sprites           []*image.Paletted
 	currentSpriteBank int
 	originalPalette   *palette
 
@@ -120,19 +119,11 @@ func NewConsole(consoleType ConsoleType) (Console, error) {
 
 	_console.font = mplusNormalFont
 
-	// init logo
-	img, _, err := image.Decode(bytes.NewReader(images.Logo_png))
-	if err != nil {
-		return nil, fmt.Errorf("Error loading image: %s", err)
-	}
-	_console.logo = img.(*image.RGBA)
-
 	// init sprites
-	// There are 3 sprite banks
-	// 0 = System sprites
-	// 1 = User sprite bank 1
-	// 2 = User sprite bank 1 mask
-	_console.sprites = make([]*image.RGBA, 3)
+	// There are 2 sprite banks
+	// 0 = User sprite bank 1
+	// 1 = User sprite bank 1 mask
+	_console.sprites = make([]*image.Paletted, 3)
 
 	_console.palette = newPalette(cfg.consoleType)
 	_console.originalPalette = newPalette(cfg.consoleType)
@@ -142,44 +133,28 @@ func NewConsole(consoleType ConsoleType) (Console, error) {
 	pImage := image.NewPaletted(rect, _console.palette.colors)
 	_console.pImage = pImage
 
-	// init icons
-	icons, _, err := image.Decode(bytes.NewReader(images.Icons_png))
-	if err != nil {
-		return nil, fmt.Errorf("Error loading icons: %s", err)
-	}
-	_console.sprites[systemSpriteBank] = icons.(*image.RGBA)
-
 	// init sprites
 	sprites, _, err := image.Decode(bytes.NewReader(images.Sprites_png))
 	if err != nil {
 		return nil, fmt.Errorf("Error loading sprites: %s", err)
 	}
-	_console.sprites[userSpriteBank1] = sprites.(*image.RGBA)
+	_console.sprites[userSpriteBank1] = sprites.(*image.Paletted)
+
+	_console.sprites[userSpriteBank1].Palette = _console.palette.colors
 
 	// create a mask
 	masks, _, err := image.Decode(bytes.NewReader(images.Sprites_png))
 	if err != nil {
 		return nil, fmt.Errorf("Error loading sprites: %s", err)
 	}
-	_console.sprites[userSpriteMask1] = masks.(*image.RGBA)
+	_console.sprites[userSpriteMask1] = masks.(*image.Paletted)
 
 	// convert all black pixels to zero alpha
 	mask := _console.sprites[userSpriteMask1]
-	for x := 0; x < mask.Bounds().Dx(); x++ {
-		for y := 0; y < mask.Bounds().Dy(); y++ {
-			c := mask.RGBAAt(x, y)
-			if c.R == 0 && c.G == 0 && c.B == 0 {
-				c.A = 0
-				mask.SetRGBA(x, y, c)
-			} else {
-				c.A = 255
-				c.R = 255
-				c.G = 255
-				c.B = 255
-				mask.SetRGBA(x, y, c)
-			}
-		}
-	}
+	// set palette on mask
+	maskPalette := newPalette(PICO8)
+	maskPalette.colors[0] = color.RGBA{R: 0, G: 0, B: 0, A: 0}
+	mask.Palette = maskPalette.colors
 
 	return _console, nil
 }
@@ -245,7 +220,7 @@ func (c *console) update(screen *ebiten.Image) error {
 	b := 0
 	for _, palPix := range pb.pixelSurface.Pix {
 		// lookup color
-		rgba := c.palette.colorMap[Color(palPix)]
+		rgba := c.palette.colorMap[ColorID(palPix)]
 		pix[b] = rgba.R
 		b++
 		pix[b] = rgba.G

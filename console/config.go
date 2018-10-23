@@ -16,11 +16,11 @@ type Config struct {
 	consoleType ConsoleType
 	fontWidth   int
 	fontHeight  int
-	BgColor     Color
-	FgColor     Color
-	BorderColor Color
-	errColor    Color
-	cursorColor Color
+	BgColor     ColorID
+	FgColor     ColorID
+	BorderColor ColorID
+	errColor    ColorID
+	cursorColor ColorID
 }
 
 var optVerbose bool

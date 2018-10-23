@@ -5,7 +5,7 @@ import (
 	"image/color"
 )
 
-type Color int
+type ColorID uint8
 
 /*
 	This package tries to replicate the pico8 API as closely as possible
@@ -27,53 +27,52 @@ type PicoInputAPI interface {
 }
 
 type Clearer interface {
-	Cls()                       // Clear screen
-	ClsWithColor(colorID Color) // Clear screen with color
+	Cls()                         // Clear screen
+	ClsWithColor(colorID ColorID) // Clear screen with color
 }
 
 type Drawer interface {
-	Color(colorID Color) // Set drawing color (colour!!!)
+	Color(colorID ColorID) // Set drawing color (colour!!!)
 	// drawing primitives
 	Circle(x, y, r int)
-	CircleWithColor(x, y, r int, colorID Color)
+	CircleWithColor(x, y, r int, colorID ColorID)
 	CircleFill(x, y, r int)
-	CircleFillWithColor(x, y, r int, colorID Color)
+	CircleFillWithColor(x, y, r int, colorID ColorID)
 	Line(x0, y0, x1, y1 int)
-	LineWithColor(x0, y0, x1, y1 int, colorID Color)
-	PGet(x, y int) Color
+	LineWithColor(x0, y0, x1, y1 int, colorID ColorID)
+	PGet(x, y int) ColorID
 	PSet(x, y int)
-	PSetWithColor(x, y int, colorID Color)
+	PSetWithColor(x, y int, colorID ColorID)
 	Rect(x0, y0, x1, y1 int)
-	RectWithColor(x0, y0, x1, y1 int, colorID Color)
+	RectWithColor(x0, y0, x1, y1 int, colorID ColorID)
 	RectFill(x0, y0, x1, y1 int)
-	RectFillWithColor(x0, y0, x1, y1 int, colorID Color)
+	RectFillWithColor(x0, y0, x1, y1 int, colorID ColorID)
 }
 
 type Paletter interface {
 	PaletteReset()
 	PaletteCopy() Paletter
-	GetColorID(rgba rgba) Color
-	GetColor(colorID Color) color.Color
-	GetRGBA(color Color) (rgba, uint32)
+	GetColorID(rgba rgba) ColorID
+	GetColor(colorID ColorID) color.Color
+	GetRGBA(color ColorID) (rgba, uint32)
 	GetColors() []color.Color
-	MapColor(fromColor Color, toColor Color) error
-	SetTransparent(color Color, enabled bool) error
+	MapColor(fromColor ColorID, toColor ColorID) error
+	SetTransparent(color ColorID, enabled bool) error
 }
 
 type Printer interface {
 	// Text/Printing
 	Cursor(x, y int) // Set text cursor
 	GetCursor() pos
-	Print(str string)                                     // Print a string of characters to the screen at default pos
-	PrintAt(str string, x, y int)                         // Print a string of characters to the screen at position
-	PrintAtWithColor(str string, x, y int, colorID Color) // Print a string of characters to the screen at position with color
+	Print(str string)                                       // Print a string of characters to the screen at default pos
+	PrintAt(str string, x, y int)                           // Print a string of characters to the screen at position
+	PrintAtWithColor(str string, x, y int, colorID ColorID) // Print a string of characters to the screen at position with color
 	ScrollUpLine()
 }
 
 type Spriter interface {
 	// TODO lots of params!! needs a bit of overloading love
 	Sprite(n, x, y, w, h, dw, dh int, rot float64, flipX, flipY bool)
-	systemSprite(n, x, y, w, h, dw, dh int, rot float64, flipX, flipY bool)
 }
 
 type ModeType int

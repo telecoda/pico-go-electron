@@ -46,7 +46,13 @@ func (c *cartridge) Update() {
 // Render - called once every frame
 func (c *cartridge) Render() {
 	c.ClsWithColor(console.PICO8_WHITE)
-	c.SetTransparent(console.PICO8_BLUE, true)
+	//c.SetTransparent(5, true)
+	//c.MapColor(console.PICO8_BLUE, console.PICO8_WHITE)
+	// for i := 20; i < 40; i++ {
+	// 	c.LineWithColor(0, i, 128, i, console.PICO8_DARK_GRAY)
+	// }
+
+	//c.MapColor(console.PICO8_DARK_GRAY, console.PICO8_WHITE)
 	c.PrintAtWithColor("SPRITES:", 50, 5, console.PICO8_BLACK)
 	c.Line(0, 12, 128, 12)
 	c.PrintAtWithColor("FLIPX: false", 10, 18, console.PICO8_BLACK)

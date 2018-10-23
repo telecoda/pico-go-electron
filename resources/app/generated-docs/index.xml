@@ -23,10 +23,10 @@ example output sourcecode package main /* This is a simple demo project to show 
     
     <item>
       <title>ebiten</title>
-      <link>/example/ebiten.html</link>
+      <link>/example/ebiten/ebiten.html</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>/example/ebiten.html</guid>
+      <guid>/example/ebiten/ebiten.html</guid>
       <description>You can use most of the ebiten examples too.
 Here is an example of the flappy.go demo
 Just trying opening a file from $GOPATH/src/github.com/hajimehoshi/ebiten/examples
