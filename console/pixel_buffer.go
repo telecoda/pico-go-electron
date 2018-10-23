@@ -38,11 +38,6 @@ type pos struct {
 	y int
 }
 
-var rmask = uint32(0xff000000)
-var gmask = uint32(0x00ff0000)
-var bmask = uint32(0x0000ff00)
-var amask = uint32(0x000000ff)
-
 func newPixelBuffer(cfg Config) (PixelBuffer, error) {
 	p := &pixelBuffer{
 		fps: cfg.FPS,
