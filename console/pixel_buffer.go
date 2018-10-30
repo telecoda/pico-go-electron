@@ -4,11 +4,12 @@ import (
 	"fmt"
 	"image"
 	"image/color"
-	"image/draw"
+	"math"
 	"time"
 
 	drawx "golang.org/x/image/draw"
 	"golang.org/x/image/font"
+	"golang.org/x/image/math/f64"
 	"golang.org/x/image/math/fixed"
 
 	"github.com/hajimehoshi/ebiten"
@@ -159,7 +160,7 @@ func (p *pixelBuffer) ScrollUpLine() {
 	// fromRect := &sdl.Rect{X: 0, Y: int32(_console.Config.fontHeight), W: p.pixelSurface.W, H: p.pixelSurface.H - int32(_console.Config.fontHeight)}
 
 	srcRect := image.Rect(0, _console.Config.fontHeight, _console.ConsoleHeight, _console.Config.ConsoleWidth)
-	draw.Draw(p.pixelSurface, srcRect, p.pixelSurface, image.Point{}, draw.Over)
+	drawx.Draw(p.pixelSurface, srcRect, p.pixelSurface, image.Point{}, drawx.Over)
 
 	// TODO
 	// fromRect := &sdl.Rect{X: 0, Y: int32(_console.Config.fontHeight), W: p.pixelSurface.W, H: p.pixelSurface.H - int32(_console.Config.fontHeight)}
@@ -192,6 +193,7 @@ func (p *pixelBuffer) PrintAtWithColor(str string, x, y int, colorID ColorID) {
 	p.fgColor = colorID
 
 	if str != "" {
+		y += (_console.fontHeight / 2) + 1
 		col := _console.palette.colors[colorID]
 		point := fixed.Point26_6{X: fixed.Int26_6(x * 64), Y: fixed.Int26_6(y * 64)}
 
@@ -494,30 +496,24 @@ func (p *pixelBuffer) RectFillWithColor(x0, y0, x1, y1 int, colorID ColorID) {
 }
 
 // Spriter methods
-func (p *pixelBuffer) Sprite(n, x, y, w, h, dw, dh int, rot float64, flipX, flipY bool) {
-	_console.currentSpriteBank = userSpriteBank1
-	p.sprite(n, x, y, w, h, dw, dh, rot, flipX, flipY)
+func (p *pixelBuffer) Sprite(n, x, y, w, h, dw, dh int) {
+	p.sprite(n, x, y, w, h, dw, dh, 0, false, false)
+}
 
+func (p *pixelBuffer) SpriteFlipped(n, x, y, w, h, dw, dh int, flipX, flipY bool) {
+	p.sprite(n, x, y, w, h, dw, dh, 0, flipX, flipY)
+}
+
+func (p *pixelBuffer) SpriteRotated(n, x, y, w, h, dw, dh int, rot float64) {
+	p.sprite(n, x, y, w, h, dw, dh, rot, false, false)
 }
 
 func (p *pixelBuffer) sprite(n, x, y, w, h, dw, dh int, rot float64, flipX, flipY bool) {
 
+	_console.currentSpriteBank = userSpriteBank1
+
 	sw := w * _spriteWidth
 	sh := h * _spriteHeight
-
-	// var flip sdl.RendererFlip
-	// if flipX {
-	// 	flip = flip | sdl.FLIP_HORIZONTAL
-	// }
-	// if flipY {
-	// 	flip = flip | sdl.FLIP_VERTICAL
-	// }
-
-	// if flip == 0 {
-	// 	flip = sdl.FLIP_NONE
-	// }
-
-	// TOOD rotation and flipping not supported yet
 
 	// convert sprite number into x,y pos
 	xCell := n % _spritesPerLine
@@ -530,6 +526,71 @@ func (p *pixelBuffer) sprite(n, x, y, w, h, dw, dh int, rot float64, flipX, flip
 	spriteSrcRect := image.Rect(xPos, yPos, xPos+sw, yPos+sh)
 	// this rect is where the sprite will be copied to
 	screenRect := image.Rect(x, y, x+dw, y+dh)
+
+	if flipX || flipY || rot != 0 {
+		// we need to transform & mask
+
+		// setup transform matrix
+
+		// do nothing matrix
+		// f64.Aff3{1, -0, 0, 0, 1, 0}
+		// matrix  = {xscale, rotx, xOffset, rotY, yscale, yOffset}
+
+		var matrix f64.Aff3
+
+		if flipX && !flipY {
+			// flip x
+			matrix = f64.Aff3{-1, 0, float64(sw), 0, 1, 0}
+		}
+		if flipY && !flipX {
+			// flip y
+			matrix = f64.Aff3{1, 0, 0, 0, -1, float64(sh)}
+		}
+		if flipX && flipY {
+			// flip xy
+			matrix = f64.Aff3{-1, 0, float64(sw), 0, -1, float64(sh)}
+		}
+
+		if rot != 0 {
+			angle := float64(rot)
+			a := math.Pi * angle / 180
+			xf, yf := float64(sw/2), float64(sh/2)
+			sin := math.Sin(a)
+			cos := math.Cos(a)
+			matrix = f64.Aff3{
+				cos, -sin, xf - xf*cos + yf*sin,
+				sin, cos, yf - xf*sin - yf*cos,
+			}
+		}
+
+		// create a copy of the sprite
+		copyRect := image.Rect(0, 0, sw, sh)
+		copyImage := image.NewPaletted(copyRect, _console.sprites[userSpriteBank1].Palette)
+		point := image.Point{X: 0, Y: 0}
+		options := &drawx.Options{
+			SrcMask:  _console.sprites[userSpriteMask1],
+			SrcMaskP: image.Point{0, 0},
+		}
+		drawx.Copy(copyImage, point, _console.sprites[userSpriteBank1], spriteSrcRect, drawx.Src, options)
+
+		// rotate it
+		txImage := image.NewPaletted(copyRect, _console.sprites[userSpriteBank1].Palette)
+		drawx.NearestNeighbor.Transform(txImage, matrix, copyImage, copyRect, drawx.Src, nil)
+
+		// create a copy of the sprite as a mask
+		maskRect := image.Rect(0, 0, sw, sh)
+		maskImage := image.NewPaletted(maskRect, _console.sprites[userSpriteMask1].Palette)
+		drawx.Copy(maskImage, point, txImage, maskRect, drawx.Src, nil)
+
+		options = &drawx.Options{
+			SrcMask:  maskImage,
+			SrcMaskP: image.Point{0, 0},
+		}
+
+		drawx.NearestNeighbor.Scale(p.pixelSurface, screenRect, txImage, maskRect, drawx.Over, options)
+
+		return
+	}
 
 	options := &drawx.Options{
 		SrcMask:  _console.sprites[userSpriteMask1],

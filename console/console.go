@@ -16,7 +16,7 @@ import (
 
 	"github.com/golang/freetype/truetype"
 	"github.com/hajimehoshi/ebiten"
-	"github.com/hajimehoshi/ebiten/ebitenutil"
+	_ "github.com/hajimehoshi/ebiten/ebitenutil"
 	"github.com/telecoda/pico-go-electron/console/resources/fonts"
 	"github.com/telecoda/pico-go-electron/console/resources/images"
 )
@@ -154,6 +154,9 @@ func NewConsole(consoleType ConsoleType) (Console, error) {
 	// set palette on mask
 	maskPalette := newPalette(PICO8)
 	maskPalette.colors[0] = color.RGBA{R: 0, G: 0, B: 0, A: 0}
+	for i := 1; i < 16; i++ {
+		maskPalette.colors[i] = color.RGBA{R: 255, G: 255, B: 255, A: 255}
+	}
 	mask.Palette = maskPalette.colors
 
 	return _console, nil
@@ -193,7 +196,7 @@ func (c *console) Run() error {
 	// init the cart
 	c.cart.Init()
 
-	return ebiten.Run(c.update, c.Config.ConsoleWidth, c.Config.ConsoleHeight, 1, "pico-go")
+	return ebiten.Run(c.update, c.Config.ConsoleWidth, c.Config.ConsoleHeight, 4, "pico-go")
 }
 
 func (c *console) update(screen *ebiten.Image) error {
@@ -231,10 +234,9 @@ func (c *console) update(screen *ebiten.Image) error {
 		b++
 	}
 
-	//screen.ReplacePixels(pb.pixelSurface.Pix)
 	screen.ReplacePixels(pix)
 
-	ebitenutil.DebugPrint(screen, fmt.Sprintf("FPS: %f", ebiten.CurrentFPS()))
+	//ebitenutil.DebugPrint(screen, fmt.Sprintf("FPS: %f", ebiten.CurrentFPS()))
 
 	return nil
 }

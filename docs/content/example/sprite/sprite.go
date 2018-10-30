@@ -25,6 +25,9 @@ type cartridge struct {
 	// example vars below
 	running bool
 	rot     float64
+	barY    int
+	scaleY  float64
+	scaleX  float64
 }
 
 // NewCart - initialise a struct implementing Cartridge interface
@@ -40,30 +43,40 @@ func (c *cartridge) Init() {
 
 // Update -  called once every frame
 func (c *cartridge) Update() {
-	c.rot -= 4
+	c.rot += 4
+	if c.rot > 360 {
+		c.rot = 0
+	}
+	c.barY += 1
+	if c.barY > 128 {
+		c.barY = 0
+	}
 }
 
 // Render - called once every frame
 func (c *cartridge) Render() {
 	c.ClsWithColor(console.PICO8_WHITE)
-	c.SetTransparent(console.PICO8_BLUE, true)
+	c.RectFillWithColor(0, c.barY, 128, c.barY+48, console.PICO8_LIGHT_GRAY)
+	c.MapColor(console.PICO8_BLUE, console.PICO8_WHITE)
 	c.PrintAtWithColor("SPRITES:", 50, 5, console.PICO8_BLACK)
 	c.Line(0, 12, 128, 12)
-	c.PrintAtWithColor("FLIPX: false", 10, 18, console.PICO8_BLACK)
-	c.PrintAtWithColor("FLIPY: false", 10, 26, console.PICO8_BLACK)
-	c.PrintAtWithColor(fmt.Sprintf("R: %d", int(c.rot)), 100, 22, console.PICO8_BLACK)
-	c.Sprite(0, 70, 16, 2, 2, 16, 16, c.rot, false, false)
-	c.PrintAtWithColor("FLIPX: true", 10, 38, console.PICO8_BLACK)
-	c.PrintAtWithColor("FLIPY: false", 10, 46, console.PICO8_BLACK)
-	c.Sprite(2, 70, 36, 2, 2, 16, 16, 0, true, false)
-	c.PrintAtWithColor("FLIPX: false", 10, 58, console.PICO8_BLACK)
-	c.PrintAtWithColor("FLIPY: true", 10, 66, console.PICO8_BLACK)
-	c.Sprite(4, 70, 56, 2, 2, 16, 16, 0, false, true)
-	c.PrintAtWithColor("FLIPX: true", 10, 78, console.PICO8_BLACK)
-	c.PrintAtWithColor("FLIPY: true", 10, 86, console.PICO8_BLACK)
-	c.Sprite(0, 70, 76, 2, 2, 16, 16, 0, true, true)
-	c.PrintAtWithColor("Scaled:", 10, 98, console.PICO8_BLACK)
-	c.Sprite(40, 40, 96, 4, 2, 64, 32, 0, false, false)
+	c.PrintAtWithColor("SPRITE:", 10, 20, console.PICO8_BLACK)
+	c.Sprite(0, 56, 16, 2, 2, 16, 16)
+
+	c.PrintAtWithColor("ROTATED:", 10, 45, console.PICO8_BLACK)
+	c.PrintAtWithColor(fmt.Sprintf("%d", int(c.rot)), 80, 45, console.PICO8_BLACK)
+	c.SpriteRotated(0, 56, 41, 2, 2, 16, 16, c.rot)
+
+	c.PrintAtWithColor("FLIPPED:", 10, 70, console.PICO8_BLACK)
+	c.SpriteFlipped(2, 56, 66, 2, 2, 16, 16, true, false)
+	c.PrintAtWithColor("X", 62, 83, console.PICO8_BLACK)
+	c.SpriteFlipped(2, 76, 66, 2, 2, 16, 16, false, true)
+	c.PrintAtWithColor("Y", 82, 83, console.PICO8_BLACK)
+	c.SpriteFlipped(2, 96, 66, 2, 2, 16, 16, true, true)
+	c.PrintAtWithColor("XY", 100, 83, console.PICO8_BLACK)
+
+	c.PrintAtWithColor("SCALED:", 10, 95, console.PICO8_BLACK)
+	c.Sprite(40, 40, 95, 4, 2, 64, 32)
 
 }
 
