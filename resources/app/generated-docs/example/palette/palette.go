@@ -1,0 +1,124 @@
+package main
+
+import (
+	"github.com/telecoda/pico-go-electron/console"
+)
+
+/*
+	This is a project to demo the palette manipulation
+
+	Copyright 2018 @telecoda
+
+*/
+
+const (
+	// define these vars to be used in javascript canvas scaling code
+	screenWidth  = 128
+	screenHeight = 128
+)
+
+// Code must implement console.Cartridge interface
+
+type cartridge struct {
+	*console.BaseCartridge
+
+	// example vars below
+	mapAnim      bool
+	frameCount   int
+	totalFrames  int
+	currentColor int
+}
+
+// NewCart - initialise a struct implementing Cartridge interface
+func NewCart() console.Cartridge {
+	return &cartridge{
+		BaseCartridge: console.NewBaseCart(),
+	}
+}
+
+// Init - called once when cart is initialised
+func (c *cartridge) Init() {
+	// the Init method receives a PixelBuffer reference
+	// hold onto this reference, this is the display that
+	// your code will be drawing onto each frame
+	c.frameCount = 0
+	c.totalFrames = 25
+	c.currentColor = 0
+	c.mapAnim = false
+}
+
+// Update -  called once every frame
+func (c *cartridge) Update() {
+	c.frameCount++
+	if c.frameCount > c.totalFrames {
+		// trigger update
+
+		if c.mapAnim {
+			c.MapColor(console.ColorID(c.currentColor), console.PICO8_RED)
+		} else {
+			c.SetTransparent(console.ColorID(c.currentColor), true)
+		}
+		// reset counters
+		c.frameCount = 0
+		c.currentColor++
+		if c.currentColor > 15 {
+			// all colors have been swapped reset
+			c.currentColor = 0
+			c.PaletteReset()
+			c.mapAnim = !c.mapAnim
+		}
+	}
+}
+
+// Render - called once every frame
+func (c *cartridge) Render() {
+	c.Cls()
+	c.RectFillWithColor(0, 0, 32, 32, 0)
+	c.RectFillWithColor(32, 0, 64, 32, 1)
+	c.RectFillWithColor(64, 0, 96, 32, 2)
+	c.RectFillWithColor(96, 0, 128, 32, 3)
+
+	c.RectFillWithColor(0, 32, 32, 64, 4)
+	c.RectFillWithColor(32, 32, 64, 64, 5)
+	c.RectFillWithColor(64, 32, 96, 64, 6)
+	c.RectFillWithColor(96, 32, 128, 64, 7)
+
+	c.RectFillWithColor(0, 64, 32, 96, 8)
+	c.RectFillWithColor(32, 64, 64, 96, 9)
+	c.RectFillWithColor(64, 64, 96, 96, 10)
+	c.RectFillWithColor(96, 64, 128, 96, 11)
+
+	c.RectFillWithColor(0, 96, 32, 128, 12)
+	c.RectFillWithColor(32, 96, 64, 128, 13)
+	c.RectFillWithColor(64, 96, 96, 128, 14)
+	c.RectFillWithColor(96, 96, 128, 128, 15)
+
+	c.PrintAtWithColor("PALETTE:", 46, 5, 15)
+	c.Line(0, 12, 128, 12)
+
+	if c.mapAnim {
+		c.PrintAtWithColor("COLORS CAN BE SWAPPED.", 20, 20, 15)
+	} else {
+		c.PrintAtWithColor("COLORS CAN BE TRANSPARENT.", 12, 20, 15)
+	}
+}
+
+func main() {
+
+	// Create virtual console - based on cart config
+	con, err := console.NewConsole(console.PICO8)
+	if err != nil {
+		panic(err)
+	}
+	defer con.Destroy()
+
+	cart := NewCart()
+
+	if err := con.LoadCart(cart); err != nil {
+		panic(err)
+	}
+
+	if err := con.Run(); err != nil {
+		panic(err)
+	}
+}
