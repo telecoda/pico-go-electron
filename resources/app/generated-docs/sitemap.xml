@@ -15,6 +15,22 @@
   </url>
   
   <url>
+    <loc>/example/drawing/drawing.html</loc>
+  </url>
+  
+  <url>
+    <loc>/example/palette/palette.html</loc>
+  </url>
+  
+  <url>
+    <loc>/example/sprite/sprite.html</loc>
+  </url>
+  
+  <url>
+    <loc>/example/starfield/starfield.html</loc>
+  </url>
+  
+  <url>
     <loc>/example.html</loc>
   </url>
   

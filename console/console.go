@@ -16,7 +16,7 @@ import (
 
 	"github.com/golang/freetype/truetype"
 	"github.com/hajimehoshi/ebiten"
-	_ "github.com/hajimehoshi/ebiten/ebitenutil"
+	"github.com/hajimehoshi/ebiten/ebitenutil"
 	"github.com/telecoda/pico-go-electron/console/resources/fonts"
 	"github.com/telecoda/pico-go-electron/console/resources/images"
 )
@@ -46,13 +46,15 @@ type Console interface {
 	Run() error
 	Destroy()
 	GetBounds() image.Rectangle
-	SetMode(newMode ModeType)
+	ShowFPS(state bool)
 	//Inputter
 }
 
 type console struct {
 	sync.Mutex
 	Config
+
+	showFPS bool
 
 	currentMode   ModeType
 	secondaryMode ModeType
@@ -166,10 +168,10 @@ func (c *console) GetBounds() image.Rectangle {
 	return image.Rect(0, 0, 0, 0)
 }
 
-func (c *console) SetMode(newMode ModeType) {
+func (c *console) ShowFPS(state bool) {
 	c.Lock()
 	defer c.Unlock()
-	c.currentMode = newMode
+	c.showFPS = state
 }
 
 func (c *console) LoadCart(cart Cartridge) error {
@@ -196,7 +198,7 @@ func (c *console) Run() error {
 	// init the cart
 	c.cart.Init()
 
-	return ebiten.Run(c.update, c.Config.ConsoleWidth, c.Config.ConsoleHeight, 4, "pico-go")
+	return ebiten.Run(c.update, c.Config.ConsoleWidth, c.Config.ConsoleHeight, 1, "pico-go")
 }
 
 func (c *console) update(screen *ebiten.Image) error {
@@ -236,7 +238,9 @@ func (c *console) update(screen *ebiten.Image) error {
 
 	screen.ReplacePixels(pix)
 
-	//ebitenutil.DebugPrint(screen, fmt.Sprintf("FPS: %f", ebiten.CurrentFPS()))
+	if c.showFPS {
+		ebitenutil.DebugPrint(screen, fmt.Sprintf("FPS: %f", ebiten.CurrentFPS()))
+	}
 
 	return nil
 }
