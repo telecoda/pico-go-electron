@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>pico-go documentation</title>
+    
+      <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="generator" content="Hugo 0.49" />
+<title>drawing :: pico-go documentation</title>
+<link rel="shortcut icon" href="../../images/favicon.png" type="image/x-icon" />
+<link href="../../css/font-awesome.min.css" rel="stylesheet">
+<link href="../../css/nucleus.css" rel="stylesheet">
+<link href="../../theme-picogo/style.css" rel="stylesheet">
+
+<link rel="stylesheet" href="../../css/bootstrap.min.css">
+<script src="../../js/jquery-2.x.min.js"></script>
+<script type="text/javascript">
+      var baseurl = "\/";
+</script>
+<meta name="description" content="">
+
+
+
+    
+  </head>
+  <body data-url="/example/drawing/drawing.html">
+    
+      <header>
+  <div class="logo">
+    
+	
+  
+    <a class="baselink" href="../../index.html">pico-go documentation</a>
+  
+
+  </div>
+  <div class="burger"><a href="javascript:void(0);" style="font-size:15px;">&#9776;</a></div>
+</header>
+<article>
+  <aside>
+    <ul class="menu">
+          <li data-nav-id="/" class="dd-item">
+          <a href="../../index.html">
+            <i class="fa fa-fw fa-home"></i>
+          </a>
+          </li>
+    <li data-nav-id="/about.html" class="dd-item haschildren
+        ">
+      <div>
+      <a href="../../about.html">about</a><i class="fa fa-angle-right fa-lg category-icon"></i>
+      </div>
+        <ul>
+      <li data-nav-id="/about/history.html" class="dd-item">
+        <div>
+          <a href="../../about/history.html">
+            
+          </a>
+        </div>
+    </li>
+        </ul>
+    </li>
+    <li data-nav-id="/dev-doc.html" class="dd-item
+        ">
+      <div>
+      <a href="../../dev-doc.html">dev docs</a>
+      </div>
+    </li>
+    <li data-nav-id="/example.html" class="dd-item parent haschildren
+        ">
+      <div>
+      <a href="../../example.html">examples</a>
+            <i class="fa fa-angle-down fa-lg category-icon"></i>
+      </div>
+        <ul>
+      <li data-nav-id="/example/demo-01/demo-01.html" class="dd-item">
+        <div>
+          <a href="../../example/demo-01/demo-01.html">
+            demo-01
+          </a>
+        </div>
+    </li>
+      <li data-nav-id="/example/drawing/drawing.html" class="dd-item active">
+        <div>
+          <a href="../../example/drawing/drawing.html">
+            drawing
+          </a>
+        </div>
+    </li>
+      <li data-nav-id="/example/palette/palette.html" class="dd-item">
+        <div>
+          <a href="../../example/palette/palette.html">
+            palette
+          </a>
+        </div>
+    </li>
+      <li data-nav-id="/example/sprite/sprite.html" class="dd-item">
+        <div>
+          <a href="../../example/sprite/sprite.html">
+            sprites
+          </a>
+        </div>
+    </li>
+      <li data-nav-id="/example/starfield/starfield.html" class="dd-item">
+        <div>
+          <a href="../../example/starfield/starfield.html">
+            starfield
+          </a>
+        </div>
+    </li>
+      <li data-nav-id="/example/ebiten/ebiten.html" class="dd-item">
+        <div>
+          <a href="../../example/ebiten/ebiten.html">
+            ebiten
+          </a>
+        </div>
+    </li>
+        </ul>
+    </li>
+
+
+
+
+    </ul>
+    <section>
+    </section>
+  </aside>
+  <section class="page">
+    
+    <div class="nav-select">
+      <center>Navigation : 
+        <select onchange="javascript:location.href = this.value;">
+          
+    <option value="/about.html" >
+   about</option>
+    <option value="/dev-doc.html" >
+   dev docs</option>
+    <option value="/example.html" >
+   examples</option> 
+      <option value="/example/demo-01/demo-01.html" >- demo-01</option>
+      <option value="/example/drawing/drawing.html"  selected>- drawing</option>
+      <option value="/example/palette/palette.html" >- palette</option>
+      <option value="/example/sprite/sprite.html" >- sprites</option>
+      <option value="/example/starfield/starfield.html" >- starfield</option>
+      <option value="/example/ebiten/ebiten.html" >- ebiten</option>
+  
+
+
+
+        </select>
+      </center>
+    </div>
+    
+
+    <h1>drawing</h1>
+    
+    
+    
+    
+
+<h1 id="drawing">drawing</h1>
+
+<p>This is a simple project to demonstrate how to use the drawing functions.</p>
+
+<h2 id="example-output">example output</h2>
+
+<p><img src="drawing.png" alt="image" /></p>
+
+<h2 id="sourcecode">sourcecode</h2>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
+
+<span style="color:#75715e">/*
+</span><span style="color:#75715e">	This is a project to demo the drawing primitives
+</span><span style="color:#75715e">
+</span><span style="color:#75715e">	Copyright 2018 @telecoda
+</span><span style="color:#75715e">
+</span><span style="color:#75715e">*/</span>
+
+<span style="color:#f92672">import</span> (
+	<span style="color:#e6db74">&#34;github.com/telecoda/pico-go-electron/console&#34;</span>
+)
+
+<span style="color:#66d9ef">const</span> (
+	<span style="color:#75715e">// define these vars to be used in javascript canvas scaling code
+</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">screenWidth</span>  = <span style="color:#ae81ff">128</span>
+	<span style="color:#a6e22e">screenHeight</span> = <span style="color:#ae81ff">128</span>
+)
+
+<span style="color:#66d9ef">type</span> <span style="color:#a6e22e">cartridge</span> <span style="color:#66d9ef">struct</span> {
+	<span style="color:#f92672">*</span><span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">BaseCartridge</span>
+}
+
+<span style="color:#75715e">// NewCart - initialise a struct implementing Cartridge interface
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">NewCart</span>() <span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">Cartridge</span> {
+	<span style="color:#66d9ef">return</span> <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">cartridge</span>{
+		<span style="color:#a6e22e">BaseCartridge</span>: <span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">NewBaseCart</span>(),
+	}
+}
+
+<span style="color:#75715e">// Init - called once when cart is initialised
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">c</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">cartridge</span>) <span style="color:#a6e22e">Init</span>() {
+}
+
+<span style="color:#75715e">// Update -  called once every frame
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">c</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">cartridge</span>) <span style="color:#a6e22e">Update</span>() {
+}
+
+<span style="color:#75715e">// Render - called once every frame
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">c</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">cartridge</span>) <span style="color:#a6e22e">Render</span>() {
+
+	<span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">ClsWithColor</span>(<span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">PICO8_RED</span>)
+	<span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">ClsWithColor</span>(<span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">PICO8_BLACK</span>)
+	<span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">PrintAtWithColor</span>(<span style="color:#e6db74">&#34;DRAWING:&#34;</span>, <span style="color:#ae81ff">50</span>, <span style="color:#ae81ff">5</span>, <span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">PICO8_WHITE</span>)
+
+	<span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">LineWithColor</span>(<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">12</span>, <span style="color:#ae81ff">128</span>, <span style="color:#ae81ff">12</span>, <span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">PICO8_WHITE</span>)
+	<span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">PrintAtWithColor</span>(<span style="color:#e6db74">&#34;RECTS:&#34;</span>, <span style="color:#ae81ff">10</span>, <span style="color:#ae81ff">32</span>, <span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">PICO8_WHITE</span>)
+	<span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">Rect</span>(<span style="color:#ae81ff">45</span>, <span style="color:#ae81ff">30</span>, <span style="color:#ae81ff">55</span>, <span style="color:#ae81ff">40</span>)
+	<span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">Color</span>(<span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">PICO8_GREEN</span>)
+	<span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">RectFill</span>(<span style="color:#ae81ff">65</span>, <span style="color:#ae81ff">30</span>, <span style="color:#ae81ff">75</span>, <span style="color:#ae81ff">40</span>)
+	<span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">RectFillWithColor</span>(<span style="color:#ae81ff">85</span>, <span style="color:#ae81ff">25</span>, <span style="color:#ae81ff">105</span>, <span style="color:#ae81ff">45</span>, <span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">PICO8_RED</span>)
+	<span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">PrintAtWithColor</span>(<span style="color:#e6db74">&#34;CIRCLE:&#34;</span>, <span style="color:#ae81ff">10</span>, <span style="color:#ae81ff">55</span>, <span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">PICO8_WHITE</span>)
+	<span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">Circle</span>(<span style="color:#ae81ff">50</span>, <span style="color:#ae81ff">57</span>, <span style="color:#ae81ff">5</span>)
+	<span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">Color</span>(<span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">PICO8_BLUE</span>)
+	<span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">CircleFill</span>(<span style="color:#ae81ff">70</span>, <span style="color:#ae81ff">57</span>, <span style="color:#ae81ff">5</span>)
+	<span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">CircleFillWithColor</span>(<span style="color:#ae81ff">95</span>, <span style="color:#ae81ff">57</span>, <span style="color:#ae81ff">10</span>, <span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">PICO8_BROWN</span>)
+	<span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">PrintAtWithColor</span>(<span style="color:#e6db74">&#34;LINES:&#34;</span>, <span style="color:#ae81ff">10</span>, <span style="color:#ae81ff">77</span>, <span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">PICO8_WHITE</span>)
+	<span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">Color</span>(<span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">PICO8_LIGHT_GRAY</span>)
+	<span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">Line</span>(<span style="color:#ae81ff">45</span>, <span style="color:#ae81ff">77</span>, <span style="color:#ae81ff">105</span>, <span style="color:#ae81ff">77</span>)
+	<span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">LineWithColor</span>(<span style="color:#ae81ff">45</span>, <span style="color:#ae81ff">79</span>, <span style="color:#ae81ff">105</span>, <span style="color:#ae81ff">79</span>, <span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">PICO8_YELLOW</span>)
+	<span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">PrintAtWithColor</span>(<span style="color:#e6db74">&#34;POINTS:&#34;</span>, <span style="color:#ae81ff">10</span>, <span style="color:#ae81ff">99</span>, <span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">PICO8_WHITE</span>)
+	<span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">PSet</span>(<span style="color:#ae81ff">50</span>, <span style="color:#ae81ff">99</span>)
+	<span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">PSetWithColor</span>(<span style="color:#ae81ff">70</span>, <span style="color:#ae81ff">99</span>, <span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">PICO8_PINK</span>)
+	<span style="color:#75715e">// get color of point // earlier rect
+</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">pointColor</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">PGet</span>(<span style="color:#ae81ff">85</span>, <span style="color:#ae81ff">25</span>)
+	<span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">PSetWithColor</span>(<span style="color:#ae81ff">95</span>, <span style="color:#ae81ff">99</span>, <span style="color:#a6e22e">pointColor</span>)
+}
+
+<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+
+	<span style="color:#75715e">// Create virtual console - based on cart config
+</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">con</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">NewConsole</span>(<span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">PICO8</span>)
+	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+		panic(<span style="color:#a6e22e">err</span>)
+	}
+	<span style="color:#66d9ef">defer</span> <span style="color:#a6e22e">con</span>.<span style="color:#a6e22e">Destroy</span>()
+
+	<span style="color:#a6e22e">cart</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">NewCart</span>()
+
+	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">con</span>.<span style="color:#a6e22e">LoadCart</span>(<span style="color:#a6e22e">cart</span>); <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+		panic(<span style="color:#a6e22e">err</span>)
+	}
+
+	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">con</span>.<span style="color:#a6e22e">Run</span>(); <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+		panic(<span style="color:#a6e22e">err</span>)
+	}
+}</code></pre></div>
+
+
+    
+    
+        <div class="chevrons">
+    <div id="navigation">
+<a class="nav nav-prev" href="../../example/demo-01/demo-01.html" title="demo-01"> <i class="fa fa-chevron-left"></i><label>demo-01</label></a>
+    <a class="nav nav-next" href="../../example/palette/palette.html" title="palette" style="margin-right: 0px;"><label>palette</label><i class="fa fa-chevron-right"></i></a></div>
+  </div>
+
+  </section>
+</article>
+
+<footer>
+
+<div class="footline">
+    
+
+    
+
+  
+
+  </div>
+
+
+	<div>
+
+
+  
+    <p>pico-go docs</p>
+
+  
+
+
+
+	</div>
+</footer>
+
+<script src="../../js/clipboard.min.js"></script>
+
+<link href="../../css/featherlight.min.css" rel="stylesheet">
+<script src="../../js/featherlight.min.js"></script>
+
+
+
+<script src="../../theme-picogo/script.js"></script>
+
+    
+
+    
+    
+
+    
+  </body>
+</html>

@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>pico-go documentation</title>
+    
+      <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="generator" content="Hugo 0.49" />
+<title>starfield :: pico-go documentation</title>
+<link rel="shortcut icon" href="../../images/favicon.png" type="image/x-icon" />
+<link href="../../css/font-awesome.min.css" rel="stylesheet">
+<link href="../../css/nucleus.css" rel="stylesheet">
+<link href="../../theme-picogo/style.css" rel="stylesheet">
+
+<link rel="stylesheet" href="../../css/bootstrap.min.css">
+<script src="../../js/jquery-2.x.min.js"></script>
+<script type="text/javascript">
+      var baseurl = "\/";
+</script>
+<meta name="description" content="">
+
+
+
+    
+  </head>
+  <body data-url="/example/starfield/starfield.html">
+    
+      <header>
+  <div class="logo">
+    
+	
+  
+    <a class="baselink" href="../../index.html">pico-go documentation</a>
+  
+
+  </div>
+  <div class="burger"><a href="javascript:void(0);" style="font-size:15px;">&#9776;</a></div>
+</header>
+<article>
+  <aside>
+    <ul class="menu">
+          <li data-nav-id="/" class="dd-item">
+          <a href="../../index.html">
+            <i class="fa fa-fw fa-home"></i>
+          </a>
+          </li>
+    <li data-nav-id="/about.html" class="dd-item haschildren
+        ">
+      <div>
+      <a href="../../about.html">about</a><i class="fa fa-angle-right fa-lg category-icon"></i>
+      </div>
+        <ul>
+      <li data-nav-id="/about/history.html" class="dd-item">
+        <div>
+          <a href="../../about/history.html">
+            
+          </a>
+        </div>
+    </li>
+        </ul>
+    </li>
+    <li data-nav-id="/dev-doc.html" class="dd-item
+        ">
+      <div>
+      <a href="../../dev-doc.html">dev docs</a>
+      </div>
+    </li>
+    <li data-nav-id="/example.html" class="dd-item parent haschildren
+        ">
+      <div>
+      <a href="../../example.html">examples</a>
+            <i class="fa fa-angle-down fa-lg category-icon"></i>
+      </div>
+        <ul>
+      <li data-nav-id="/example/demo-01/demo-01.html" class="dd-item">
+        <div>
+          <a href="../../example/demo-01/demo-01.html">
+            demo-01
+          </a>
+        </div>
+    </li>
+      <li data-nav-id="/example/drawing/drawing.html" class="dd-item">
+        <div>
+          <a href="../../example/drawing/drawing.html">
+            drawing
+          </a>
+        </div>
+    </li>
+      <li data-nav-id="/example/palette/palette.html" class="dd-item">
+        <div>
+          <a href="../../example/palette/palette.html">
+            palette
+          </a>
+        </div>
+    </li>
+      <li data-nav-id="/example/sprite/sprite.html" class="dd-item">
+        <div>
+          <a href="../../example/sprite/sprite.html">
+            sprites
+          </a>
+        </div>
+    </li>
+      <li data-nav-id="/example/starfield/starfield.html" class="dd-item active">
+        <div>
+          <a href="../../example/starfield/starfield.html">
+            starfield
+          </a>
+        </div>
+    </li>
+      <li data-nav-id="/example/ebiten/ebiten.html" class="dd-item">
+        <div>
+          <a href="../../example/ebiten/ebiten.html">
+            ebiten
+          </a>
+        </div>
+    </li>
+        </ul>
+    </li>
+
+
+
+
+    </ul>
+    <section>
+    </section>
+  </aside>
+  <section class="page">
+    
+    <div class="nav-select">
+      <center>Navigation : 
+        <select onchange="javascript:location.href = this.value;">
+          
+    <option value="/about.html" >
+   about</option>
+    <option value="/dev-doc.html" >
+   dev docs</option>
+    <option value="/example.html" >
+   examples</option> 
+      <option value="/example/demo-01/demo-01.html" >- demo-01</option>
+      <option value="/example/drawing/drawing.html" >- drawing</option>
+      <option value="/example/palette/palette.html" >- palette</option>
+      <option value="/example/sprite/sprite.html" >- sprites</option>
+      <option value="/example/starfield/starfield.html"  selected>- starfield</option>
+      <option value="/example/ebiten/ebiten.html" >- ebiten</option>
+  
+
+
+
+        </select>
+      </center>
+    </div>
+    
+
+    <h1>starfield</h1>
+    
+    
+    
+    
+
+<h1 id="starfield">starfield</h1>
+
+<p>This is a simple project which creates an old skool starfield</p>
+
+<h2 id="example-output">example output</h2>
+
+<p><img src="starfield.png" alt="image" /></p>
+
+<h2 id="sourcecode">sourcecode</h2>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
+
+<span style="color:#75715e">/*
+</span><span style="color:#75715e">	This is a project to demo an oldskool starfield
+</span><span style="color:#75715e">
+</span><span style="color:#75715e">	Copyright 2018 @telecoda
+</span><span style="color:#75715e">
+</span><span style="color:#75715e">*/</span>
+
+<span style="color:#f92672">import</span> (
+	<span style="color:#e6db74">&#34;math/rand&#34;</span>
+
+	<span style="color:#e6db74">&#34;github.com/telecoda/pico-go-electron/console&#34;</span>
+)
+
+<span style="color:#66d9ef">const</span> (
+	<span style="color:#75715e">// define these vars to be used in javascript canvas scaling code
+</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">screenWidth</span>  = <span style="color:#ae81ff">128</span>
+	<span style="color:#a6e22e">screenHeight</span> = <span style="color:#ae81ff">128</span>
+)
+
+<span style="color:#66d9ef">type</span> <span style="color:#a6e22e">cartridge</span> <span style="color:#66d9ef">struct</span> {
+	<span style="color:#f92672">*</span><span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">BaseCartridge</span>
+	<span style="color:#a6e22e">s</span> []<span style="color:#66d9ef">int</span>
+}
+
+<span style="color:#75715e">// NewCart - initialise a struct implementing Cartridge interface
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">NewCart</span>() <span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">Cartridge</span> {
+	<span style="color:#66d9ef">return</span> <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">cartridge</span>{
+		<span style="color:#a6e22e">BaseCartridge</span>: <span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">NewBaseCart</span>(),
+	}
+}
+
+<span style="color:#75715e">/* This is the original tweetcart code
+</span><span style="color:#75715e">s={}w=128 r=rnd for i=1,w do s[i]={}p=s[i]p[1]=r(w)end::a::cls()for i=1,w do p=s[i]pset(p[1],i,i%3+5)p[1]=(p[1]-i%3)%w end flip()goto a
+</span><span style="color:#75715e">*/</span>
+
+<span style="color:#75715e">// Init -  called once
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">c</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">cartridge</span>) <span style="color:#a6e22e">Init</span>() {
+
+	<span style="color:#75715e">// init stars
+</span><span style="color:#75715e"></span>	<span style="color:#75715e">/*
+</span><span style="color:#75715e">		s={}
+</span><span style="color:#75715e">		w=128
+</span><span style="color:#75715e">		r=rnd
+</span><span style="color:#75715e">		for i=1,w do
+</span><span style="color:#75715e">			s[i]={}
+</span><span style="color:#75715e">			p=s[i]
+</span><span style="color:#75715e">			p[1]=r(w)
+</span><span style="color:#75715e">		end
+</span><span style="color:#75715e">	*/</span>
+
+	<span style="color:#a6e22e">w</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">screenWidth</span>
+	<span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">s</span> = make([]<span style="color:#66d9ef">int</span>, <span style="color:#a6e22e">w</span>, <span style="color:#a6e22e">w</span>)
+
+	<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">i</span> <span style="color:#f92672">:=</span> <span style="color:#ae81ff">0</span>; <span style="color:#a6e22e">i</span> &lt; <span style="color:#a6e22e">w</span>; <span style="color:#a6e22e">i</span><span style="color:#f92672">++</span> {
+		<span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">s</span>[<span style="color:#a6e22e">i</span>] = <span style="color:#a6e22e">rand</span>.<span style="color:#a6e22e">Intn</span>(<span style="color:#a6e22e">w</span>)
+	}
+
+}
+
+<span style="color:#75715e">// Update -  called once every frame
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">c</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">cartridge</span>) <span style="color:#a6e22e">Update</span>() {
+
+}
+
+<span style="color:#75715e">// Render - called once every frame
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">c</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">cartridge</span>) <span style="color:#a6e22e">Render</span>() {
+	<span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">ClsWithColor</span>(<span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">PICO8_BLACK</span>)
+	<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">i</span> <span style="color:#f92672">:=</span> <span style="color:#ae81ff">0</span>; <span style="color:#a6e22e">i</span> &lt; <span style="color:#a6e22e">screenWidth</span>; <span style="color:#a6e22e">i</span><span style="color:#f92672">++</span> {
+		<span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">PSetWithColor</span>(<span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">s</span>[<span style="color:#a6e22e">i</span>], <span style="color:#a6e22e">i</span>, <span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">ColorID</span>(<span style="color:#a6e22e">i</span><span style="color:#f92672">%</span><span style="color:#ae81ff">3</span><span style="color:#f92672">+</span><span style="color:#ae81ff">5</span>))
+		<span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">s</span>[<span style="color:#a6e22e">i</span>] = (<span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">s</span>[<span style="color:#a6e22e">i</span>] <span style="color:#f92672">-</span> (<span style="color:#a6e22e">i</span> <span style="color:#f92672">%</span> <span style="color:#ae81ff">3</span>)) <span style="color:#f92672">%</span> <span style="color:#a6e22e">screenWidth</span>
+		<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">s</span>[<span style="color:#a6e22e">i</span>] &lt; <span style="color:#ae81ff">0</span> {
+			<span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">s</span>[<span style="color:#a6e22e">i</span>] <span style="color:#f92672">+=</span> <span style="color:#a6e22e">screenWidth</span>
+		}
+	}
+}
+
+<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+
+	<span style="color:#75715e">// Create virtual console - based on cart config
+</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">con</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">NewConsole</span>(<span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">PICO8</span>)
+	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+		panic(<span style="color:#a6e22e">err</span>)
+	}
+	<span style="color:#66d9ef">defer</span> <span style="color:#a6e22e">con</span>.<span style="color:#a6e22e">Destroy</span>()
+
+	<span style="color:#75715e">//con.ShowFPS(true)
+</span><span style="color:#75715e"></span>
+	<span style="color:#a6e22e">cart</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">NewCart</span>()
+
+	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">con</span>.<span style="color:#a6e22e">LoadCart</span>(<span style="color:#a6e22e">cart</span>); <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+		panic(<span style="color:#a6e22e">err</span>)
+	}
+
+	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">con</span>.<span style="color:#a6e22e">Run</span>(); <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+		panic(<span style="color:#a6e22e">err</span>)
+	}
+}</code></pre></div>
+
+
+    
+    
+        <div class="chevrons">
+    <div id="navigation">
+<a class="nav nav-prev" href="../../example/sprite/sprite.html" title="sprites"> <i class="fa fa-chevron-left"></i><label>sprites</label></a>
+    <a class="nav nav-next" href="../../example/ebiten/ebiten.html" title="ebiten" style="margin-right: 0px;"><label>ebiten</label><i class="fa fa-chevron-right"></i></a></div>
+  </div>
+
+  </section>
+</article>
+
+<footer>
+
+<div class="footline">
+    
+
+    
+
+  
+
+  </div>
+
+
+	<div>
+
+
+  
+    <p>pico-go docs</p>
+
+  
+
+
+
+	</div>
+</footer>
+
+<script src="../../js/clipboard.min.js"></script>
+
+<link href="../../css/featherlight.min.css" rel="stylesheet">
+<script src="../../js/featherlight.min.js"></script>
+
+
+
+<script src="../../theme-picogo/script.js"></script>
+
+    
+
+    
+    
+
+    
+  </body>
+</html>
