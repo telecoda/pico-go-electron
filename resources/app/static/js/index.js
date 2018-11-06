@@ -53,6 +53,25 @@ let index = {
             this.load(filenames[0]);
         }
     },
+        // reload source changed
+    reload: function(path) {
+        // check if source in editor has been changed since it was loaded
+        console.log("Reloading: " + path);
+        that = this;
+        cbFunc = function(buttonIndex){ 
+            if (buttonIndex == 0) {
+                that.load(path);
+            }
+        }
+        if (loadedSource != editor.session.getValue()) {
+            // display alert to ask for permission
+            dialog.showMessageBox({"title": "Source changed","message": "The sourcecode has been changed in this editor and in an external editor, do you wish to load the latest changes and loose anything you have done here?", "type": "question", "buttons": [ "OK","cancel"], "defaultId": 0 }, cbFunc );
+        } else {
+            // just load it
+            this.load(path);
+        }
+        
+    },
     // run menu clicked
     runMenu: function(message) {
         this.run();
@@ -97,6 +116,8 @@ let index = {
             document.title = message.payload.path;
             editor.session.setMode("ace/mode/golang");
             editor.session.setValue(message.payload.source)
+            // save loaded source
+            loadedSource = message.payload.source;
 
             // switch to code tab
             document.getElementById("codeTab").click();
@@ -179,6 +200,8 @@ let index = {
                 dialog.showErrorBox("Save Error",message.payload);
                 return
             }
+            // update loadedSource to track for code changes
+            loadedSource = editor.session.getValue()
             document.title = message.payload.path;
         })
     },
@@ -198,6 +221,10 @@ let index = {
                 case "open":
                     index.openMenu(message.payload);
                     return {payload: "open clicked!"};
+                    break;
+                case "reload":
+                    index.reload(message.payload);
+                    return {payload: "reload source changed"};
                     break;
                 case "run":
                     index.runMenu(message.payload);

@@ -86,7 +86,6 @@ func main() {
 						Label:       astilectron.PtrStr("Open"),
 						OnClick: func(e astilectron.Event) (deleteListener bool) {
 							if err := bootstrap.SendMessage(w, "open", "open this", func(m *bootstrap.MessageIn) {
-								// Unmarshal payload
 								var s string
 								if m != nil {
 									if err := json.Unmarshal(m.Payload, &s); err != nil {
@@ -105,7 +104,6 @@ func main() {
 						Label:       astilectron.PtrStr("Save"),
 						OnClick: func(e astilectron.Event) (deleteListener bool) {
 							if err := bootstrap.SendMessage(w, "save", "save this", func(m *bootstrap.MessageIn) {
-								// Unmarshal payload
 								var s string
 								if m != nil {
 									if err := json.Unmarshal(m.Payload, &s); err != nil {
@@ -125,7 +123,6 @@ func main() {
 						Label:       astilectron.PtrStr("Save As..."),
 						OnClick: func(e astilectron.Event) (deleteListener bool) {
 							if err := bootstrap.SendMessage(w, "saveAs", "saveAs this", func(m *bootstrap.MessageIn) {
-								// Unmarshal payload
 								var s string
 								if m != nil {
 									if err := json.Unmarshal(m.Payload, &s); err != nil {
@@ -169,7 +166,6 @@ func main() {
 						Label:       astilectron.PtrStr("Run"),
 						OnClick: func(e astilectron.Event) (deleteListener bool) {
 							if err := bootstrap.SendMessage(w, "run", "run code", func(m *bootstrap.MessageIn) {
-								// Unmarshal payload
 								var s string
 								if m != nil {
 									if err := json.Unmarshal(m.Payload, &s); err != nil {
