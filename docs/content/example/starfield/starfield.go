@@ -83,9 +83,7 @@ func (c *cartridge) Render() {
 }
 
 func main() {
-
 	cart := NewCart()
-
 	if err := console.Run(cart); err != nil {
 		panic(err)
 	}
