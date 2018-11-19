@@ -76,18 +76,6 @@ type Spriter interface {
 	SpriteRotated(n, x, y, w, h, dw, dh int, rot float64)
 }
 
-type ModeType int
-
-const (
-	CLI ModeType = iota
-	CODE_EDITOR
-	SPRITE_EDITOR
-	MAP_EDITOR
-	SFX_EDITOR
-	MUSIC_EDITOR
-	RUNTIME
-)
-
 type ConsoleType string
 
 const (
@@ -115,11 +103,9 @@ type Cartridge interface {
 	Configger
 	initPb(pb PixelBuffer)
 	getPb() PixelBuffer
-	IsRunning() bool
-	Stop()
 	PicoInputAPI
 	// User implemented methods below
-	Init()
+	Init() error
 	Render()
 	Update()
 }
@@ -135,6 +121,8 @@ type PixelBuffer interface {
 	GetFrame() *image.Paletted
 	PicoGraphicsAPI
 	getPixelBuffer() *pixelBuffer
+	GetWidth() int
+	GetHeight() int
 }
 
 var title = "pico-go virtual games console"

@@ -4,13 +4,12 @@ type BaseCartridge struct {
 	cfg         Config // holds details of console config
 	PixelBuffer        // ref to console display
 	PicoInputAPI
-	running bool
 }
 
 // NewBaseCart - initialise a struct implementing Cartridge interface
 func NewBaseCart() *BaseCartridge {
 	cart := &BaseCartridge{
-		cfg: _console.Config,
+		//		cfg: _console.Config,
 	}
 
 	return cart
@@ -27,19 +26,10 @@ func (bc *BaseCartridge) initPb(pb PixelBuffer) {
 	// hold onto this reference, this is the display that
 	// your code will be drawing onto each frame
 	bc.PixelBuffer = pb
-	bc.running = true
 }
 
 func (bc *BaseCartridge) getPb() PixelBuffer {
 	return bc.PixelBuffer
-}
-
-func (bc *BaseCartridge) IsRunning() bool {
-	return bc.running
-}
-
-func (bc *BaseCartridge) Stop() {
-	bc.running = false
 }
 
 func (bc *BaseCartridge) Btn(id int) bool {

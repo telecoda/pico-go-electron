@@ -41,14 +41,9 @@ const (
 	userSpriteMask1 = 1
 )
 
-type Console interface {
-	LoadCart(cart Cartridge) error
-	Run() error
-	Destroy()
-	GetBounds() image.Rectangle
-	ShowFPS(state bool)
-	//Inputter
-}
+var lastFrame time.Time
+var startFrame time.Time
+var endFrame time.Time
 
 type console struct {
 	sync.Mutex
@@ -56,15 +51,12 @@ type console struct {
 
 	showFPS bool
 
-	currentMode   ModeType
-	secondaryMode ModeType
-	hasQuit       bool
-
 	// files
 	baseDir    string
 	currentDir string
 
-	cart Cartridge
+	consoleType ConsoleType
+	cart        Cartridge
 
 	screen *ebiten.Image
 	pImage *image.Paletted
@@ -79,20 +71,14 @@ type console struct {
 	//Inputter
 }
 
-func NewConsole(consoleType ConsoleType) (Console, error) {
+func Run(cart Cartridge) error {
 
-	// validate type
-	if _, ok := ConsoleTypes[consoleType]; !ok {
-		return nil, fmt.Errorf("Console type: %s not supported", consoleType)
-	}
-
-	cfg := NewConfig(consoleType)
+	// init console
+	// load cartridge
+	// run main loop
 
 	_console = &console{
-		Config:        cfg,
-		currentMode:   CLI,
-		secondaryMode: CODE_EDITOR,
-		hasQuit:       false,
+		//Config:  cfg,
 	}
 
 	// TODO screen recorder
@@ -121,11 +107,48 @@ func NewConsole(consoleType ConsoleType) (Console, error) {
 
 	_console.font = mplusNormalFont
 
+	_console.cart = cart
+
+	// use PICO8 as default
+	if err := SetType(PICO8); err != nil {
+		return err
+	}
+
+	// init the cart
+	_console.cart.Init()
+
+	// poll events
+	endFrame = time.Now() // init end frame
+	startFrame = time.Now()
+
+	return ebiten.Run(_console.update, _console.Config.ConsoleWidth, _console.Config.ConsoleHeight, 1, "pico-go")
+}
+
+func (c *console) ShowFPS(state bool) {
+	c.Lock()
+	defer c.Unlock()
+	c.showFPS = state
+}
+
+func SetType(consoleType ConsoleType) error {
+	if _console == nil {
+		return fmt.Errorf("Console Init() must be called first")
+	}
+
+	// validate type
+	if _, ok := ConsoleTypes[consoleType]; !ok {
+		return fmt.Errorf("Console type: %s not supported", consoleType)
+	}
+
+	cfg := NewConfig(consoleType)
+
+	_console.Config = cfg
+
 	// init sprites
 	// There are 2 sprite banks
 	// 0 = User sprite bank 1
 	// 1 = User sprite bank 1 mask
-	_console.sprites = make([]*image.Paletted, 3)
+	_console.sprites = make([]*image.Paletted, 2)
 
 	_console.palette = newPalette(cfg.consoleType)
 	_console.originalPalette = newPalette(cfg.consoleType)
@@ -138,7 +161,7 @@ func NewConsole(consoleType ConsoleType) (Console, error) {
 	// init sprites
 	sprites, _, err := image.Decode(bytes.NewReader(images.Sprites_png))
 	if err != nil {
-		return nil, fmt.Errorf("Error loading sprites: %s", err)
+		return fmt.Errorf("Error loading sprites: %s", err)
 	}
 	_console.sprites[userSpriteBank1] = sprites.(*image.Paletted)
 
@@ -147,7 +170,7 @@ func NewConsole(consoleType ConsoleType) (Console, error) {
 	// create a mask
 	masks, _, err := image.Decode(bytes.NewReader(images.Sprites_png))
 	if err != nil {
-		return nil, fmt.Errorf("Error loading sprites: %s", err)
+		return fmt.Errorf("Error loading sprites: %s", err)
 	}
 	_console.sprites[userSpriteMask1] = masks.(*image.Paletted)
 
@@ -161,44 +184,15 @@ func NewConsole(consoleType ConsoleType) (Console, error) {
 	}
 	mask.Palette = maskPalette.colors
 
-	return _console, nil
-}
-
-func (c *console) GetBounds() image.Rectangle {
-	return image.Rect(0, 0, 0, 0)
-}
-
-func (c *console) ShowFPS(state bool) {
-	c.Lock()
-	defer c.Unlock()
-	c.showFPS = state
-}
-
-func (c *console) LoadCart(cart Cartridge) error {
-	c.cart = cart
-	return nil
-}
-
-var lastFrame time.Time
-var startFrame time.Time
-var endFrame time.Time
-
-// Run is the main run loop
-func (c *console) Run() error {
-
 	// init pixelbuffer
-	pb, _ := newPixelBuffer(c.Config)
+	pb, err := newPixelBuffer(_console.Config)
+	if err != nil {
+		return fmt.Errorf("Error creating pixel buffer: %s", err)
+	}
 
-	c.cart.initPb(pb)
+	_console.cart.initPb(pb)
 
-	// poll events
-	endFrame = time.Now() // init end frame
-	startFrame = time.Now()
-
-	// init the cart
-	c.cart.Init()
-
-	return ebiten.Run(c.update, c.Config.ConsoleWidth, c.Config.ConsoleHeight, 1, "pico-go")
+	return nil
 }
 
 func (c *console) update(screen *ebiten.Image) error {
@@ -212,15 +206,13 @@ func (c *console) update(screen *ebiten.Image) error {
 	// record frame
 	//			c.recorder.AddFrame(mode.GetFrame(), mode)
 
-	//mode.Flip()
-
 	cpb := c.cart.getPb()
 
 	pb := cpb.getPixelBuffer()
 
 	// convert paletted image to RGBA
 
-	pix := make([]uint8, 65536)
+	pix := make([]uint8, c.ConsoleWidth*c.ConsoleHeight*4)
 
 	b := 0
 	for _, palPix := range pb.pixelSurface.Pix {
@@ -257,21 +249,6 @@ func (c *console) handleInput() error {
 	// 	// F8 Start recording a video
 	// 	// F9 Save GIF video to desktop (max: 8 seconds by default)
 
-	// 	switch t := event.(type) {
-	// 	case *sdl.QuitEvent:
-	// 		fmt.Printf("Quit event..\n")
-	// 		c.state.SaveState(c)
-	// 		c.hasQuit = true
-	// 	case *sdl.KeyDownEvent:
-	// 		switch t.Keysym.Sym {
-	// 		case sdl.K_ESCAPE:
-	// 			c.toggleCLI()
-
-	// if not handled pass event to mode event handler
-	// if err := c.modes[c.currentMode].HandleInput(); err != nil {
-	// 	return err
-	// }
-
 	// 		case sdl.K_F6:
 	// 			if err := c.saveScreenshot(); err != nil {
 	// 				return err
@@ -286,18 +263,6 @@ func (c *console) handleInput() error {
 	// 				return err
 	// 			}
 	// 		}
-	// 	case *sdl.MouseButtonEvent:
-	// 		// we only care about mouse clicks
-	// 		if t.State == 1 && t.Button == 1 {
-	// 			c.mouseClicked(t.X, t.Y)
-	// 		}
-	// 	default:
-	// 		// if not handled pass event to mode event handler
-	// 		if err := mode.HandleEvent(event); err != nil {
-	// 			return err
-	// 		}
-	// 	}
-	// }
 
 	//	}
 
@@ -306,35 +271,7 @@ func (c *console) handleInput() error {
 
 func (c *console) mouseClicked(x, y int32) {
 	// transform window x,y coords to pixel buffer coords
-
 	fmt.Printf("Mouse clicked at x: %d y: %d\n", x, y)
-
-	// get mode
-	// if mode, ok := c.modes[c.currentMode]; ok {
-	// 	pb := mode.getPixelBuffer()
-	// 	fmt.Printf("RenderRect: %#v\n", pb.renderRect)
-	// 	fmt.Printf("pixelBuffer: %#v\n", pb.psRect)
-	// 	// subtract top left offset
-	// 	x -= int32(pb.renderRect.Min.X)
-	// 	y -= int32(pb.renderRect.Min.Y)
-	// 	fmt.Printf("[adjusted] Mouse clicked at x: %d y: %d\n", x, y)
-	// 	// scale to match pixelbuffer
-	// 	scale := float32(pb.renderRect.Max.X) / float32(pb.pixelSurface.Bounds().Max.X)
-	// 	scaledX := float32(x) / scale
-	// 	scaledY := float32(y) / scale
-	// 	x = int32(scaledX)
-	// 	y = int32(scaledY)
-	// 	fmt.Printf("[scaled] Mouse clicked at x: %d y: %d\n", x, y)
-	// }
-
-}
-
-func (c *console) Quit() {
-	c.hasQuit = true
-}
-
-// Destroy cleans up any resources at end
-func (c *console) Destroy() {
 }
 
 // saveScreenshot - saves a screenshot of current frame

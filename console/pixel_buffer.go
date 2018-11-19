@@ -656,3 +656,17 @@ func (p *pixelBuffer) SetTransparent(color ColorID, enabled bool) error {
 func (p *pixelBuffer) Destroy() {
 	p.pixelSurface = nil
 }
+
+func (p *pixelBuffer) GetWidth() int {
+	if p.pixelSurface == nil {
+		return 0
+	}
+	return p.pixelSurface.Bounds().Dx()
+}
+
+func (p *pixelBuffer) GetHeight() int {
+	if p.pixelSurface == nil {
+		return 0
+	}
+	return p.pixelSurface.Bounds().Dy()
+}

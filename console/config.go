@@ -4,8 +4,6 @@ type Config struct {
 	BorderWidth     int
 	ConsoleWidth    int
 	ConsoleHeight   int
-	WindowWidth     int
-	WindowHeight    int
 	FPS             int
 	Verbose         bool
 	ScreenshotScale int
@@ -28,11 +26,6 @@ var screenshotScale int
 var gifScale int
 var gifLength int
 
-// electron vars we never use
-var noSandbox bool
-var servicePipeToken string
-var lang string
-
 func NewConfig(consoleType ConsoleType) Config {
 	switch consoleType {
 	case PICO8:
@@ -52,8 +45,6 @@ func newPico8Config() Config {
 	config := Config{
 		ConsoleWidth:    128,
 		ConsoleHeight:   128,
-		WindowWidth:     400,
-		WindowHeight:    400,
 		FPS:             60,
 		Verbose:         optVerbose,
 		ScreenshotScale: screenshotScale,
@@ -75,8 +66,6 @@ func newTic80Config() Config {
 	config := Config{
 		ConsoleWidth:    240,
 		ConsoleHeight:   136,
-		WindowWidth:     480,
-		WindowHeight:    272,
 		FPS:             60,
 		Verbose:         optVerbose,
 		ScreenshotScale: screenshotScale,
@@ -99,8 +88,6 @@ func newZXSpectrumConfig() Config {
 		BorderWidth:     25,
 		ConsoleWidth:    256,
 		ConsoleHeight:   192,
-		WindowWidth:     512,
-		WindowHeight:    384,
 		FPS:             60,
 		Verbose:         optVerbose,
 		ScreenshotScale: screenshotScale,
@@ -123,8 +110,6 @@ func newCBM64Config() Config {
 		BorderWidth:     25,
 		ConsoleWidth:    320,
 		ConsoleHeight:   200,
-		WindowWidth:     640,
-		WindowHeight:    400,
 		FPS:             60,
 		Verbose:         optVerbose,
 		ScreenshotScale: screenshotScale,

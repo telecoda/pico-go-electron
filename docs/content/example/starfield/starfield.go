@@ -36,8 +36,11 @@ s={}w=128 r=rnd for i=1,w do s[i]={}p=s[i]p[1]=r(w)end::a::cls()for i=1,w do p=s
 */
 
 // Init -  called once
-func (c *cartridge) Init() {
+func (c *cartridge) Init() error {
 
+	if err := console.SetType(console.CBM64); err != nil {
+		return err
+	}
 	// init stars
 	/*
 		s={}
@@ -50,12 +53,15 @@ func (c *cartridge) Init() {
 		end
 	*/
 
-	w := screenWidth
+	w := c.GetWidth()
+	//h := c.GetHeight()
 	c.s = make([]int, w, w)
 
 	for i := 0; i < w; i++ {
 		c.s[i] = rand.Intn(w)
 	}
+
+	return nil
 
 }
 
@@ -67,33 +73,20 @@ func (c *cartridge) Update() {
 // Render - called once every frame
 func (c *cartridge) Render() {
 	c.ClsWithColor(console.PICO8_BLACK)
-	for i := 0; i < screenWidth; i++ {
+	for i := 0; i < c.GetHeight(); i++ {
 		c.PSetWithColor(c.s[i], i, console.ColorID(i%3+5))
-		c.s[i] = (c.s[i] - (i % 3)) % screenWidth
+		c.s[i] = (c.s[i] - (i % 3)) % c.GetWidth()
 		if c.s[i] < 0 {
-			c.s[i] += screenWidth
+			c.s[i] += c.GetWidth()
 		}
 	}
 }
 
 func main() {
 
-	// Create virtual console - based on cart config
-	con, err := console.NewConsole(console.PICO8)
-	if err != nil {
-		panic(err)
-	}
-	defer con.Destroy()
-
-	//con.ShowFPS(true)
-
 	cart := NewCart()
 
-	if err := con.LoadCart(cart); err != nil {
-		panic(err)
-	}
-
-	if err := con.Run(); err != nil {
+	if err := console.Run(cart); err != nil {
 		panic(err)
 	}
 }

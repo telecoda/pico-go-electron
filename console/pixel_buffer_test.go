@@ -13,7 +13,7 @@ func TestPixelToChar(t *testing.T) {
 		{testValue: pos{x: 0, y: 0}, expectedValue: pos{x: 0, y: 0}},
 	}
 
-	NewConsole(PICO8)
+	NewConsole()
 
 	for _, test := range tests {
 		pixelPos := charToPixel(test.testValue)

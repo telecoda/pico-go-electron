@@ -29,7 +29,8 @@ func NewCart() console.Cartridge {
 }
 
 // Init - called once when cart is initialised
-func (c *cartridge) Init() {
+func (c *cartridge) Init() error {
+	return nil
 }
 
 // Update -  called once every frame
@@ -67,21 +68,8 @@ func (c *cartridge) Render() {
 }
 
 func main() {
-
-	// Create virtual console - based on cart config
-	con, err := console.NewConsole(console.PICO8)
-	if err != nil {
-		panic(err)
-	}
-	defer con.Destroy()
-
 	cart := NewCart()
-
-	if err := con.LoadCart(cart); err != nil {
-		panic(err)
-	}
-
-	if err := con.Run(); err != nil {
+	if err := console.Run(cart); err != nil {
 		panic(err)
 	}
 }
