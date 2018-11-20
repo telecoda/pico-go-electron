@@ -30,8 +30,6 @@ type pixelBuffer struct {
 	screen       *ebiten.Image
 	psRect       image.Rectangle // rect of pixelSurface
 	renderRect   image.Rectangle // rect on main window that pixelbuffer is rendered into
-	fps          int
-	timeBudget   int64
 }
 
 type pos struct {
@@ -40,11 +38,7 @@ type pos struct {
 }
 
 func newPixelBuffer(cfg Config) (PixelBuffer, error) {
-	p := &pixelBuffer{
-		fps: cfg.FPS,
-	}
-
-	p.timeBudget = time.Duration(1*time.Second).Nanoseconds() / int64(p.fps)
+	p := &pixelBuffer{}
 
 	p.psRect = image.Rect(0, 0, cfg.ConsoleWidth, cfg.ConsoleHeight)
 	p.renderRect = image.Rect(0, 0, cfg.ConsoleWidth, cfg.ConsoleHeight)

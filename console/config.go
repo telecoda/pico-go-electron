@@ -4,8 +4,6 @@ type Config struct {
 	BorderWidth     int
 	ConsoleWidth    int
 	ConsoleHeight   int
-	FPS             int
-	Verbose         bool
 	ScreenshotScale int
 	GifScale        int
 	GifLength       int
@@ -17,8 +15,6 @@ type Config struct {
 	BgColor     ColorID
 	FgColor     ColorID
 	BorderColor ColorID
-	errColor    ColorID
-	cursorColor ColorID
 }
 
 var optVerbose bool
@@ -45,8 +41,6 @@ func newPico8Config() Config {
 	config := Config{
 		ConsoleWidth:    128,
 		ConsoleHeight:   128,
-		FPS:             60,
-		Verbose:         optVerbose,
 		ScreenshotScale: screenshotScale,
 		GifScale:        gifScale,
 		GifLength:       gifLength,
@@ -55,9 +49,7 @@ func newPico8Config() Config {
 		fontHeight:      8,
 		BgColor:         PICO8_BLACK,
 		FgColor:         PICO8_WHITE,
-		errColor:        PICO8_PINK,
 		BorderColor:     PICO8_BLACK,
-		cursorColor:     PICO8_RED,
 	}
 	return config
 }
@@ -66,8 +58,6 @@ func newTic80Config() Config {
 	config := Config{
 		ConsoleWidth:    240,
 		ConsoleHeight:   136,
-		FPS:             60,
-		Verbose:         optVerbose,
 		ScreenshotScale: screenshotScale,
 		GifScale:        gifScale,
 		GifLength:       gifLength,
@@ -76,9 +66,7 @@ func newTic80Config() Config {
 		fontHeight:      8,
 		BgColor:         TIC80_BLACK,
 		FgColor:         TIC80_WHITE,
-		errColor:        TIC80_YELLOW,
 		BorderColor:     TIC80_BLACK,
-		cursorColor:     TIC80_RED,
 	}
 	return config
 }
@@ -88,8 +76,6 @@ func newZXSpectrumConfig() Config {
 		BorderWidth:     25,
 		ConsoleWidth:    256,
 		ConsoleHeight:   192,
-		FPS:             60,
-		Verbose:         optVerbose,
 		ScreenshotScale: screenshotScale,
 		GifScale:        gifScale,
 		GifLength:       gifLength,
@@ -98,9 +84,7 @@ func newZXSpectrumConfig() Config {
 		fontHeight:      8,
 		BgColor:         ZX_WHITE,
 		FgColor:         ZX_BLACK,
-		errColor:        ZX_BLUE,
 		BorderColor:     ZX_WHITE,
-		cursorColor:     ZX_RED,
 	}
 	return config
 }
@@ -110,8 +94,6 @@ func newCBM64Config() Config {
 		BorderWidth:     25,
 		ConsoleWidth:    320,
 		ConsoleHeight:   200,
-		FPS:             60,
-		Verbose:         optVerbose,
 		ScreenshotScale: screenshotScale,
 		GifScale:        gifScale,
 		GifLength:       gifLength,
@@ -120,9 +102,7 @@ func newCBM64Config() Config {
 		fontHeight:      8,
 		BgColor:         C64_BLUE,
 		FgColor:         C64_LIGHT_BLUE,
-		errColor:        C64_WHITE,
 		BorderColor:     C64_LIGHT_BLUE,
-		cursorColor:     C64_LIGHT_BLUE,
 	}
 	return config
 }
