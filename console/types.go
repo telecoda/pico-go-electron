@@ -76,32 +76,20 @@ type Spriter interface {
 	SpriteRotated(n, x, y, w, h, dw, dh int, rot float64)
 }
 
-type ModeType int
-
-const (
-	CLI ModeType = iota
-	CODE_EDITOR
-	SPRITE_EDITOR
-	MAP_EDITOR
-	SFX_EDITOR
-	MUSIC_EDITOR
-	RUNTIME
-)
-
 type ConsoleType string
 
 const (
-	PICO8       = "pico8"
-	TIC80       = "tic80"
-	ZX_SPECTRUM = "zxspectrum"
-	CBM64       = "cbm64"
+	PICO8      = "pico8"
+	TIC80      = "tic80"
+	ZXSPECTRUM = "zxspectrum"
+	CBM64      = "cbm64"
 )
 
 var ConsoleTypes = map[ConsoleType]string{
-	PICO8:       "PICO8",
-	TIC80:       "TIC80",
-	ZX_SPECTRUM: "ZX_SPECTRUM",
-	CBM64:       "CBM64",
+	PICO8:      "PICO8",
+	TIC80:      "TIC80",
+	ZXSPECTRUM: "ZXSPECTRUM",
+	CBM64:      "CBM64",
 }
 
 const TOTAL_COLORS = 16
@@ -115,11 +103,9 @@ type Cartridge interface {
 	Configger
 	initPb(pb PixelBuffer)
 	getPb() PixelBuffer
-	IsRunning() bool
-	Stop()
 	PicoInputAPI
 	// User implemented methods below
-	Init()
+	Init() error
 	Render()
 	Update()
 }
@@ -135,6 +121,8 @@ type PixelBuffer interface {
 	GetFrame() *image.Paletted
 	PicoGraphicsAPI
 	getPixelBuffer() *pixelBuffer
+	GetWidth() int
+	GetHeight() int
 }
 
 var title = "pico-go virtual games console"

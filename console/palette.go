@@ -106,7 +106,7 @@ func newPalette(consoleType ConsoleType) *palette {
 		return newPico8Palette()
 	case TIC80:
 		return newTic80Palette()
-	case ZX_SPECTRUM:
+	case ZXSPECTRUM:
 		return newZXSpectrumPalette()
 	case CBM64:
 		return newCBM64Palette()

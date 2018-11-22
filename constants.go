@@ -10,50 +10,70 @@ const (
 
 const aboutBody = "Welcome on to `pico-go`\n\nThe golang fantasy console.\n\nby @telecoda\n"
 
-const demoSrc = `/*
+const demoSrc = `package main
+
+/*
 	This is a simple demo project to show you how to use pico-go
-
 	Copyright 2018 @telecoda
+*/
 
+import "github.com/telecoda/pico-go-electron/console"
+
+const (
+	// set console type to one of the predefined consoles
+	consoleType = console.PICO8
+	// define these vars to be used in javascript canvas scaling code
+	screenWidth  = 128
+	screenHeight = 128
+)
+
+type cartridge struct {
+	*console.BaseCartridge
+}
+
+// Init -  called once
+func (c *cartridge) Init() error {
+	console.ShowFPS()
+	return nil
+}
+
+// Update -  called once every frame
+func (c *cartridge) Update() {
+}
+
+// Render - called once every frame
+func (c *cartridge) Render() {
+	c.ClsWithColor(console.PICO8_BLUE)
+	c.PrintAt("Hello", 10, 20)
+}`
+
+const genMainSrc = `/*
+	This is the generated bootstrap code for running a pico-go cartridge.
+
+	Don't change any of this code, you shouldn't even really be seeing it, I guess you're the curious type.
 */
 package main
 
 import (
 	"fmt"
-	"log"
 
-	"image/color"
-
-	"github.com/hajimehoshi/ebiten"
-	"github.com/hajimehoshi/ebiten/ebitenutil"
+	"github.com/telecoda/pico-go-electron/console"
 )
 
-const (
-	// define these vars to be used in javascript canvas scaling code
-	screenWidth  = 320
-	screenHeight = 240
-)
-
-var blue = color.RGBA{R: 33, G: 174, B: 255, A: 255}
-
-// update - this method is called 60 time a second
-func update(screen *ebiten.Image) error {
-
-	// this is here to skip frames when things struggle
-	if ebiten.IsRunningSlowly() {
-		return nil
+func NewCart() console.Cartridge {
+	return &cartridge{
+		BaseCartridge: console.NewBaseCart(),
 	}
-
-	// screen screen with Gopher color
-	screen.Fill(blue)
-	// show some frame rate text to impress your friends
-	ebitenutil.DebugPrint(screen, fmt.Sprintf("FPS: %f", ebiten.CurrentFPS()))
-	return nil
 }
 
 func main() {
-	// run app
-	if err := ebiten.Run(update, screenWidth, screenHeight, 1, "pico-go (demo project)"); err != nil {
-		log.Fatal(err)
+	cart := NewCart()
+	if err := console.Init(consoleType); err != nil {
+		fmt.Printf("Failed to init console: %s\n", err)
+		return
+	}
+	if err := console.Run(cart); err != nil {
+		fmt.Printf("Failed to run cartridge: %s\n", err)
+		return
 	}
 }`

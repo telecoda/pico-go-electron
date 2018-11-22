@@ -17,7 +17,7 @@
       
       <guid>/example/demo-01/demo-01.html</guid>
       <description>demo-01 This is a simple project to demonstrate how to develop using pico-go.
-example output sourcecode package main /* This is a simple demo project to show you how to use pico-go Copyright 2018 @telecoda */ import ( &amp;#34;fmt&amp;#34; &amp;#34;log&amp;#34; &amp;#34;image/color&amp;#34; &amp;#34;github.com/hajimehoshi/ebiten&amp;#34; &amp;#34;github.com/hajimehoshi/ebiten/ebitenutil&amp;#34; ) const ( // define these vars to be used in javascript canvas scaling code 	screenWidth = 320 screenHeight = 240 ) var blue = color.</description>
+example output sourcecode package main /* This is a simple demo project to show you how to use pico-go Copyright 2018 @telecoda */ import &amp;#34;github.com/telecoda/pico-go-electron/console&amp;#34; const ( // set console type to one of the predefined consoles 	consoleType = console.PICO8 // define these vars to be used in javascript canvas scaling code 	screenWidth = 128 screenHeight = 128 ) type cartridge struct { *console.</description>
     </item>
     
     <item>
@@ -27,7 +27,7 @@ example output sourcecode package main /* This is a simple demo project to show 
       
       <guid>/example/drawing/drawing.html</guid>
       <description>drawing This is a simple project to demonstrate how to use the drawing functions.
-example output sourcecode package main /* This is a project to demo the drawing primitives Copyright 2018 @telecoda */ import ( &amp;#34;github.com/telecoda/pico-go-electron/console&amp;#34; ) const ( // define these vars to be used in javascript canvas scaling code 	screenWidth = 128 screenHeight = 128 ) type cartridge struct { *console.BaseCartridge } // NewCart - initialise a struct implementing Cartridge interface func NewCart() console.</description>
+example output sourcecode package main /* This is a project to demo the drawing primitives Copyright 2018 @telecoda */ import ( &amp;#34;github.com/telecoda/pico-go-electron/console&amp;#34; ) const ( // set console type to one of the predefined consoles 	consoleType = console.CBM64 ) type cartridge struct { *console.BaseCartridge } // Init - called once when cart is initialised func (c *cartridge) Init() error { return nil } // Update - called once every frame func (c *cartridge) Update() { } // Render - called once every frame func (c *cartridge) Render() { c.</description>
     </item>
     
     <item>
@@ -47,7 +47,7 @@ example output sourcecode package main import ( &amp;#34;github.com/telecoda/pic
       
       <guid>/example/sprite/sprite.html</guid>
       <description>sprites This is a simple project to demonstrate how to use the sprite functions.
-example output sourcecode package main /* This is a project to demo the sprite functions Copyright 2018 @telecoda */ import ( &amp;#34;fmt&amp;#34; &amp;#34;github.com/telecoda/pico-go-electron/console&amp;#34; ) const ( // define these vars to be used in javascript canvas scaling code 	screenWidth = 128 screenHeight = 128 ) type cartridge struct { *console.BaseCartridge // example vars below 	running bool rot float64 barY int scaleY float64 scaleX float64 } // NewCart - initialise a struct implementing Cartridge interface func NewCart() console.</description>
+example output sourcecode package main /* This is a project to demo the sprite functions Copyright 2018 @telecoda */ import ( &amp;#34;fmt&amp;#34; &amp;#34;github.com/telecoda/pico-go-electron/console&amp;#34; ) const ( // define these vars to be used in javascript canvas scaling code 	screenWidth = 128 screenHeight = 128 ) func main() { cart := NewCart() if err := console.</description>
     </item>
     
     <item>
@@ -57,7 +57,7 @@ example output sourcecode package main /* This is a project to demo the sprite f
       
       <guid>/example/starfield/starfield.html</guid>
       <description>starfield This is a simple project which creates an old skool starfield
-example output sourcecode package main /* This is a project to demo an oldskool starfield Copyright 2018 @telecoda */ import ( &amp;#34;math/rand&amp;#34; &amp;#34;github.com/telecoda/pico-go-electron/console&amp;#34; ) const ( // define these vars to be used in javascript canvas scaling code 	screenWidth = 128 screenHeight = 128 ) type cartridge struct { *console.BaseCartridge s []int } // NewCart - initialise a struct implementing Cartridge interface func NewCart() console.</description>
+example output sourcecode package main /* This is a project to demo an oldskool starfield Copyright 2018 @telecoda */ import ( &amp;#34;math/rand&amp;#34; &amp;#34;github.com/telecoda/pico-go-electron/console&amp;#34; ) const ( // set console type to one of the predefined consoles 	screenWidth = 128 screenHeight = 128 consoleType = console.CBM64 ) type cartridge struct { *console.BaseCartridge s []int } /* This is the original tweetcart code s={}w=128 r=rnd for i=1,w do s[i]={}p=s[i]p[1]=r(w)end::a::cls()for i=1,w do p=s[i]pset(p[1],i,i%3+5)p[1]=(p[1]-i%3)%w end flip()goto a */ // Init - called once func (c *cartridge) Init() error { // init stars 	/* s={} w=128 r=rnd for i=1,w do s[i]={} p=s[i] p[1]=r(w) end */ w := c.</description>
     </item>
     
     <item>

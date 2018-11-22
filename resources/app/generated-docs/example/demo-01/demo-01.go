@@ -2,47 +2,35 @@ package main
 
 /*
 	This is a simple demo project to show you how to use pico-go
-
 	Copyright 2018 @telecoda
-
 */
 
-import (
-	"fmt"
-	"log"
-
-	"image/color"
-
-	"github.com/hajimehoshi/ebiten"
-	"github.com/hajimehoshi/ebiten/ebitenutil"
-)
+import "github.com/telecoda/pico-go-electron/console"
 
 const (
+	// set console type to one of the predefined consoles
+	consoleType = console.PICO8
 	// define these vars to be used in javascript canvas scaling code
-	screenWidth  = 320
-	screenHeight = 240
+	screenWidth  = 128
+	screenHeight = 128
 )
 
-var blue = color.RGBA{R: 33, G: 174, B: 255, A: 255}
+type cartridge struct {
+	*console.BaseCartridge
+}
 
-// update - this method is called 60 time a second
-func update(screen *ebiten.Image) error {
-
-	// this is here to skip frames when things struggle
-	if ebiten.IsRunningSlowly() {
-		return nil
-	}
-
-	// screen screen with Gopher color
-	screen.Fill(blue)
-	// show some frame rate text to impress your friends
-	ebitenutil.DebugPrint(screen, fmt.Sprintf("FPS: %f", ebiten.CurrentFPS()))
+// Init -  called once
+func (c *cartridge) Init() error {
+	console.ShowFPS()
 	return nil
 }
 
-func main() {
-	// run app
-	if err := ebiten.Run(update, screenWidth, screenHeight, 1, "pico-go (demo project)"); err != nil {
-		log.Fatal(err)
-	}
+// Update -  called once every frame
+func (c *cartridge) Update() {
+}
+
+// Render - called once every frame
+func (c *cartridge) Render() {
+	c.ClsWithColor(console.PICO8_BLUE)
+	c.PrintAt("Hello", 10, 20)
 }

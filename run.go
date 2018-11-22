@@ -46,16 +46,23 @@ func run(sourceCode SourceCode) (a Application, err error) {
 
 	defer os.RemoveAll(dir) // clean up
 
-	tmpFileName := filepath.Join(dir, "main.go")
-	if err = ioutil.WriteFile(tmpFileName, []byte(sourceCode.Source), 0666); err != nil {
-		err = fmt.Errorf("Failed to write source to to temporary dir - %s", err)
+	tmpCartFile := filepath.Join(dir, "cart.go")
+	if err = ioutil.WriteFile(tmpCartFile, []byte(sourceCode.Source), 0666); err != nil {
+		err = fmt.Errorf("Failed to write cart source to to temporary dir - %s", err)
 		return
 	}
+
+	tmpMainFile := filepath.Join(dir, "gen-main.go")
+	if err = ioutil.WriteFile(tmpMainFile, []byte(genMainSrc), 0666); err != nil {
+		err = fmt.Errorf("Failed to write gen-main source to to temporary dir - %s", err)
+		return
+	}
+
 
 	// compile with GopherJS
 	outFile := filepath.Join(dir, "cart.js")
 
-	cmd := getBuildCmd(tmpFileName, outFile)
+	cmd := getBuildCmd(tmpCartFile, tmpMainFile, outFile)
 	var out []byte
 	out, err = cmd.CombinedOutput()
 	if err != nil {

@@ -181,24 +181,17 @@
 )
 
 <span style="color:#66d9ef">const</span> (
-	<span style="color:#75715e">// define these vars to be used in javascript canvas scaling code
-</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">screenWidth</span>  = <span style="color:#ae81ff">128</span>
-	<span style="color:#a6e22e">screenHeight</span> = <span style="color:#ae81ff">128</span>
+	<span style="color:#75715e">// set console type to one of the predefined consoles
+</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">consoleType</span> = <span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">CBM64</span>
 )
 
 <span style="color:#66d9ef">type</span> <span style="color:#a6e22e">cartridge</span> <span style="color:#66d9ef">struct</span> {
 	<span style="color:#f92672">*</span><span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">BaseCartridge</span>
 }
 
-<span style="color:#75715e">// NewCart - initialise a struct implementing Cartridge interface
-</span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">NewCart</span>() <span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">Cartridge</span> {
-	<span style="color:#66d9ef">return</span> <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">cartridge</span>{
-		<span style="color:#a6e22e">BaseCartridge</span>: <span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">NewBaseCart</span>(),
-	}
-}
-
 <span style="color:#75715e">// Init - called once when cart is initialised
-</span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">c</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">cartridge</span>) <span style="color:#a6e22e">Init</span>() {
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">c</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">cartridge</span>) <span style="color:#a6e22e">Init</span>() <span style="color:#66d9ef">error</span> {
+	<span style="color:#66d9ef">return</span> <span style="color:#66d9ef">nil</span>
 }
 
 <span style="color:#75715e">// Update -  called once every frame
@@ -233,26 +226,6 @@
 	<span style="color:#75715e">// get color of point // earlier rect
 </span><span style="color:#75715e"></span>	<span style="color:#a6e22e">pointColor</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">PGet</span>(<span style="color:#ae81ff">85</span>, <span style="color:#ae81ff">25</span>)
 	<span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">PSetWithColor</span>(<span style="color:#ae81ff">95</span>, <span style="color:#ae81ff">99</span>, <span style="color:#a6e22e">pointColor</span>)
-}
-
-<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
-
-	<span style="color:#75715e">// Create virtual console - based on cart config
-</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">con</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">NewConsole</span>(<span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">PICO8</span>)
-	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
-		panic(<span style="color:#a6e22e">err</span>)
-	}
-	<span style="color:#66d9ef">defer</span> <span style="color:#a6e22e">con</span>.<span style="color:#a6e22e">Destroy</span>()
-
-	<span style="color:#a6e22e">cart</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">NewCart</span>()
-
-	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">con</span>.<span style="color:#a6e22e">LoadCart</span>(<span style="color:#a6e22e">cart</span>); <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
-		panic(<span style="color:#a6e22e">err</span>)
-	}
-
-	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">con</span>.<span style="color:#a6e22e">Run</span>(); <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
-		panic(<span style="color:#a6e22e">err</span>)
-	}
 }</code></pre></div>
 
 
