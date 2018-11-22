@@ -171,9 +171,7 @@
 
 <span style="color:#75715e">/*
 </span><span style="color:#75715e">	This is a simple demo project to show you how to use pico-go
-</span><span style="color:#75715e">
 </span><span style="color:#75715e">	Copyright 2018 @telecoda
-</span><span style="color:#75715e">
 </span><span style="color:#75715e">*/</span>
 
 <span style="color:#f92672">import</span> <span style="color:#e6db74">&#34;github.com/telecoda/pico-go-electron/console&#34;</span>
@@ -181,6 +179,9 @@
 <span style="color:#66d9ef">const</span> (
 	<span style="color:#75715e">// set console type to one of the predefined consoles
 </span><span style="color:#75715e"></span>	<span style="color:#a6e22e">consoleType</span> = <span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">PICO8</span>
+	<span style="color:#75715e">// define these vars to be used in javascript canvas scaling code
+</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">screenWidth</span>  = <span style="color:#ae81ff">128</span>
+	<span style="color:#a6e22e">screenHeight</span> = <span style="color:#ae81ff">128</span>
 )
 
 <span style="color:#66d9ef">type</span> <span style="color:#a6e22e">cartridge</span> <span style="color:#66d9ef">struct</span> {

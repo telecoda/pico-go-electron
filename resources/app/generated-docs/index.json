@@ -11,7 +11,7 @@
 	"title": "demo-01",
 	"tags": [],
 	"description": "",
-	"content": " demo-01 This is a simple project to demonstrate how to develop using pico-go.\nexample output sourcecode package main /* This is a simple demo project to show you how to use pico-go Copyright 2018 @telecoda */ import \u0026#34;github.com/telecoda/pico-go-electron/console\u0026#34; const ( // set console type to one of the predefined consoles \tconsoleType = console.PICO8 ) type cartridge struct { *console.BaseCartridge } // Init - called once func (c *cartridge) Init() error { console.ShowFPS() return nil } // Update - called once every frame func (c *cartridge) Update() { } // Render - called once every frame func (c *cartridge) Render() { c.ClsWithColor(console.PICO8_BLUE) c.PrintAt(\u0026#34;Hello\u0026#34;, 10, 20) } "
+	"content": " demo-01 This is a simple project to demonstrate how to develop using pico-go.\nexample output sourcecode package main /* This is a simple demo project to show you how to use pico-go Copyright 2018 @telecoda */ import \u0026#34;github.com/telecoda/pico-go-electron/console\u0026#34; const ( // set console type to one of the predefined consoles \tconsoleType = console.PICO8 // define these vars to be used in javascript canvas scaling code \tscreenWidth = 128 screenHeight = 128 ) type cartridge struct { *console.BaseCartridge } // Init - called once func (c *cartridge) Init() error { console.ShowFPS() return nil } // Update - called once every frame func (c *cartridge) Update() { } // Render - called once every frame func (c *cartridge) Render() { c.ClsWithColor(console.PICO8_BLUE) c.PrintAt(\u0026#34;Hello\u0026#34;, 10, 20) } "
 },
 {
 	"uri": "/dev-doc.html",
