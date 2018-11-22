@@ -176,44 +176,31 @@
 </span><span style="color:#75715e">
 </span><span style="color:#75715e">*/</span>
 
-<span style="color:#f92672">import</span> (
-	<span style="color:#e6db74">&#34;fmt&#34;</span>
-	<span style="color:#e6db74">&#34;log&#34;</span>
-
-	<span style="color:#e6db74">&#34;image/color&#34;</span>
-
-	<span style="color:#e6db74">&#34;github.com/hajimehoshi/ebiten&#34;</span>
-	<span style="color:#e6db74">&#34;github.com/hajimehoshi/ebiten/ebitenutil&#34;</span>
-)
+<span style="color:#f92672">import</span> <span style="color:#e6db74">&#34;github.com/telecoda/pico-go-electron/console&#34;</span>
 
 <span style="color:#66d9ef">const</span> (
-	<span style="color:#75715e">// define these vars to be used in javascript canvas scaling code
-</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">screenWidth</span>  = <span style="color:#ae81ff">320</span>
-	<span style="color:#a6e22e">screenHeight</span> = <span style="color:#ae81ff">240</span>
+	<span style="color:#75715e">// set console type to one of the predefined consoles
+</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">consoleType</span> = <span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">PICO8</span>
 )
 
-<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">blue</span> = <span style="color:#a6e22e">color</span>.<span style="color:#a6e22e">RGBA</span>{<span style="color:#a6e22e">R</span>: <span style="color:#ae81ff">33</span>, <span style="color:#a6e22e">G</span>: <span style="color:#ae81ff">174</span>, <span style="color:#a6e22e">B</span>: <span style="color:#ae81ff">255</span>, <span style="color:#a6e22e">A</span>: <span style="color:#ae81ff">255</span>}
+<span style="color:#66d9ef">type</span> <span style="color:#a6e22e">cartridge</span> <span style="color:#66d9ef">struct</span> {
+	<span style="color:#f92672">*</span><span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">BaseCartridge</span>
+}
 
-<span style="color:#75715e">// update - this method is called 60 time a second
-</span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">update</span>(<span style="color:#a6e22e">screen</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">ebiten</span>.<span style="color:#a6e22e">Image</span>) <span style="color:#66d9ef">error</span> {
-
-	<span style="color:#75715e">// this is here to skip frames when things struggle
-</span><span style="color:#75715e"></span>	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">ebiten</span>.<span style="color:#a6e22e">IsRunningSlowly</span>() {
-		<span style="color:#66d9ef">return</span> <span style="color:#66d9ef">nil</span>
-	}
-
-	<span style="color:#75715e">// screen screen with Gopher color
-</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">screen</span>.<span style="color:#a6e22e">Fill</span>(<span style="color:#a6e22e">blue</span>)
-	<span style="color:#75715e">// show some frame rate text to impress your friends
-</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">ebitenutil</span>.<span style="color:#a6e22e">DebugPrint</span>(<span style="color:#a6e22e">screen</span>, <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Sprintf</span>(<span style="color:#e6db74">&#34;FPS: %f&#34;</span>, <span style="color:#a6e22e">ebiten</span>.<span style="color:#a6e22e">CurrentFPS</span>()))
+<span style="color:#75715e">// Init -  called once
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">c</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">cartridge</span>) <span style="color:#a6e22e">Init</span>() <span style="color:#66d9ef">error</span> {
+	<span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">ShowFPS</span>()
 	<span style="color:#66d9ef">return</span> <span style="color:#66d9ef">nil</span>
 }
 
-<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
-	<span style="color:#75715e">// run app
-</span><span style="color:#75715e"></span>	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">ebiten</span>.<span style="color:#a6e22e">Run</span>(<span style="color:#a6e22e">update</span>, <span style="color:#a6e22e">screenWidth</span>, <span style="color:#a6e22e">screenHeight</span>, <span style="color:#ae81ff">1</span>, <span style="color:#e6db74">&#34;pico-go (demo project)&#34;</span>); <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
-		<span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Fatal</span>(<span style="color:#a6e22e">err</span>)
-	}
+<span style="color:#75715e">// Update -  called once every frame
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">c</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">cartridge</span>) <span style="color:#a6e22e">Update</span>() {
+}
+
+<span style="color:#75715e">// Render - called once every frame
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">c</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">cartridge</span>) <span style="color:#a6e22e">Render</span>() {
+	<span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">ClsWithColor</span>(<span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">PICO8_BLUE</span>)
+	<span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">PrintAt</span>(<span style="color:#e6db74">&#34;Hello&#34;</span>, <span style="color:#ae81ff">10</span>, <span style="color:#ae81ff">20</span>)
 }</code></pre></div>
 
 

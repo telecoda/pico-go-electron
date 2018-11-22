@@ -19,6 +19,20 @@ const (
 	screenHeight = 128
 )
 
+func main() {
+	cart := NewCart()
+	if err := console.Run(cart); err != nil {
+		panic(err)
+	}
+}
+
+// NewCart - initialise a struct implementing Cartridge interface
+func NewCart() console.Cartridge {
+	return &cartridge{
+		BaseCartridge: console.NewBaseCart(),
+	}
+}
+
 type cartridge struct {
 	*console.BaseCartridge
 
@@ -28,13 +42,6 @@ type cartridge struct {
 	barY    int
 	scaleY  float64
 	scaleX  float64
-}
-
-// NewCart - initialise a struct implementing Cartridge interface
-func NewCart() console.Cartridge {
-	return &cartridge{
-		BaseCartridge: console.NewBaseCart(),
-	}
 }
 
 // Init -  called once
@@ -79,11 +86,4 @@ func (c *cartridge) Render() {
 	c.PrintAtWithColor("SCALED:", 10, 95, console.PICO8_BLACK)
 	c.Sprite(40, 40, 95, 4, 2, 64, 32)
 
-}
-
-func main() {
-	cart := NewCart()
-	if err := console.Run(cart); err != nil {
-		panic(err)
-	}
 }

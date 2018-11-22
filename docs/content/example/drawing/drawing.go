@@ -12,20 +12,12 @@ import (
 )
 
 const (
-	// define these vars to be used in javascript canvas scaling code
-	screenWidth  = 128
-	screenHeight = 128
+	// set console type to one of the predefined consoles
+	consoleType = console.CBM64
 )
 
 type cartridge struct {
 	*console.BaseCartridge
-}
-
-// NewCart - initialise a struct implementing Cartridge interface
-func NewCart() console.Cartridge {
-	return &cartridge{
-		BaseCartridge: console.NewBaseCart(),
-	}
 }
 
 // Init - called once when cart is initialised
@@ -65,11 +57,4 @@ func (c *cartridge) Render() {
 	// get color of point // earlier rect
 	pointColor := c.PGet(85, 25)
 	c.PSetWithColor(95, 99, pointColor)
-}
-
-func main() {
-	cart := NewCart()
-	if err := console.Run(cart); err != nil {
-		panic(err)
-	}
 }

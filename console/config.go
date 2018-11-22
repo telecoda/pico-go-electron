@@ -28,7 +28,7 @@ func NewConfig(consoleType ConsoleType) Config {
 		return newPico8Config()
 	case TIC80:
 		return newTic80Config()
-	case ZX_SPECTRUM:
+	case ZXSPECTRUM:
 		return newZXSpectrumConfig()
 	case CBM64:
 		return newCBM64Config()
@@ -79,7 +79,7 @@ func newZXSpectrumConfig() Config {
 		ScreenshotScale: screenshotScale,
 		GifScale:        gifScale,
 		GifLength:       gifLength,
-		consoleType:     ZX_SPECTRUM,
+		consoleType:     ZXSPECTRUM,
 		fontWidth:       8,
 		fontHeight:      8,
 		BgColor:         ZX_WHITE,

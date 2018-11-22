@@ -14,9 +14,10 @@ import (
 )
 
 const (
-	// define these vars to be used in javascript canvas scaling code
+	// set console type to one of the predefined consoles
 	screenWidth  = 128
 	screenHeight = 128
+	consoleType  = console.CBM64
 )
 
 type cartridge struct {
@@ -24,19 +25,12 @@ type cartridge struct {
 	s []int
 }
 
-// NewCart - initialise a struct implementing Cartridge interface
-func NewCart() console.Cartridge {
-	return &cartridge{
-		BaseCartridge: console.NewBaseCart(),
-	}
-}
-
 /* This is the original tweetcart code
 s={}w=128 r=rnd for i=1,w do s[i]={}p=s[i]p[1]=r(w)end::a::cls()for i=1,w do p=s[i]pset(p[1],i,i%3+5)p[1]=(p[1]-i%3)%w end flip()goto a
 */
 
 // Init -  called once
-func (c *cartridge) Init() {
+func (c *cartridge) Init() error {
 
 	// init stars
 	/*
@@ -50,12 +44,15 @@ func (c *cartridge) Init() {
 		end
 	*/
 
-	w := screenWidth
+	w := c.GetWidth()
+	//h := c.GetHeight()
 	c.s = make([]int, w, w)
 
 	for i := 0; i < w; i++ {
 		c.s[i] = rand.Intn(w)
 	}
+
+	return nil
 
 }
 
@@ -67,33 +64,11 @@ func (c *cartridge) Update() {
 // Render - called once every frame
 func (c *cartridge) Render() {
 	c.ClsWithColor(console.PICO8_BLACK)
-	for i := 0; i < screenWidth; i++ {
+	for i := 0; i < c.GetHeight(); i++ {
 		c.PSetWithColor(c.s[i], i, console.ColorID(i%3+5))
-		c.s[i] = (c.s[i] - (i % 3)) % screenWidth
+		c.s[i] = (c.s[i] - (i % 3)) % c.GetWidth()
 		if c.s[i] < 0 {
-			c.s[i] += screenWidth
+			c.s[i] += c.GetWidth()
 		}
-	}
-}
-
-func main() {
-
-	// Create virtual console - based on cart config
-	con, err := console.NewConsole(console.PICO8)
-	if err != nil {
-		panic(err)
-	}
-	defer con.Destroy()
-
-	//con.ShowFPS(true)
-
-	cart := NewCart()
-
-	if err := con.LoadCart(cart); err != nil {
-		panic(err)
-	}
-
-	if err := con.Run(); err != nil {
-		panic(err)
 	}
 }

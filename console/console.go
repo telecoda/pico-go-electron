@@ -23,7 +23,7 @@ import (
 
 // Global var
 
-var _console *console
+var _console = &console{}
 
 const (
 	_version        = "v0.1"
@@ -60,6 +60,7 @@ type console struct {
 
 	screen *ebiten.Image
 	pImage *image.Paletted
+	pb     PixelBuffer
 
 	font              font.Face
 	sprites           []*image.Paletted
@@ -73,13 +74,8 @@ type console struct {
 
 func Run(cart Cartridge) error {
 
-	// init console
 	// load cartridge
 	// run main loop
-
-	_console = &console{
-		//Config:  cfg,
-	}
 
 	// TODO screen recorder
 	//	_console.recorder = NewRecorder(cfg.FPS, cfg.GifLength)
@@ -109,10 +105,8 @@ func Run(cart Cartridge) error {
 
 	_console.cart = cart
 
-	// use PICO8 as default
-	if err := SetType(PICO8); err != nil {
-		return err
-	}
+	// set reference to pixel buffer
+	cart.initPb(_console.pb)
 
 	// init the cart
 	_console.cart.Init()
@@ -124,16 +118,19 @@ func Run(cart Cartridge) error {
 	return ebiten.Run(_console.update, _console.Config.ConsoleWidth, _console.Config.ConsoleHeight, 1, "pico-go")
 }
 
-func (c *console) ShowFPS(state bool) {
-	c.Lock()
-	defer c.Unlock()
-	c.showFPS = state
+func ShowFPS() {
+	_console.Lock()
+	defer _console.Unlock()
+	_console.showFPS = true
 }
 
-func SetType(consoleType ConsoleType) error {
-	if _console == nil {
-		return fmt.Errorf("Console Init() must be called first")
-	}
+func HideFPS() {
+	_console.Lock()
+	defer _console.Unlock()
+	_console.showFPS = false
+}
+
+func Init(consoleType ConsoleType) error {
 
 	// validate type
 	if _, ok := ConsoleTypes[consoleType]; !ok {
@@ -190,7 +187,7 @@ func SetType(consoleType ConsoleType) error {
 		return fmt.Errorf("Error creating pixel buffer: %s", err)
 	}
 
-	_console.cart.initPb(pb)
+	_console.pb = pb
 
 	return nil
 }
@@ -236,8 +233,6 @@ func (c *console) update(screen *ebiten.Image) error {
 
 	return nil
 }
-
-var escapePressed bool
 
 func (c *console) handleInput() error {
 

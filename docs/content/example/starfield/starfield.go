@@ -14,21 +14,15 @@ import (
 )
 
 const (
-	// define these vars to be used in javascript canvas scaling code
+	// set console type to one of the predefined consoles
 	screenWidth  = 128
 	screenHeight = 128
+	consoleType  = console.CBM64
 )
 
 type cartridge struct {
 	*console.BaseCartridge
 	s []int
-}
-
-// NewCart - initialise a struct implementing Cartridge interface
-func NewCart() console.Cartridge {
-	return &cartridge{
-		BaseCartridge: console.NewBaseCart(),
-	}
 }
 
 /* This is the original tweetcart code
@@ -38,9 +32,6 @@ s={}w=128 r=rnd for i=1,w do s[i]={}p=s[i]p[1]=r(w)end::a::cls()for i=1,w do p=s
 // Init -  called once
 func (c *cartridge) Init() error {
 
-	if err := console.SetType(console.CBM64); err != nil {
-		return err
-	}
 	// init stars
 	/*
 		s={}
@@ -79,12 +70,5 @@ func (c *cartridge) Render() {
 		if c.s[i] < 0 {
 			c.s[i] += c.GetWidth()
 		}
-	}
-}
-
-func main() {
-	cart := NewCart()
-	if err := console.Run(cart); err != nil {
-		panic(err)
 	}
 }
