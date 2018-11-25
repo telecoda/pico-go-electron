@@ -13,6 +13,7 @@ import (
 	"golang.org/x/image/math/fixed"
 
 	"github.com/hajimehoshi/ebiten"
+	"github.com/hajimehoshi/ebiten/ebitenutil"
 )
 
 type mode struct {
@@ -30,6 +31,8 @@ type pixelBuffer struct {
 	screen       *ebiten.Image
 	psRect       image.Rectangle // rect of pixelSurface
 	renderRect   image.Rectangle // rect on main window that pixelbuffer is rendered into
+
+	flipReady bool
 }
 
 type pos struct {
@@ -37,7 +40,7 @@ type pos struct {
 	y int
 }
 
-func newPixelBuffer(cfg Config) (PixelBuffer, error) {
+func newPixelBuffer(cfg Config) (*pixelBuffer, error) {
 	p := &pixelBuffer{}
 
 	p.psRect = image.Rect(0, 0, cfg.ConsoleWidth, cfg.ConsoleHeight)
@@ -113,17 +116,49 @@ func (p *pixelBuffer) Cursor(x, y int) {
 // Flip - copy offscreen buffer to onscreen buffer
 func (p *pixelBuffer) Flip() error {
 
+	if p.pixelSurface == nil {
+		return nil
+	}
+
+	if _console.screen == nil {
+		return nil
+	}
+
+	if !p.flipReady {
+		time.Sleep(500)
+		return nil
+	}
+
+	p.flipReady = false
 	// record frame
 	//_console.recorder.AddFrame(p.GetFrame(), p)
 
 	// at end of frame delay start timing for next one
 	startFrame = time.Now()
 
-	return nil
-}
+	pix := make([]uint8, _console.Config.ConsoleWidth*_console.Config.ConsoleHeight*4)
 
-func (p *pixelBuffer) getPixelBuffer() *pixelBuffer {
-	return p
+	b := 0
+	for _, palPix := range p.pixelSurface.Pix {
+		// lookup color
+		rgba := _console.palette.colorMap[ColorID(palPix)]
+		pix[b] = rgba.R
+		b++
+		pix[b] = rgba.G
+		b++
+		pix[b] = rgba.B
+		b++
+		pix[b] = rgba.A
+		b++
+	}
+
+	_console.screen.ReplacePixels(pix)
+
+	if _console.showFPS {
+		ebitenutil.DebugPrint(_console.screen, fmt.Sprintf("FPS: %f", ebiten.CurrentFPS()))
+	}
+
+	return nil
 }
 
 func (p *pixelBuffer) GetCursor() pos {

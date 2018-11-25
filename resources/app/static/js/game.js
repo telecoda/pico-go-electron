@@ -15,9 +15,18 @@ let gameFuncs = {
             */
             var script_element = document.body.getElementsByTagName("script");
             var cart_src = parent.userPath + "/Local Storage/cart.js";
-            if (script_element[0].src =="") {
+
+            var runCart = localStorage.getItem("runCart");
+            if (typeof runCart == "undefined") {
+                runCart = false;
+            }
+            if (runCart=="true")  {
                 script_element[0].innerText="";
                 script_element[0].src = cart_src;
+            } else {
+                // don't run cart when app first starts
+                script_element[0].innerText="";
+                script_element[0].src = "";
             }
         }
     }

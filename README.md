@@ -12,7 +12,7 @@ To get started follow the installation instructions [here.](./INSTALL.md)
 
 # Getting started
 
-Once you have built and run pico-go you _should_ be presented with a fairly empty code editor window.
+Once you have built and run pico-go you'll be presented with a fairly empty code editor window.
 
 Select `New` from the file menu or press `CMD+N` and the editor will be filled with a _very_ simple program file.
 

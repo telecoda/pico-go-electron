@@ -28,10 +28,6 @@ func (bc *BaseCartridge) initPb(pb PixelBuffer) {
 	bc.PixelBuffer = pb
 }
 
-func (bc *BaseCartridge) getPb() PixelBuffer {
-	return bc.PixelBuffer
-}
-
 func (bc *BaseCartridge) Btn(id int) bool {
 	// access runtime button mappings
 	//return _console.Btn(id)

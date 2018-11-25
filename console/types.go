@@ -102,7 +102,6 @@ type Cartridge interface {
 	// BaseCartridge methods already implemented
 	Configger
 	initPb(pb PixelBuffer)
-	getPb() PixelBuffer
 	PicoInputAPI
 	// User implemented methods below
 	Init() error
@@ -120,7 +119,6 @@ type PixelBuffer interface {
 	Destroy()
 	GetFrame() *image.Paletted
 	PicoGraphicsAPI
-	getPixelBuffer() *pixelBuffer
 	GetWidth() int
 	GetHeight() int
 }

@@ -3,6 +3,8 @@ let index = {
 
     // init - called during application start, invokes backend initialisation
     init: function() {
+        console.log("Set runCart false\n")
+        localStorage.setItem("runCart", false);
         // Init
         asticode.loader.init();
         // capture electron app "userData" variable 
@@ -172,6 +174,7 @@ let index = {
             // switch to game tab
             screenWidth = message.payload.screenWidth;
             screenHeight = message.payload.screenHeight;
+            localStorage.setItem("runCart", true);
             document.getElementById("gameFrame").contentWindow.location.reload();
             document.getElementById("gameTab").click();
             // refresh js

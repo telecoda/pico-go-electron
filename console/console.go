@@ -16,7 +16,6 @@ import (
 
 	"github.com/golang/freetype/truetype"
 	"github.com/hajimehoshi/ebiten"
-	"github.com/hajimehoshi/ebiten/ebitenutil"
 	"github.com/telecoda/pico-go-electron/console/resources/fonts"
 	"github.com/telecoda/pico-go-electron/console/resources/images"
 )
@@ -60,7 +59,7 @@ type console struct {
 
 	screen *ebiten.Image
 	pImage *image.Paletted
-	pb     PixelBuffer
+	pb     *pixelBuffer
 
 	font              font.Face
 	sprites           []*image.Paletted
@@ -197,41 +196,21 @@ func (c *console) update(screen *ebiten.Image) error {
 		return nil
 	}
 
+	c.screen = screen
+
 	c.cart.Update()
 	c.cart.Render()
 
 	// record frame
 	//			c.recorder.AddFrame(mode.GetFrame(), mode)
 
-	cpb := c.cart.getPb()
-
-	pb := cpb.getPixelBuffer()
-
 	// convert paletted image to RGBA
 
-	pix := make([]uint8, c.ConsoleWidth*c.ConsoleHeight*4)
+	pb := _console.pb
 
-	b := 0
-	for _, palPix := range pb.pixelSurface.Pix {
-		// lookup color
-		rgba := c.palette.colorMap[ColorID(palPix)]
-		pix[b] = rgba.R
-		b++
-		pix[b] = rgba.G
-		b++
-		pix[b] = rgba.B
-		b++
-		pix[b] = rgba.A
-		b++
-	}
+	pb.flipReady = true
 
-	screen.ReplacePixels(pix)
-
-	if c.showFPS {
-		ebitenutil.DebugPrint(screen, fmt.Sprintf("FPS: %f", ebiten.CurrentFPS()))
-	}
-
-	return nil
+	return pb.Flip()
 }
 
 func (c *console) handleInput() error {
