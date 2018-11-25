@@ -113,20 +113,25 @@ func (p *pixelBuffer) Cursor(x, y int) {
 	p.textCursor.y = y
 }
 
+var delay = time.Duration(1 * time.Second / 60)
+
 // Flip - copy offscreen buffer to onscreen buffer
 func (p *pixelBuffer) Flip() error {
 
 	if p.pixelSurface == nil {
+		fmt.Printf("TEMP: no pixelSurface\n")
 		return nil
 	}
 
-	if _console.screen == nil {
-		return nil
-	}
+	// if _console.screen == nil {
+	// 	fmt.Printf("TEMP: no screen\n")
+	// 	return nil
+	// }
 
 	if !p.flipReady {
-		time.Sleep(500)
+		time.Sleep(delay)
 		return nil
+	} else {
 	}
 
 	p.flipReady = false
@@ -153,7 +158,6 @@ func (p *pixelBuffer) Flip() error {
 	}
 
 	_console.screen.ReplacePixels(pix)
-
 	if _console.showFPS {
 		ebitenutil.DebugPrint(_console.screen, fmt.Sprintf("FPS: %f", ebiten.CurrentFPS()))
 	}

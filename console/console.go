@@ -192,11 +192,10 @@ func Init(consoleType ConsoleType) error {
 }
 
 func (c *console) update(screen *ebiten.Image) error {
+	c.screen = screen
 	if ebiten.IsRunningSlowly() {
 		return nil
 	}
-
-	c.screen = screen
 
 	c.cart.Update()
 	c.cart.Render()

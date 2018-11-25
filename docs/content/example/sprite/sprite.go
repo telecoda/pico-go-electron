@@ -17,21 +17,8 @@ const (
 	// define these vars to be used in javascript canvas scaling code
 	screenWidth  = 128
 	screenHeight = 128
+	consoleType = console.PICO8
 )
-
-func main() {
-	cart := NewCart()
-	if err := console.Run(cart); err != nil {
-		panic(err)
-	}
-}
-
-// NewCart - initialise a struct implementing Cartridge interface
-func NewCart() console.Cartridge {
-	return &cartridge{
-		BaseCartridge: console.NewBaseCart(),
-	}
-}
 
 type cartridge struct {
 	*console.BaseCartridge
