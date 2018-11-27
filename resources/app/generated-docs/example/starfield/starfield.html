@@ -107,10 +107,10 @@
           </a>
         </div>
     </li>
-      <li data-nav-id="/example/ebiten/ebiten.html" class="dd-item">
+      <li data-nav-id="/example/tweetcart/tweetcart.html" class="dd-item">
         <div>
-          <a href="../../example/ebiten/ebiten.html">
-            ebiten
+          <a href="../../example/tweetcart/tweetcart.html">
+            tweetcart
           </a>
         </div>
     </li>
@@ -141,7 +141,7 @@
       <option value="/example/palette/palette.html" >- palette</option>
       <option value="/example/sprite/sprite.html" >- sprites</option>
       <option value="/example/starfield/starfield.html"  selected>- starfield</option>
-      <option value="/example/ebiten/ebiten.html" >- ebiten</option>
+      <option value="/example/tweetcart/tweetcart.html" >- tweetcart</option>
   
 
 
@@ -232,9 +232,9 @@
 
 <span style="color:#75715e">// Render - called once every frame
 </span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">c</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">cartridge</span>) <span style="color:#a6e22e">Render</span>() {
-	<span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">ClsWithColor</span>(<span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">PICO8_BLACK</span>)
+	<span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">Cls</span>(<span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">PICO8_BLACK</span>)
 	<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">i</span> <span style="color:#f92672">:=</span> <span style="color:#ae81ff">0</span>; <span style="color:#a6e22e">i</span> &lt; <span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">GetHeight</span>(); <span style="color:#a6e22e">i</span><span style="color:#f92672">++</span> {
-		<span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">PSetWithColor</span>(<span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">s</span>[<span style="color:#a6e22e">i</span>], <span style="color:#a6e22e">i</span>, <span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">ColorID</span>(<span style="color:#a6e22e">i</span><span style="color:#f92672">%</span><span style="color:#ae81ff">3</span><span style="color:#f92672">+</span><span style="color:#ae81ff">5</span>))
+		<span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">PSet</span>(<span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">s</span>[<span style="color:#a6e22e">i</span>], <span style="color:#a6e22e">i</span>, <span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">ColorID</span>(<span style="color:#a6e22e">i</span><span style="color:#f92672">%</span><span style="color:#ae81ff">3</span><span style="color:#f92672">+</span><span style="color:#ae81ff">5</span>))
 		<span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">s</span>[<span style="color:#a6e22e">i</span>] = (<span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">s</span>[<span style="color:#a6e22e">i</span>] <span style="color:#f92672">-</span> (<span style="color:#a6e22e">i</span> <span style="color:#f92672">%</span> <span style="color:#ae81ff">3</span>)) <span style="color:#f92672">%</span> <span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">GetWidth</span>()
 		<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">s</span>[<span style="color:#a6e22e">i</span>] &lt; <span style="color:#ae81ff">0</span> {
 			<span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">s</span>[<span style="color:#a6e22e">i</span>] <span style="color:#f92672">+=</span> <span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">GetWidth</span>()
@@ -248,7 +248,7 @@
         <div class="chevrons">
     <div id="navigation">
 <a class="nav nav-prev" href="../../example/sprite/sprite.html" title="sprites"> <i class="fa fa-chevron-left"></i><label>sprites</label></a>
-    <a class="nav nav-next" href="../../example/ebiten/ebiten.html" title="ebiten" style="margin-right: 0px;"><label>ebiten</label><i class="fa fa-chevron-right"></i></a></div>
+    <a class="nav nav-next" href="../../example/tweetcart/tweetcart.html" title="tweetcart" style="margin-right: 0px;"><label>tweetcart</label><i class="fa fa-chevron-right"></i></a></div>
   </div>
 
   </section>

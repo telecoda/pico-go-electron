@@ -15,6 +15,7 @@ const (
 	// define these vars to be used in javascript canvas scaling code
 	screenWidth  = 128
 	screenHeight = 128
+	consoleType  = console.PICO8
 )
 
 // Code must implement console.Cartridge interface
@@ -27,13 +28,6 @@ type cartridge struct {
 	frameCount   int
 	totalFrames  int
 	currentColor int
-}
-
-// NewCart - initialise a struct implementing Cartridge interface
-func NewCart() console.Cartridge {
-	return &cartridge{
-		BaseCartridge: console.NewBaseCart(),
-	}
 }
 
 // Init - called once when cart is initialised
@@ -74,39 +68,32 @@ func (c *cartridge) Update() {
 // Render - called once every frame
 func (c *cartridge) Render() {
 	c.Cls()
-	c.RectFillWithColor(0, 0, 32, 32, 0)
-	c.RectFillWithColor(32, 0, 64, 32, 1)
-	c.RectFillWithColor(64, 0, 96, 32, 2)
-	c.RectFillWithColor(96, 0, 128, 32, 3)
+	c.RectFill(0, 0, 32, 32, 0)
+	c.RectFill(32, 0, 64, 32, 1)
+	c.RectFill(64, 0, 96, 32, 2)
+	c.RectFill(96, 0, 128, 32, 3)
 
-	c.RectFillWithColor(0, 32, 32, 64, 4)
-	c.RectFillWithColor(32, 32, 64, 64, 5)
-	c.RectFillWithColor(64, 32, 96, 64, 6)
-	c.RectFillWithColor(96, 32, 128, 64, 7)
+	c.RectFill(0, 32, 32, 64, 4)
+	c.RectFill(32, 32, 64, 64, 5)
+	c.RectFill(64, 32, 96, 64, 6)
+	c.RectFill(96, 32, 128, 64, 7)
 
-	c.RectFillWithColor(0, 64, 32, 96, 8)
-	c.RectFillWithColor(32, 64, 64, 96, 9)
-	c.RectFillWithColor(64, 64, 96, 96, 10)
-	c.RectFillWithColor(96, 64, 128, 96, 11)
+	c.RectFill(0, 64, 32, 96, 8)
+	c.RectFill(32, 64, 64, 96, 9)
+	c.RectFill(64, 64, 96, 96, 10)
+	c.RectFill(96, 64, 128, 96, 11)
 
-	c.RectFillWithColor(0, 96, 32, 128, 12)
-	c.RectFillWithColor(32, 96, 64, 128, 13)
-	c.RectFillWithColor(64, 96, 96, 128, 14)
-	c.RectFillWithColor(96, 96, 128, 128, 15)
+	c.RectFill(0, 96, 32, 128, 12)
+	c.RectFill(32, 96, 64, 128, 13)
+	c.RectFill(64, 96, 96, 128, 14)
+	c.RectFill(96, 96, 128, 128, 15)
 
-	c.PrintAtWithColor("PALETTE:", 46, 5, 15)
+	c.PrintAt("PALETTE:", 46, 5, 15)
 	c.Line(0, 12, 128, 12)
 
 	if c.mapAnim {
-		c.PrintAtWithColor("COLORS CAN BE SWAPPED.", 20, 20, 15)
+		c.PrintAt("COLORS CAN BE SWAPPED.", 20, 20, 15)
 	} else {
-		c.PrintAtWithColor("COLORS CAN BE TRANSPARENT.", 12, 20, 15)
-	}
-}
-
-func main() {
-	cart := NewCart()
-	if err := console.Run(cart); err != nil {
-		panic(err)
+		c.PrintAt("COLORS CAN BE TRANSPARENT.", 12, 20, 15)
 	}
 }

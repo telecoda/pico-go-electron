@@ -31,6 +31,6 @@ func (c *cartridge) Update() {
 
 // Render - called once every frame
 func (c *cartridge) Render() {
-	c.ClsWithColor(console.PICO8_BLUE)
+	c.Cls(console.PICO8_BLUE)
 	c.PrintAt("Hello", 10, 20)
 }

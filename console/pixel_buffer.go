@@ -92,20 +92,18 @@ func (p *pixelBuffer) Render() error {
 // API
 
 // Cls - clears pixel buffer
-func (p *pixelBuffer) Cls() {
+func (p *pixelBuffer) Cls(colorID ...ColorID) {
 	// clear buffer with background color
+	if len(colorID) != 0 {
+		p.bgColor = colorID[0]
+	}
+
 	bg := uint8(p.bgColor)
 
 	// fill every pixel with same color
 	for i, _ := range p.pixelSurface.Pix {
 		p.pixelSurface.Pix[i] = bg
 	}
-}
-
-// ClsWithColor - fill pixel buffer with a set color
-func (p *pixelBuffer) ClsWithColor(colorID ColorID) {
-	p.bgColor = colorID
-	p.Cls()
 }
 
 func (p *pixelBuffer) Cursor(x, y int) {
@@ -206,7 +204,7 @@ func (p *pixelBuffer) ScrollUpLine() {
 func (p *pixelBuffer) Print(str string) {
 	pixelPos := charToPixel(p.textCursor)
 
-	p.PrintAtWithColor(str, int(pixelPos.x), int(pixelPos.y), p.fgColor)
+	p.PrintAt(str, int(pixelPos.x), int(pixelPos.y), p.fgColor)
 
 	// increase printPos by 1 line
 	p.textCursor.y++
@@ -217,12 +215,16 @@ func (p *pixelBuffer) Print(str string) {
 }
 
 // PrintAt - prints a string of characters to the screen at position with drawing color
-func (p *pixelBuffer) PrintAt(str string, x, y int) {
-	p.PrintAtWithColor(str, x, y, p.fgColor)
+func (p *pixelBuffer) PrintAt(str string, x, y int, colorID ...ColorID) {
+	if len(colorID) == 0 {
+		p.printAtWithColor(str, x, y, p.fgColor)
+	} else {
+		p.printAtWithColor(str, x, y, colorID[0])
+	}
 }
 
 // PrintAtWithColor - prints a string of characters to the screen at position with color
-func (p *pixelBuffer) PrintAtWithColor(str string, x, y int, colorID ColorID) {
+func (p *pixelBuffer) printAtWithColor(str string, x, y int, colorID ColorID) {
 	p.fgColor = colorID
 
 	if str != "" {
@@ -248,12 +250,16 @@ func (p *pixelBuffer) PrintAtWithColor(str string, x, y int, colorID ColorID) {
 // Drawer methods
 
 // Circle - draw circle with drawing color
-func (p *pixelBuffer) Circle(x, y, r int) {
-	p.CircleWithColor(x, y, r, p.fgColor)
+func (p *pixelBuffer) Circle(x, y, r int, colorID ...ColorID) {
+	if len(colorID) == 0 {
+		p.circleWithColor(x, y, r, p.fgColor)
+	} else {
+		p.circleWithColor(x, y, r, colorID[0])
+	}
 }
 
 // CircleWithColor - draw circle with color
-func (p *pixelBuffer) CircleWithColor(x0, y0, r int, colorID ColorID) {
+func (p *pixelBuffer) circleWithColor(x0, y0, r int, colorID ColorID) {
 	p.fgColor = colorID
 
 	x := 0
@@ -303,12 +309,16 @@ func (p *pixelBuffer) circlePoints(cx, cy, x, y int) {
 }
 
 // CircleFill - fill circle with drawing color
-func (p *pixelBuffer) CircleFill(x, y, r int) {
-	p.CircleFillWithColor(x, y, r, p.fgColor)
+func (p *pixelBuffer) CircleFill(x, y, r int, colorID ...ColorID) {
+	if len(colorID) == 0 {
+		p.circleFillWithColor(x, y, r, p.fgColor)
+	} else {
+		p.circleFillWithColor(x, y, r, colorID[0])
+	}
 }
 
 // CircleFillWithColor - fill circle with color
-func (p *pixelBuffer) CircleFillWithColor(x0, y0, r int, colorID ColorID) {
+func (p *pixelBuffer) circleFillWithColor(x0, y0, r int, colorID ColorID) {
 	p.fgColor = colorID
 
 	x := 0
@@ -340,12 +350,16 @@ func (p *pixelBuffer) circleLines(cx, cy, x, y int) {
 }
 
 // Line - line in drawing color
-func (p *pixelBuffer) Line(x0, y0, x1, y1 int) {
-	p.LineWithColor(x0, y0, x1, y1, p.fgColor)
+func (p *pixelBuffer) Line(x0, y0, x1, y1 int, colorID ...ColorID) {
+	if len(colorID) == 0 {
+		p.lineWithColor(x0, y0, x1, y1, p.fgColor)
+	} else {
+		p.lineWithColor(x0, y0, x1, y1, colorID[0])
+	}
 }
 
 // LineWithColor - line with color
-func (p *pixelBuffer) LineWithColor(x1, y1, x2, y2 int, colorID ColorID) {
+func (p *pixelBuffer) lineWithColor(x1, y1, x2, y2 int, colorID ColorID) {
 	p.setFGColor(colorID)
 
 	col := p.palette.GetColor(colorID)
@@ -491,23 +505,31 @@ func (p *pixelBuffer) PGet(x, y int) ColorID {
 }
 
 // PSet - pixel set in drawing color
-func (p *pixelBuffer) PSet(x, y int) {
-	p.PSetWithColor(x, y, p.fgColor)
+func (p *pixelBuffer) PSet(x, y int, colorID ...ColorID) {
+	if len(colorID) == 0 {
+		p.pSetWithColor(x, y, p.fgColor)
+	} else {
+		p.pSetWithColor(x, y, colorID[0])
+	}
 }
 
 // PSetWithColor - pixel set with color
-func (p *pixelBuffer) PSetWithColor(x0, y0 int, colorID ColorID) {
+func (p *pixelBuffer) pSetWithColor(x0, y0 int, colorID ColorID) {
 	p.setFGColor(colorID)
 	p.pixelSurface.Set(x0, y0, p.palette.GetColor(colorID))
 }
 
 // Rect - draw rectangle with drawing color
-func (p *pixelBuffer) Rect(x0, y0, x1, y1 int) {
-	p.RectWithColor(x0, y0, x1, y1, p.fgColor)
+func (p *pixelBuffer) Rect(x0, y0, x1, y1 int, colorID ...ColorID) {
+	if len(colorID) == 0 {
+		p.rectWithColor(x0, y0, x1, y1, p.fgColor)
+	} else {
+		p.rectWithColor(x0, y0, x1, y1, colorID[0])
+	}
 }
 
 // RectWithColor - draw rectangle with color
-func (p *pixelBuffer) RectWithColor(x0, y0, x1, y1 int, colorID ColorID) {
+func (p *pixelBuffer) rectWithColor(x0, y0, x1, y1 int, colorID ColorID) {
 	p.fgColor = colorID
 	p.Line(x0, y0, x1, y0)
 	p.Line(x1, y0, x1, y1)
@@ -516,12 +538,16 @@ func (p *pixelBuffer) RectWithColor(x0, y0, x1, y1 int, colorID ColorID) {
 }
 
 // RectFill - fill rectangle with drawing color
-func (p *pixelBuffer) RectFill(x0, y0, x1, y1 int) {
-	p.RectFillWithColor(x0, y0, x1, y1, p.fgColor)
+func (p *pixelBuffer) RectFill(x0, y0, x1, y1 int, colorID ...ColorID) {
+	if len(colorID) == 0 {
+		p.rectFillWithColor(x0, y0, x1, y1, p.fgColor)
+	} else {
+		p.rectFillWithColor(x0, y0, x1, y1, colorID[0])
+	}
 }
 
 // RectFillWithColor - fill rectangle with color
-func (p *pixelBuffer) RectFillWithColor(x0, y0, x1, y1 int, colorID ColorID) {
+func (p *pixelBuffer) rectFillWithColor(x0, y0, x1, y1 int, colorID ColorID) {
 	p.fgColor = colorID
 	for x := x0; x < x1; x++ {
 		p.Line(x, y0, x, y1)
@@ -634,8 +660,8 @@ func (p *pixelBuffer) sprite(n, x, y, w, h, dw, dh int, rot float64, flipX, flip
 
 }
 
-// Color - Set current drawing color
-func (p *pixelBuffer) Color(colorID ColorID) {
+// SetColor - Set current drawing color
+func (p *pixelBuffer) SetColor(colorID ColorID) {
 	p.fgColor = colorID
 }
 

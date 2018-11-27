@@ -63,9 +63,9 @@ func (c *cartridge) Update() {
 
 // Render - called once every frame
 func (c *cartridge) Render() {
-	c.ClsWithColor(console.PICO8_BLACK)
+	c.Cls(console.PICO8_BLACK)
 	for i := 0; i < c.GetHeight(); i++ {
-		c.PSetWithColor(c.s[i], i, console.ColorID(i%3+5))
+		c.PSet(c.s[i], i, console.ColorID(i%3+5))
 		c.s[i] = (c.s[i] - (i % 3)) % c.GetWidth()
 		if c.s[i] < 0 {
 			c.s[i] += c.GetWidth()
