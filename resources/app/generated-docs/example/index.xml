@@ -27,7 +27,7 @@ example output sourcecode package main /* This is a simple demo project to show 
       
       <guid>/example/drawing/drawing.html</guid>
       <description>drawing This is a simple project to demonstrate how to use the drawing functions.
-example output sourcecode package main /* This is a project to demo the drawing primitives Copyright 2018 @telecoda */ import ( &amp;#34;github.com/telecoda/pico-go-electron/console&amp;#34; ) const ( // set console type to one of the predefined consoles 	consoleType = console.CBM64 ) type cartridge struct { *console.BaseCartridge } // Init - called once when cart is initialised func (c *cartridge) Init() error { return nil } // Update - called once every frame func (c *cartridge) Update() { } // Render - called once every frame func (c *cartridge) Render() { c.</description>
+example output sourcecode package main /* This is a project to demo the drawing primitives Copyright 2018 @telecoda */ import ( &amp;#34;github.com/telecoda/pico-go-electron/console&amp;#34; ) const ( // set console type to one of the predefined consoles 	consoleType = console.PICO8 ) type cartridge struct { *console.BaseCartridge } // Init - called once when cart is initialised func (c *cartridge) Init() error { return nil } // Update - called once every frame func (c *cartridge) Update() { } // Render - called once every frame func (c *cartridge) Render() { c.</description>
     </item>
     
     <item>
@@ -37,7 +37,7 @@ example output sourcecode package main /* This is a project to demo the drawing 
       
       <guid>/example/palette/palette.html</guid>
       <description>palette This is a simple project to demonstrate how to use the palette functions.
-example output sourcecode package main import ( &amp;#34;github.com/telecoda/pico-go-electron/console&amp;#34; ) /* This is a project to demo the palette manipulation Copyright 2018 @telecoda */ const ( // define these vars to be used in javascript canvas scaling code 	screenWidth = 128 screenHeight = 128 ) // Code must implement console.Cartridge interface  type cartridge struct { *console.</description>
+example output sourcecode package main import ( &amp;#34;github.com/telecoda/pico-go-electron/console&amp;#34; ) /* This is a project to demo the palette manipulation Copyright 2018 @telecoda */ const ( // define these vars to be used in javascript canvas scaling code 	screenWidth = 128 screenHeight = 128 consoleType = console.PICO8 ) // Code must implement console.Cartridge interface  type cartridge struct { *console.</description>
     </item>
     
     <item>
@@ -47,7 +47,7 @@ example output sourcecode package main import ( &amp;#34;github.com/telecoda/pic
       
       <guid>/example/sprite/sprite.html</guid>
       <description>sprites This is a simple project to demonstrate how to use the sprite functions.
-example output sourcecode package main /* This is a project to demo the sprite functions Copyright 2018 @telecoda */ import ( &amp;#34;fmt&amp;#34; &amp;#34;github.com/telecoda/pico-go-electron/console&amp;#34; ) const ( // define these vars to be used in javascript canvas scaling code 	screenWidth = 128 screenHeight = 128 ) func main() { cart := NewCart() if err := console.</description>
+example output sourcecode package main /* This is a project to demo the sprite functions Copyright 2018 @telecoda */ import ( &amp;#34;fmt&amp;#34; &amp;#34;github.com/telecoda/pico-go-electron/console&amp;#34; ) const ( // define these vars to be used in javascript canvas scaling code 	screenWidth = 128 screenHeight = 128 consoleType = console.PICO8 ) type cartridge struct { *console.BaseCartridge // example vars below 	running bool rot float64 barY int scaleY float64 scaleX float64 } // Init - called once func (c *cartridge) Init() error { return nil } // Update - called once every frame func (c *cartridge) Update() { c.</description>
     </item>
     
     <item>
@@ -61,16 +61,14 @@ example output sourcecode package main /* This is a project to demo an oldskool 
     </item>
     
     <item>
-      <title>ebiten</title>
-      <link>/example/ebiten/ebiten.html</link>
+      <title>tweetcart</title>
+      <link>/example/tweetcart/tweetcart.html</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>/example/ebiten/ebiten.html</guid>
-      <description>You can use most of the ebiten examples too.
-Here is an example of the flappy.go demo
-Just trying opening a file from $GOPATH/src/github.com/hajimehoshi/ebiten/examples
-The only code you may need to change is the scale factor when running ebiten. Set the value to 1 instead of 2 on some of the demos and we&amp;rsquo;ll handle the scaling for you.
-func main() { if err := ebiten.Run(update, screenWidth, screenHeight, 2, &amp;#34;(Demo)&amp;#34;); err !</description>
+      <guid>/example/tweetcart/tweetcart.html</guid>
+      <description>tweetcart This is an example of a tweetcart animation. Tweetcarts are animations where the code should be able to fit within the size of a single tweet.
+This tweetcart is based upon a pico8 tweetcart from here
+example output sourcecode package main /* This is a simple demo project to show you how to use pico-go Copyright 2018 @telecoda */ import ( &amp;#34;math&amp;#34; &amp;#34;github.com/telecoda/pico-go-electron/console&amp;#34; ) const ( // set console type to one of the predefined consoles 	consoleType = console.</description>
     </item>
     
   </channel>

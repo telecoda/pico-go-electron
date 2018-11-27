@@ -107,10 +107,10 @@
           </a>
         </div>
     </li>
-      <li data-nav-id="/example/ebiten/ebiten.html" class="dd-item">
+      <li data-nav-id="/example/tweetcart/tweetcart.html" class="dd-item">
         <div>
-          <a href="../../example/ebiten/ebiten.html">
-            ebiten
+          <a href="../../example/tweetcart/tweetcart.html">
+            tweetcart
           </a>
         </div>
     </li>
@@ -141,7 +141,7 @@
       <option value="/example/palette/palette.html"  selected>- palette</option>
       <option value="/example/sprite/sprite.html" >- sprites</option>
       <option value="/example/starfield/starfield.html" >- starfield</option>
-      <option value="/example/ebiten/ebiten.html" >- ebiten</option>
+      <option value="/example/tweetcart/tweetcart.html" >- tweetcart</option>
   
 
 
@@ -184,6 +184,7 @@
 	<span style="color:#75715e">// define these vars to be used in javascript canvas scaling code
 </span><span style="color:#75715e"></span>	<span style="color:#a6e22e">screenWidth</span>  = <span style="color:#ae81ff">128</span>
 	<span style="color:#a6e22e">screenHeight</span> = <span style="color:#ae81ff">128</span>
+	<span style="color:#a6e22e">consoleType</span>  = <span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">PICO8</span>
 )
 
 <span style="color:#75715e">// Code must implement console.Cartridge interface
@@ -196,13 +197,6 @@
 	<span style="color:#a6e22e">frameCount</span>   <span style="color:#66d9ef">int</span>
 	<span style="color:#a6e22e">totalFrames</span>  <span style="color:#66d9ef">int</span>
 	<span style="color:#a6e22e">currentColor</span> <span style="color:#66d9ef">int</span>
-}
-
-<span style="color:#75715e">// NewCart - initialise a struct implementing Cartridge interface
-</span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">NewCart</span>() <span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">Cartridge</span> {
-	<span style="color:#66d9ef">return</span> <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">cartridge</span>{
-		<span style="color:#a6e22e">BaseCartridge</span>: <span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">NewBaseCart</span>(),
-	}
 }
 
 <span style="color:#75715e">// Init - called once when cart is initialised
@@ -243,40 +237,33 @@
 <span style="color:#75715e">// Render - called once every frame
 </span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">c</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">cartridge</span>) <span style="color:#a6e22e">Render</span>() {
 	<span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">Cls</span>()
-	<span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">RectFillWithColor</span>(<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">32</span>, <span style="color:#ae81ff">32</span>, <span style="color:#ae81ff">0</span>)
-	<span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">RectFillWithColor</span>(<span style="color:#ae81ff">32</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">64</span>, <span style="color:#ae81ff">32</span>, <span style="color:#ae81ff">1</span>)
-	<span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">RectFillWithColor</span>(<span style="color:#ae81ff">64</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">96</span>, <span style="color:#ae81ff">32</span>, <span style="color:#ae81ff">2</span>)
-	<span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">RectFillWithColor</span>(<span style="color:#ae81ff">96</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">128</span>, <span style="color:#ae81ff">32</span>, <span style="color:#ae81ff">3</span>)
+	<span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">RectFill</span>(<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">32</span>, <span style="color:#ae81ff">32</span>, <span style="color:#ae81ff">0</span>)
+	<span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">RectFill</span>(<span style="color:#ae81ff">32</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">64</span>, <span style="color:#ae81ff">32</span>, <span style="color:#ae81ff">1</span>)
+	<span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">RectFill</span>(<span style="color:#ae81ff">64</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">96</span>, <span style="color:#ae81ff">32</span>, <span style="color:#ae81ff">2</span>)
+	<span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">RectFill</span>(<span style="color:#ae81ff">96</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">128</span>, <span style="color:#ae81ff">32</span>, <span style="color:#ae81ff">3</span>)
 
-	<span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">RectFillWithColor</span>(<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">32</span>, <span style="color:#ae81ff">32</span>, <span style="color:#ae81ff">64</span>, <span style="color:#ae81ff">4</span>)
-	<span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">RectFillWithColor</span>(<span style="color:#ae81ff">32</span>, <span style="color:#ae81ff">32</span>, <span style="color:#ae81ff">64</span>, <span style="color:#ae81ff">64</span>, <span style="color:#ae81ff">5</span>)
-	<span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">RectFillWithColor</span>(<span style="color:#ae81ff">64</span>, <span style="color:#ae81ff">32</span>, <span style="color:#ae81ff">96</span>, <span style="color:#ae81ff">64</span>, <span style="color:#ae81ff">6</span>)
-	<span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">RectFillWithColor</span>(<span style="color:#ae81ff">96</span>, <span style="color:#ae81ff">32</span>, <span style="color:#ae81ff">128</span>, <span style="color:#ae81ff">64</span>, <span style="color:#ae81ff">7</span>)
+	<span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">RectFill</span>(<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">32</span>, <span style="color:#ae81ff">32</span>, <span style="color:#ae81ff">64</span>, <span style="color:#ae81ff">4</span>)
+	<span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">RectFill</span>(<span style="color:#ae81ff">32</span>, <span style="color:#ae81ff">32</span>, <span style="color:#ae81ff">64</span>, <span style="color:#ae81ff">64</span>, <span style="color:#ae81ff">5</span>)
+	<span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">RectFill</span>(<span style="color:#ae81ff">64</span>, <span style="color:#ae81ff">32</span>, <span style="color:#ae81ff">96</span>, <span style="color:#ae81ff">64</span>, <span style="color:#ae81ff">6</span>)
+	<span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">RectFill</span>(<span style="color:#ae81ff">96</span>, <span style="color:#ae81ff">32</span>, <span style="color:#ae81ff">128</span>, <span style="color:#ae81ff">64</span>, <span style="color:#ae81ff">7</span>)
 
-	<span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">RectFillWithColor</span>(<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">64</span>, <span style="color:#ae81ff">32</span>, <span style="color:#ae81ff">96</span>, <span style="color:#ae81ff">8</span>)
-	<span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">RectFillWithColor</span>(<span style="color:#ae81ff">32</span>, <span style="color:#ae81ff">64</span>, <span style="color:#ae81ff">64</span>, <span style="color:#ae81ff">96</span>, <span style="color:#ae81ff">9</span>)
-	<span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">RectFillWithColor</span>(<span style="color:#ae81ff">64</span>, <span style="color:#ae81ff">64</span>, <span style="color:#ae81ff">96</span>, <span style="color:#ae81ff">96</span>, <span style="color:#ae81ff">10</span>)
-	<span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">RectFillWithColor</span>(<span style="color:#ae81ff">96</span>, <span style="color:#ae81ff">64</span>, <span style="color:#ae81ff">128</span>, <span style="color:#ae81ff">96</span>, <span style="color:#ae81ff">11</span>)
+	<span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">RectFill</span>(<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">64</span>, <span style="color:#ae81ff">32</span>, <span style="color:#ae81ff">96</span>, <span style="color:#ae81ff">8</span>)
+	<span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">RectFill</span>(<span style="color:#ae81ff">32</span>, <span style="color:#ae81ff">64</span>, <span style="color:#ae81ff">64</span>, <span style="color:#ae81ff">96</span>, <span style="color:#ae81ff">9</span>)
+	<span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">RectFill</span>(<span style="color:#ae81ff">64</span>, <span style="color:#ae81ff">64</span>, <span style="color:#ae81ff">96</span>, <span style="color:#ae81ff">96</span>, <span style="color:#ae81ff">10</span>)
+	<span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">RectFill</span>(<span style="color:#ae81ff">96</span>, <span style="color:#ae81ff">64</span>, <span style="color:#ae81ff">128</span>, <span style="color:#ae81ff">96</span>, <span style="color:#ae81ff">11</span>)
 
-	<span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">RectFillWithColor</span>(<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">96</span>, <span style="color:#ae81ff">32</span>, <span style="color:#ae81ff">128</span>, <span style="color:#ae81ff">12</span>)
-	<span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">RectFillWithColor</span>(<span style="color:#ae81ff">32</span>, <span style="color:#ae81ff">96</span>, <span style="color:#ae81ff">64</span>, <span style="color:#ae81ff">128</span>, <span style="color:#ae81ff">13</span>)
-	<span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">RectFillWithColor</span>(<span style="color:#ae81ff">64</span>, <span style="color:#ae81ff">96</span>, <span style="color:#ae81ff">96</span>, <span style="color:#ae81ff">128</span>, <span style="color:#ae81ff">14</span>)
-	<span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">RectFillWithColor</span>(<span style="color:#ae81ff">96</span>, <span style="color:#ae81ff">96</span>, <span style="color:#ae81ff">128</span>, <span style="color:#ae81ff">128</span>, <span style="color:#ae81ff">15</span>)
+	<span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">RectFill</span>(<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">96</span>, <span style="color:#ae81ff">32</span>, <span style="color:#ae81ff">128</span>, <span style="color:#ae81ff">12</span>)
+	<span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">RectFill</span>(<span style="color:#ae81ff">32</span>, <span style="color:#ae81ff">96</span>, <span style="color:#ae81ff">64</span>, <span style="color:#ae81ff">128</span>, <span style="color:#ae81ff">13</span>)
+	<span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">RectFill</span>(<span style="color:#ae81ff">64</span>, <span style="color:#ae81ff">96</span>, <span style="color:#ae81ff">96</span>, <span style="color:#ae81ff">128</span>, <span style="color:#ae81ff">14</span>)
+	<span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">RectFill</span>(<span style="color:#ae81ff">96</span>, <span style="color:#ae81ff">96</span>, <span style="color:#ae81ff">128</span>, <span style="color:#ae81ff">128</span>, <span style="color:#ae81ff">15</span>)
 
-	<span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">PrintAtWithColor</span>(<span style="color:#e6db74">&#34;PALETTE:&#34;</span>, <span style="color:#ae81ff">46</span>, <span style="color:#ae81ff">5</span>, <span style="color:#ae81ff">15</span>)
+	<span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">PrintAt</span>(<span style="color:#e6db74">&#34;PALETTE:&#34;</span>, <span style="color:#ae81ff">46</span>, <span style="color:#ae81ff">5</span>, <span style="color:#ae81ff">15</span>)
 	<span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">Line</span>(<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">12</span>, <span style="color:#ae81ff">128</span>, <span style="color:#ae81ff">12</span>)
 
 	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">mapAnim</span> {
-		<span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">PrintAtWithColor</span>(<span style="color:#e6db74">&#34;COLORS CAN BE SWAPPED.&#34;</span>, <span style="color:#ae81ff">20</span>, <span style="color:#ae81ff">20</span>, <span style="color:#ae81ff">15</span>)
+		<span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">PrintAt</span>(<span style="color:#e6db74">&#34;COLORS CAN BE SWAPPED.&#34;</span>, <span style="color:#ae81ff">20</span>, <span style="color:#ae81ff">20</span>, <span style="color:#ae81ff">15</span>)
 	} <span style="color:#66d9ef">else</span> {
-		<span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">PrintAtWithColor</span>(<span style="color:#e6db74">&#34;COLORS CAN BE TRANSPARENT.&#34;</span>, <span style="color:#ae81ff">12</span>, <span style="color:#ae81ff">20</span>, <span style="color:#ae81ff">15</span>)
-	}
-}
-
-<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
-	<span style="color:#a6e22e">cart</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">NewCart</span>()
-	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">Run</span>(<span style="color:#a6e22e">cart</span>); <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
-		panic(<span style="color:#a6e22e">err</span>)
+		<span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">PrintAt</span>(<span style="color:#e6db74">&#34;COLORS CAN BE TRANSPARENT.&#34;</span>, <span style="color:#ae81ff">12</span>, <span style="color:#ae81ff">20</span>, <span style="color:#ae81ff">15</span>)
 	}
 }</code></pre></div>
 

@@ -27,26 +27,19 @@ type PicoInputAPI interface {
 }
 
 type Clearer interface {
-	Cls()                         // Clear screen
-	ClsWithColor(colorID ColorID) // Clear screen with color
+	Cls(colorID ...ColorID) // Clear screen
 }
 
 type Drawer interface {
-	Color(colorID ColorID) // Set drawing color (colour!!!)
+	SetColor(colorID ColorID) // Set drawing color (colour!!!)
 	// drawing primitives
-	Circle(x, y, r int)
-	CircleWithColor(x, y, r int, colorID ColorID)
-	CircleFill(x, y, r int)
-	CircleFillWithColor(x, y, r int, colorID ColorID)
-	Line(x0, y0, x1, y1 int)
-	LineWithColor(x0, y0, x1, y1 int, colorID ColorID)
+	Circle(x, y, r int, colorID ...ColorID)
+	CircleFill(x, y, r int, colorID ...ColorID)
+	Line(x0, y0, x1, y1 int, colorID ...ColorID)
 	PGet(x, y int) ColorID
-	PSet(x, y int)
-	PSetWithColor(x, y int, colorID ColorID)
-	Rect(x0, y0, x1, y1 int)
-	RectWithColor(x0, y0, x1, y1 int, colorID ColorID)
-	RectFill(x0, y0, x1, y1 int)
-	RectFillWithColor(x0, y0, x1, y1 int, colorID ColorID)
+	PSet(x, y int, colorID ...ColorID)
+	Rect(x0, y0, x1, y1 int, colorID ...ColorID)
+	RectFill(x0, y0, x1, y1 int, colorID ...ColorID)
 }
 
 type Paletter interface {
@@ -64,9 +57,8 @@ type Printer interface {
 	// Text/Printing
 	Cursor(x, y int) // Set text cursor
 	GetCursor() pos
-	Print(str string)                                       // Print a string of characters to the screen at default pos
-	PrintAt(str string, x, y int)                           // Print a string of characters to the screen at position
-	PrintAtWithColor(str string, x, y int, colorID ColorID) // Print a string of characters to the screen at position with color
+	Print(str string)                                 // Print a string of characters to the screen at default pos
+	PrintAt(str string, x, y int, colorID ...ColorID) // Print a string of characters to the screen at position with color
 	ScrollUpLine()
 }
 
