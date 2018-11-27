@@ -44,7 +44,7 @@ Head on over to the development guide and get started writing your own games and
 
 Or if your are looking for inspiration check out the [examples](./docs/content/example)
 
-![image](./docs/content/example/sprites/sprites.png)
+![image](./docs/content/example/sprite/sprite.png)
 
 # History
 Find a little about the background of this project [here](./docs/content/about/history.md)
