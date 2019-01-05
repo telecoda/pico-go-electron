@@ -65,7 +65,7 @@ type Printer interface {
 type Spriter interface {
 	Sprite(n, x, y, w, h, dw, dh int)
 	SpriteFlipped(n, x, y, w, h, dw, dh int, flipX, flipY bool)
-	SpriteRotated(n, x, y, w, h, dw, dh int, rot float64)
+	SpriteRotated(n, x, y, w, h, dw, dh, rot int)
 }
 
 type ConsoleType string

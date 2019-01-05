@@ -21,18 +21,48 @@ type mode struct {
 }
 
 type pixelBuffer struct {
-	textCursor   pos // note print pos in char/line pos not pixel pos
-	fgColor      ColorID
-	bgColor      ColorID
-	palette      *palette
+	textCursor pos // note print pos in char/line pos not pixel pos
+	fgColor    ColorID
+	bgColor    ColorID
+	palette    *palette
+	r          []uint8 // lookup for red color component
+	g          []uint8 // lookup for green color component
+	b          []uint8 // lookup for blue color component
+	a          []uint8 // lookup for alpha color component
+
 	charCols     int
 	charRows     int
 	pixelSurface *image.Paletted // offscreen pixel buffer
+	rgbaPixels   []uint8
 	screen       *ebiten.Image
 	psRect       image.Rectangle // rect of pixelSurface
 	renderRect   image.Rectangle // rect on main window that pixelbuffer is rendered into
 
+	// these are temp paletted images stored by size for reuse
+	copySpritesMap map[image.Rectangle]*image.Paletted
+	txSpritesMap   map[image.Rectangle]*image.Paletted
+	maskSpritesMap map[image.Rectangle]*image.Paletted
+
+	// these are cached versions of previously transformed sprites
+	spriteCache map[spriteTx]spriteCached
+
 	flipReady bool
+}
+
+type spriteTx struct {
+	number      int
+	width       int
+	height      int
+	scaleWidth  int
+	scaleHeight int
+	rot         int
+	flipX       bool
+	flipY       bool
+}
+
+type spriteCached struct {
+	txImage   *image.Paletted
+	maskImage *image.Paletted
 }
 
 type pos struct {
@@ -53,6 +83,12 @@ func newPixelBuffer(cfg Config) (*pixelBuffer, error) {
 	}
 
 	p.palette = cfg.palette
+	p.r = make([]uint8, len(_console.palette.colorMap), len(_console.palette.colorMap))
+	p.g = make([]uint8, len(_console.palette.colorMap), len(_console.palette.colorMap))
+	p.b = make([]uint8, len(_console.palette.colorMap), len(_console.palette.colorMap))
+	p.a = make([]uint8, len(_console.palette.colorMap), len(_console.palette.colorMap))
+
+	p.spriteCache = make(map[spriteTx]spriteCached)
 
 	if err := setSurfacePalette(p.palette, ps); err != nil {
 		return nil, err
@@ -71,8 +107,14 @@ func newPixelBuffer(cfg Config) (*pixelBuffer, error) {
 	p.fgColor = 7
 	p.bgColor = 0
 
-	p.charCols = cfg.ConsoleWidth / _console.Config.fontWidth
-	p.charRows = cfg.ConsoleHeight / _console.Config.fontHeight
+	p.charCols = cfg.ConsoleWidth / cfg.fontWidth
+	p.charRows = cfg.ConsoleHeight / cfg.fontHeight
+
+	p.rgbaPixels = make([]uint8, _console.Config.ConsoleWidth*_console.Config.ConsoleHeight*4)
+	// init temp sprite maps
+	p.copySpritesMap = make(map[image.Rectangle]*image.Paletted)
+	p.txSpritesMap = make(map[image.Rectangle]*image.Paletted)
+	p.maskSpritesMap = make(map[image.Rectangle]*image.Paletted)
 
 	return p, nil
 }
@@ -117,8 +159,7 @@ var delay = time.Duration(1 * time.Second / 60)
 func (p *pixelBuffer) Flip() error {
 
 	if p.pixelSurface == nil {
-		fmt.Printf("TEMP: no pixelSurface\n")
-		return nil
+		return fmt.Errorf("No pixelsurface")
 	}
 
 	// if _console.screen == nil {
@@ -139,28 +180,36 @@ func (p *pixelBuffer) Flip() error {
 	// at end of frame delay start timing for next one
 	startFrame = time.Now()
 
-	pix := make([]uint8, _console.Config.ConsoleWidth*_console.Config.ConsoleHeight*4)
+	p.copyIndexedToRGBA()
 
-	b := 0
-	for _, palPix := range p.pixelSurface.Pix {
-		// lookup color
-		rgba := _console.palette.colorMap[ColorID(palPix)]
-		pix[b] = rgba.R
-		b++
-		pix[b] = rgba.G
-		b++
-		pix[b] = rgba.B
-		b++
-		pix[b] = rgba.A
-		b++
-	}
-
-	_console.screen.ReplacePixels(pix)
+	_console.screen.ReplacePixels(p.rgbaPixels)
 	if _console.showFPS {
 		ebitenutil.DebugPrint(_console.screen, fmt.Sprintf("FPS: %f", ebiten.CurrentFPS()))
 	}
 
 	return nil
+}
+
+// copyIndexedToRGBA - convert the paletted (indexed) image into a set of RGBA pixels for rendering on display
+func (p *pixelBuffer) copyIndexedToRGBA() {
+	for id, rgba := range _console.palette.colorMap {
+		p.r[id] = rgba.R
+		p.g[id] = rgba.G
+		p.b[id] = rgba.B
+		p.a[id] = rgba.A
+	}
+
+	i := 0
+	for _, palPix := range p.pixelSurface.Pix {
+		p.rgbaPixels[i] = p.r[palPix]
+		i++
+		p.rgbaPixels[i] = p.g[palPix]
+		i++
+		p.rgbaPixels[i] = p.b[palPix]
+		i++
+		p.rgbaPixels[i] = p.a[palPix]
+		i++
+	}
 }
 
 func (p *pixelBuffer) GetCursor() pos {
@@ -563,11 +612,11 @@ func (p *pixelBuffer) SpriteFlipped(n, x, y, w, h, dw, dh int, flipX, flipY bool
 	p.sprite(n, x, y, w, h, dw, dh, 0, flipX, flipY)
 }
 
-func (p *pixelBuffer) SpriteRotated(n, x, y, w, h, dw, dh int, rot float64) {
+func (p *pixelBuffer) SpriteRotated(n, x, y, w, h, dw, dh int, rot int) {
 	p.sprite(n, x, y, w, h, dw, dh, rot, false, false)
 }
 
-func (p *pixelBuffer) sprite(n, x, y, w, h, dw, dh int, rot float64, flipX, flipY bool) {
+func (p *pixelBuffer) sprite(n, x, y, w, h, dw, dh, rot int, flipX, flipY bool) {
 
 	_console.currentSpriteBank = userSpriteBank1
 
@@ -658,6 +707,273 @@ func (p *pixelBuffer) sprite(n, x, y, w, h, dw, dh int, rot float64, flipX, flip
 
 	drawx.NearestNeighbor.Scale(p.pixelSurface, screenRect, _console.sprites[userSpriteBank1], spriteSrcRect, drawx.Over, options)
 
+}
+
+func (p *pixelBuffer) spriteWithMaps(n, x, y, w, h, dw, dh, rot int, flipX, flipY bool) {
+
+	_console.currentSpriteBank = userSpriteBank1
+
+	sw := w * _spriteWidth
+	sh := h * _spriteHeight
+
+	// convert sprite number into x,y pos
+	xCell := n % _spritesPerLine
+	yCell := (n - xCell) / _spritesPerLine
+
+	xPos := xCell * _spriteWidth
+	yPos := yCell * _spriteHeight
+
+	// this is the rect to copy from sprite sheet
+	spriteSrcRect := image.Rect(xPos, yPos, xPos+sw, yPos+sh)
+	// this rect is where the sprite will be copied to
+	screenRect := image.Rect(x, y, x+dw, y+dh)
+
+	if flipX || flipY || rot != 0 {
+		// we need to transform & mask
+
+		// setup transform matrix
+
+		// do nothing matrix
+		// f64.Aff3{1, -0, 0, 0, 1, 0}
+		// matrix  = {xscale, rotx, xOffset, rotY, yscale, yOffset}
+
+		var matrix f64.Aff3
+
+		if flipX && !flipY {
+			// flip x
+			matrix = f64.Aff3{-1, 0, float64(sw), 0, 1, 0}
+		}
+		if flipY && !flipX {
+			// flip y
+			matrix = f64.Aff3{1, 0, 0, 0, -1, float64(sh)}
+		}
+		if flipX && flipY {
+			// flip xy
+			matrix = f64.Aff3{-1, 0, float64(sw), 0, -1, float64(sh)}
+		}
+
+		if rot != 0 {
+			angle := float64(rot)
+			a := math.Pi * angle / 180
+			xf, yf := float64(sw/2), float64(sh/2)
+			sin := math.Sin(a)
+			cos := math.Cos(a)
+			matrix = f64.Aff3{
+				cos, -sin, xf - xf*cos + yf*sin,
+				sin, cos, yf - xf*sin - yf*cos,
+			}
+		}
+
+		// create a copy of the sprite
+		copyRect := image.Rect(0, 0, sw, sh)
+		copyImage := p.getCopyImage(copyRect)
+		point := image.Point{X: 0, Y: 0}
+		options := &drawx.Options{
+			SrcMask:  _console.sprites[userSpriteMask1],
+			SrcMaskP: image.Point{0, 0},
+		}
+		drawx.Copy(copyImage, point, _console.sprites[userSpriteBank1], spriteSrcRect, drawx.Src, options)
+
+		// rotate it
+		txImage := p.getTxImage(copyRect)
+
+		drawx.NearestNeighbor.Transform(txImage, matrix, copyImage, copyRect, drawx.Src, nil)
+
+		// create a copy of the sprite as a mask
+		maskRect := image.Rect(0, 0, sw, sh)
+		maskImage := p.getMaskImage(maskRect)
+		drawx.Copy(maskImage, point, txImage, maskRect, drawx.Src, nil)
+
+		options = &drawx.Options{
+			SrcMask:  maskImage,
+			SrcMaskP: image.Point{0, 0},
+		}
+
+		drawx.NearestNeighbor.Scale(p.pixelSurface, screenRect, txImage, maskRect, drawx.Over, options)
+
+		return
+	}
+
+	options := &drawx.Options{
+		SrcMask:  _console.sprites[userSpriteMask1],
+		SrcMaskP: image.Point{0, 0},
+	}
+
+	drawx.NearestNeighbor.Scale(p.pixelSurface, screenRect, _console.sprites[userSpriteBank1], spriteSrcRect, drawx.Over, options)
+
+}
+
+func (p *pixelBuffer) spriteWithCache(n, x, y, w, h, dw, dh, rot int, flipX, flipY bool) {
+
+	_console.currentSpriteBank = userSpriteBank1
+
+	sw := w * _spriteWidth
+	sh := h * _spriteHeight
+
+	// convert sprite number into x,y pos
+	xCell := n % _spritesPerLine
+	yCell := (n - xCell) / _spritesPerLine
+
+	xPos := xCell * _spriteWidth
+	yPos := yCell * _spriteHeight
+
+	// this is the rect to copy from sprite sheet
+	spriteSrcRect := image.Rect(xPos, yPos, xPos+sw, yPos+sh)
+	// this rect is where the sprite will be copied to
+	screenRect := image.Rect(x, y, x+dw, y+dh)
+
+	if flipX || flipY || rot != 0 {
+
+		tx := spriteTx{
+			number:      n,
+			width:       w,
+			height:      h,
+			scaleWidth:  dw,
+			scaleHeight: dh,
+			rot:         rot,
+			flipX:       flipX,
+			flipY:       flipY,
+		}
+
+		cached, ok := p.spriteCache[tx]
+
+		if !ok {
+			// do transform
+
+			// we need to transform & mask
+
+			// setup transform matrix
+
+			// do nothing matrix
+			// f64.Aff3{1, -0, 0, 0, 1, 0}
+			// matrix  = {xscale, rotx, xOffset, rotY, yscale, yOffset}
+
+			var matrix f64.Aff3
+			if flipY && !flipX {
+				// flip y
+				matrix = f64.Aff3{1, 0, 0, 0, -1, float64(sh)}
+			}
+			if flipX && !flipY {
+				// flip x
+				matrix = f64.Aff3{-1, 0, float64(sw), 0, 1, 0}
+			}
+			if flipX && flipY {
+				// flip xy
+				matrix = f64.Aff3{-1, 0, float64(sw), 0, -1, float64(sh)}
+			}
+
+			if rot != 0 {
+				angle := float64(rot)
+				a := math.Pi * angle / 180
+				xf, yf := float64(sw/2), float64(sh/2)
+				sin := math.Sin(a)
+				cos := math.Cos(a)
+				matrix = f64.Aff3{
+					cos, -sin, xf - xf*cos + yf*sin,
+					sin, cos, yf - xf*sin - yf*cos,
+				}
+			}
+
+			// create a copy of the sprite
+			copyRect := image.Rect(0, 0, sw, sh)
+			copyImage := p.getCopyImage(copyRect)
+			point := image.Point{X: 0, Y: 0}
+			options := &drawx.Options{
+				SrcMask:  _console.sprites[userSpriteMask1],
+				SrcMaskP: image.Point{0, 0},
+			}
+			drawx.Copy(copyImage, point, _console.sprites[userSpriteBank1], spriteSrcRect, drawx.Src, options)
+
+			// rotate it
+			txImage := p.getTxImage(copyRect)
+
+			drawx.NearestNeighbor.Transform(txImage, matrix, copyImage, copyRect, drawx.Src, nil)
+
+			// create a copy of the sprite as a mask
+			maskRect := image.Rect(0, 0, sw, sh)
+			maskImage := p.getMaskImage(maskRect)
+			drawx.Copy(maskImage, point, txImage, maskRect, drawx.Src, nil)
+
+			options = &drawx.Options{
+				SrcMask:  maskImage,
+				SrcMaskP: image.Point{0, 0},
+			}
+
+			drawx.NearestNeighbor.Scale(p.pixelSurface, screenRect, txImage, maskRect, drawx.Over, options)
+
+			// store in cache
+
+			p.spriteCache[tx] = spriteCached{
+				txImage:   txImage,
+				maskImage: maskImage,
+			}
+
+			return
+		} else {
+
+			options := &drawx.Options{
+				SrcMask:  cached.maskImage,
+				SrcMaskP: image.Point{0, 0},
+			}
+			maskRect := image.Rect(0, 0, sw, sh)
+
+			drawx.NearestNeighbor.Scale(p.pixelSurface, screenRect, cached.txImage, maskRect, drawx.Over, options)
+
+			return
+
+		}
+
+	}
+
+	options := &drawx.Options{
+		SrcMask:  _console.sprites[userSpriteMask1],
+		SrcMaskP: image.Point{0, 0},
+	}
+
+	drawx.NearestNeighbor.Scale(p.pixelSurface, screenRect, _console.sprites[userSpriteBank1], spriteSrcRect, drawx.Over, options)
+}
+
+func (p *pixelBuffer) getCopyImage(r image.Rectangle) *image.Paletted {
+
+	copyImage, ok := p.copySpritesMap[r]
+	if ok {
+		return copyImage
+	}
+
+	copyImage = image.NewPaletted(r, _console.sprites[userSpriteBank1].Palette)
+
+	p.copySpritesMap[r] = copyImage
+	return copyImage
+}
+
+func (p *pixelBuffer) getTxImage(r image.Rectangle) *image.Paletted {
+
+	txImage, ok := p.txSpritesMap[r]
+	if ok {
+		// fill pixels
+		for i, _ := range txImage.Pix {
+			txImage.Pix[i] = 0
+		}
+		return txImage
+	}
+
+	txImage = image.NewPaletted(r, _console.sprites[userSpriteBank1].Palette)
+
+	p.txSpritesMap[r] = txImage
+	return txImage
+}
+
+func (p *pixelBuffer) getMaskImage(r image.Rectangle) *image.Paletted {
+
+	maskImage, ok := p.maskSpritesMap[r]
+	if ok {
+		return maskImage
+	}
+
+	maskImage = image.NewPaletted(r, _console.sprites[userSpriteMask1].Palette)
+
+	p.maskSpritesMap[r] = maskImage
+	return maskImage
 }
 
 // SetColor - Set current drawing color
