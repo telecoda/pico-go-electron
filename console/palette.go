@@ -292,6 +292,9 @@ func (p *palette) GetColorID(rgba rgba) ColorID {
 
 // GetColor - find color from ID
 func (p *palette) GetColor(colorID ColorID) color.Color {
+	if colorID < 0 || int(colorID) > len(p.colors)-1 {
+		return p.colors[0]
+	}
 	return p.colors[colorID]
 }
 func setSurfacePalette(palette Paletter, surface *image.Paletted) error {
