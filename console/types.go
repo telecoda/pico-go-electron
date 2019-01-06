@@ -19,6 +19,7 @@ type PicoGraphicsAPI interface {
 	Clearer
 	Drawer
 	Paletter
+	Peeker
 	Printer
 	Spriter
 }
@@ -52,6 +53,11 @@ type Paletter interface {
 	GetColors() []color.Color
 	MapColor(fromColor ColorID, toColor ColorID) error
 	SetTransparent(color ColorID, enabled bool) error
+}
+
+type Peeker interface {
+	Peek(pos int) uint8
+	Poke(pos int, value uint8)
 }
 
 type Printer interface {

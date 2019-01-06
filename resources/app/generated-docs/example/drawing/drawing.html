@@ -93,6 +93,13 @@
           </a>
         </div>
     </li>
+      <li data-nav-id="/example/peekpoke/peekpoke.html" class="dd-item">
+        <div>
+          <a href="../../example/peekpoke/peekpoke.html">
+            peekpoke
+          </a>
+        </div>
+    </li>
       <li data-nav-id="/example/sprite/sprite.html" class="dd-item">
         <div>
           <a href="../../example/sprite/sprite.html">
@@ -139,6 +146,7 @@
       <option value="/example/demo-01/demo-01.html" >- demo-01</option>
       <option value="/example/drawing/drawing.html"  selected>- drawing</option>
       <option value="/example/palette/palette.html" >- palette</option>
+      <option value="/example/peekpoke/peekpoke.html" >- peekpoke</option>
       <option value="/example/sprite/sprite.html" >- sprites</option>
       <option value="/example/starfield/starfield.html" >- starfield</option>
       <option value="/example/tweetcart/tweetcart.html" >- tweetcart</option>
@@ -181,8 +189,10 @@
 )
 
 <span style="color:#66d9ef">const</span> (
-	<span style="color:#75715e">// set console type to one of the predefined consoles
-</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">consoleType</span> = <span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">PICO8</span>
+	<span style="color:#75715e">// define these vars to be used in javascript canvas scaling code
+</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">screenWidth</span>  = <span style="color:#ae81ff">128</span>
+	<span style="color:#a6e22e">screenHeight</span> = <span style="color:#ae81ff">128</span>
+	<span style="color:#a6e22e">consoleType</span>  = <span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">PICO8</span>
 )
 
 <span style="color:#66d9ef">type</span> <span style="color:#a6e22e">cartridge</span> <span style="color:#66d9ef">struct</span> {

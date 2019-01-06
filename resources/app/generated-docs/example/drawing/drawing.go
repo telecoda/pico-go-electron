@@ -12,8 +12,10 @@ import (
 )
 
 const (
-	// set console type to one of the predefined consoles
-	consoleType = console.PICO8
+	// define these vars to be used in javascript canvas scaling code
+	screenWidth  = 128
+	screenHeight = 128
+	consoleType  = console.PICO8
 )
 
 type cartridge struct {

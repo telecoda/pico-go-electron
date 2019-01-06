@@ -201,7 +201,9 @@ func (p *pixelBuffer) copyIndexedToRGBA() {
 	}
 
 	i := 0
+	paletteSize := uint8(len(p.r))
 	for _, palPix := range p.pixelSurface.Pix {
+		palPix = palPix % paletteSize
 		p.rgbaPixels[i] = p.r[palPix]
 		i++
 		p.rgbaPixels[i] = p.g[palPix]
@@ -1029,6 +1031,10 @@ func (p *pixelBuffer) GetColorID(rgba rgba) ColorID {
 	return p.palette.GetColorID(rgba)
 }
 
+func (p *pixelBuffer) GetColors() []color.Color {
+	return p.palette.GetColors()
+}
+
 func (p *pixelBuffer) PaletteReset() {
 	p.palette.PaletteReset()
 }
@@ -1037,8 +1043,17 @@ func (p *pixelBuffer) PaletteCopy() Paletter {
 	return p.palette.PaletteCopy()
 }
 
-func (p *pixelBuffer) GetColors() []color.Color {
-	return p.palette.GetColors()
+func (p *pixelBuffer) Peek(pos int) uint8 {
+	if pos > 0 && pos < len(p.pixelSurface.Pix) {
+		return p.pixelSurface.Pix[pos]
+	}
+	return 0
+}
+
+func (p *pixelBuffer) Poke(pos int, value uint8) {
+	if pos > 0 && pos < len(p.pixelSurface.Pix) {
+		p.pixelSurface.Pix[pos] = value
+	}
 }
 
 func (p *pixelBuffer) MapColor(fromColor ColorID, toColor ColorID) error {

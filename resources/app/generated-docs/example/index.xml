@@ -27,7 +27,7 @@ example output sourcecode package main /* This is a simple demo project to show 
       
       <guid>/example/drawing/drawing.html</guid>
       <description>drawing This is a simple project to demonstrate how to use the drawing functions.
-example output sourcecode package main /* This is a project to demo the drawing primitives Copyright 2018 @telecoda */ import ( &amp;#34;github.com/telecoda/pico-go-electron/console&amp;#34; ) const ( // set console type to one of the predefined consoles 	consoleType = console.PICO8 ) type cartridge struct { *console.BaseCartridge } // Init - called once when cart is initialised func (c *cartridge) Init() error { return nil } // Update - called once every frame func (c *cartridge) Update() { } // Render - called once every frame func (c *cartridge) Render() { c.</description>
+example output sourcecode package main /* This is a project to demo the drawing primitives Copyright 2018 @telecoda */ import ( &amp;#34;github.com/telecoda/pico-go-electron/console&amp;#34; ) const ( // define these vars to be used in javascript canvas scaling code 	screenWidth = 128 screenHeight = 128 consoleType = console.PICO8 ) type cartridge struct { *console.BaseCartridge } // Init - called once when cart is initialised func (c *cartridge) Init() error { return nil } // Update - called once every frame func (c *cartridge) Update() { } // Render - called once every frame func (c *cartridge) Render() { c.</description>
     </item>
     
     <item>
@@ -38,6 +38,16 @@ example output sourcecode package main /* This is a project to demo the drawing 
       <guid>/example/palette/palette.html</guid>
       <description>palette This is a simple project to demonstrate how to use the palette functions.
 example output sourcecode package main import ( &amp;#34;github.com/telecoda/pico-go-electron/console&amp;#34; ) /* This is a project to demo the palette manipulation Copyright 2018 @telecoda */ const ( // define these vars to be used in javascript canvas scaling code 	screenWidth = 128 screenHeight = 128 consoleType = console.PICO8 ) // Code must implement console.Cartridge interface  type cartridge struct { *console.</description>
+    </item>
+    
+    <item>
+      <title>peekpoke</title>
+      <link>/example/peekpoke/peekpoke.html</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/example/peekpoke/peekpoke.html</guid>
+      <description>peekpoke This is a simple project to demonstrate how to use the peek and poke functions.
+example output sourcecode package main /* This is a project to demo the peek poke functions Copyright 2018 @telecoda */ import ( &amp;#34;github.com/telecoda/pico-go-electron/console&amp;#34; ) const ( // define these vars to be used in javascript canvas scaling code 	screenWidth = 128 screenHeight = 128 consoleType = console.PICO8 ) type cartridge struct { *console.</description>
     </item>
     
     <item>
