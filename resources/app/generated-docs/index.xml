@@ -48,7 +48,7 @@ example output sourcecode package main import ( &amp;#34;github.com/telecoda/pic
       
       <guid>/example/sprite/sprite.html</guid>
       <description>sprites This is a simple project to demonstrate how to use the sprite functions.
-example output sourcecode package main /* This is a project to demo the sprite functions Copyright 2018 @telecoda */ import ( &amp;#34;fmt&amp;#34; &amp;#34;github.com/telecoda/pico-go-electron/console&amp;#34; ) const ( // define these vars to be used in javascript canvas scaling code 	screenWidth = 128 screenHeight = 128 consoleType = console.PICO8 ) type cartridge struct { *console.BaseCartridge // example vars below 	running bool rot float64 barY int scaleY float64 scaleX float64 } // Init - called once func (c *cartridge) Init() error { return nil } // Update - called once every frame func (c *cartridge) Update() { c.</description>
+example output sourcecode package main /* This is a project to demo the sprite functions Copyright 2018 @telecoda */ import ( &amp;#34;fmt&amp;#34; &amp;#34;github.com/telecoda/pico-go-electron/console&amp;#34; ) const ( // define these vars to be used in javascript canvas scaling code 	screenWidth = 128 screenHeight = 128 consoleType = console.PICO8 ) type cartridge struct { *console.BaseCartridge // example vars below 	running bool rot int barY int scaleY float64 scaleX float64 } // Init - called once func (c *cartridge) Init() error { console.</description>
     </item>
     
     <item>

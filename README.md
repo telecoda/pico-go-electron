@@ -46,6 +46,12 @@ Or if your are looking for inspiration check out the [examples](./docs/content/e
 
 ![image](./docs/content/example/sprite/sprite.png)
 
+# Benchmarks
+
+There are a few benchmarks in here which have helped me pinpoint (and hopefully improve) cpu or memory intensive code.  If you'd like to run them:
+
+    go test -benchmem -run=^$ github.com/telecoda/pico-go-electron/console -bench ^Benchmark
+
 # History
 Find a little about the background of this project [here](./docs/content/about/history.md)
 

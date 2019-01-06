@@ -3,6 +3,7 @@ package console
 import (
 	"image"
 	"image/color"
+	"time"
 )
 
 type ColorID uint8
@@ -65,7 +66,7 @@ type Printer interface {
 type Spriter interface {
 	Sprite(n, x, y, w, h, dw, dh int)
 	SpriteFlipped(n, x, y, w, h, dw, dh int, flipX, flipY bool)
-	SpriteRotated(n, x, y, w, h, dw, dh int, rot float64)
+	SpriteRotated(n, x, y, w, h, dw, dh, rot int)
 }
 
 type ConsoleType string
@@ -76,6 +77,9 @@ const (
 	ZXSPECTRUM = "zxspectrum"
 	CBM64      = "cbm64"
 )
+
+const MaxSpriteCache = 1000
+const MaxCacheAge = 1 * time.Minute
 
 var ConsoleTypes = map[ConsoleType]string{
 	PICO8:      "PICO8",

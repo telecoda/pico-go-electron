@@ -64,7 +64,8 @@ type console struct {
 	font              font.Face
 	sprites           []*image.Paletted
 	currentSpriteBank int
-	originalPalette   *palette
+
+	originalPalette *palette
 
 	//state    Persister
 	//recorder Recorder

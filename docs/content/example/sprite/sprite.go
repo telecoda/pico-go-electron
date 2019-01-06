@@ -25,7 +25,7 @@ type cartridge struct {
 
 	// example vars below
 	running bool
-	rot     float64
+	rot     int
 	barY    int
 	scaleY  float64
 	scaleX  float64
@@ -33,6 +33,7 @@ type cartridge struct {
 
 // Init -  called once
 func (c *cartridge) Init() error {
+	console.ShowFPS()
 	return nil
 }
 
