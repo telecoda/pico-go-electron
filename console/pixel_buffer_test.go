@@ -46,6 +46,42 @@ func TestCharToPixel(t *testing.T) {
 	}
 }
 
+func TestRotatedWithCache(t *testing.T) {
+	Init(PICO8)
+	for i := 0; i < 720; i++ {
+		_console.pb.spriteWithCache(1, 0, 0, 16, 16, 32, 32, i%360, false, false)
+	}
+
+	// key cache size
+	if len(_console.pb.spriteCache) != 359 {
+		// we expect a size of 359 because angle 0 is never transformed
+		t.Errorf("Expected size: %d got: %d", 359, len(_console.pb.spriteCache))
+	}
+
+	// sprite in cache should differ
+	keys := make([]spriteTx, len(_console.pb.spriteCache))
+	sprites := make([]spriteCached, len(_console.pb.spriteCache))
+	i := 0
+	for key, cached := range _console.pb.spriteCache {
+		keys[i] = key
+		sprites[i] = cached
+		i++
+	}
+
+	if keys[0] == keys[1] {
+		t.Errorf("Keys should not match: %#v vs %#v", keys[0], keys[1])
+	}
+
+	if &sprites[0].txImage == &sprites[1].txImage {
+		t.Errorf("Tx image addresses should not match: %#v vs %#v", sprites[0].txImage, sprites[1].txImage)
+	}
+
+	if &sprites[0].maskImage == &sprites[1].maskImage {
+		t.Errorf("Mask image addresses should not match: %#v vs %#v", sprites[0].maskImage, sprites[1].maskImage)
+	}
+
+}
+
 func BenchmarkCopyPixels(b *testing.B) {
 	// this benchmark measures the performance of the code the copies the offset pixelbuffer into an array of RGBA pixels every frame
 	cfg := newPico8Config()
@@ -66,7 +102,6 @@ func BenchmarkCopyPixels(b *testing.B) {
 func BenchmarkDrawSpriteUnscaled(b *testing.B) {
 	Init(PICO8)
 	for i := 0; i < b.N; i++ {
-		// _console.pb.Sprite(1, 0, 0, 16, 16, 16, 16)
 		_console.pb.sprite(1, 0, 0, 16, 16, 16, 16, 0.0, false, false)
 	}
 }
@@ -74,7 +109,6 @@ func BenchmarkDrawSpriteUnscaled(b *testing.B) {
 func BenchmarkDrawSpriteUnscaledWithMaps(b *testing.B) {
 	Init(PICO8)
 	for i := 0; i < b.N; i++ {
-		// _console.pb.Sprite(1, 0, 0, 16, 16, 16, 16)
 		_console.pb.spriteWithMaps(1, 0, 0, 16, 16, 16, 16, 0.0, false, false)
 	}
 }
@@ -82,7 +116,6 @@ func BenchmarkDrawSpriteUnscaledWithMaps(b *testing.B) {
 func BenchmarkDrawSpriteScaled(b *testing.B) {
 	Init(PICO8)
 	for i := 0; i < b.N; i++ {
-		// _console.pb.Sprite(1, 0, 0, 16, 16, 32, 32)
 		_console.pb.sprite(1, 0, 0, 16, 16, 32, 32, 0.0, false, false)
 	}
 }
@@ -90,21 +123,18 @@ func BenchmarkDrawSpriteScaled(b *testing.B) {
 func BenchmarkDrawSpriteScaledWithMaps(b *testing.B) {
 	Init(PICO8)
 	for i := 0; i < b.N; i++ {
-		// _console.pb.Sprite(1, 0, 0, 16, 16, 32, 32)
 		_console.pb.spriteWithMaps(1, 0, 0, 16, 16, 32, 32, 0.0, false, false)
 	}
 }
 func BenchmarkDrawSpriteScaledWithCache(b *testing.B) {
 	Init(PICO8)
 	for i := 0; i < b.N; i++ {
-		// _console.pb.Sprite(1, 0, 0, 16, 16, 32, 32)
 		_console.pb.spriteWithCache(1, 0, 0, 16, 16, 32, 32, 0.0, false, false)
 	}
 }
 func BenchmarkDrawSpriteXFlipped(b *testing.B) {
 	Init(PICO8)
 	for i := 0; i < b.N; i++ {
-		// _console.pb.SpriteFlipped(1, 0, 0, 16, 16, 32, 32, true, false)
 		_console.pb.sprite(1, 0, 0, 16, 16, 16, 16, 0.0, true, false)
 	}
 }
@@ -112,7 +142,6 @@ func BenchmarkDrawSpriteXFlipped(b *testing.B) {
 func BenchmarkDrawSpriteXFlippedWithMaps(b *testing.B) {
 	Init(PICO8)
 	for i := 0; i < b.N; i++ {
-		// _console.pb.SpriteFlipped(1, 0, 0, 16, 16, 32, 32, true, false)
 		_console.pb.spriteWithMaps(1, 0, 0, 16, 16, 16, 16, 0.0, true, false)
 	}
 }
@@ -120,21 +149,18 @@ func BenchmarkDrawSpriteXFlippedWithMaps(b *testing.B) {
 func BenchmarkDrawSpriteXFlippedWithCache(b *testing.B) {
 	Init(PICO8)
 	for i := 0; i < b.N; i++ {
-		// _console.pb.SpriteFlipped(1, 0, 0, 16, 16, 32, 32, true, false)
 		_console.pb.spriteWithCache(1, 0, 0, 16, 16, 16, 16, 0.0, true, false)
 	}
 }
 func BenchmarkDrawSpriteYFlippedWithCache(b *testing.B) {
 	Init(PICO8)
 	for i := 0; i < b.N; i++ {
-		// _console.pb.SpriteFlipped(1, 0, 0, 16, 16, 16, 16, false, true)
 		_console.pb.spriteWithCache(1, 0, 0, 16, 16, 16, 16, 0.0, false, true)
 	}
 }
 func BenchmarkDrawSpriteYFlipped(b *testing.B) {
 	Init(PICO8)
 	for i := 0; i < b.N; i++ {
-		// _console.pb.SpriteFlipped(1, 0, 0, 16, 16, 16, 16, false, true)
 		_console.pb.sprite(1, 0, 0, 16, 16, 16, 16, 0.0, false, true)
 	}
 }
@@ -142,7 +168,6 @@ func BenchmarkDrawSpriteYFlipped(b *testing.B) {
 func BenchmarkDrawSpriteYFlippedWithMaps(b *testing.B) {
 	Init(PICO8)
 	for i := 0; i < b.N; i++ {
-		// _console.pb.SpriteFlipped(1, 0, 0, 16, 16, 16, 16, false, true)
 		_console.pb.spriteWithMaps(1, 0, 0, 16, 16, 16, 16, 0.0, false, true)
 	}
 }
@@ -150,7 +175,6 @@ func BenchmarkDrawSpriteYFlippedWithMaps(b *testing.B) {
 func BenchmarkDrawSpriteXYFlipped(b *testing.B) {
 	Init(PICO8)
 	for i := 0; i < b.N; i++ {
-		// _console.pb.SpriteFlipped(1, 0, 0, 16, 16, 16, 16, true, true)
 		_console.pb.sprite(1, 0, 0, 16, 16, 16, 16, 0.0, true, true)
 	}
 }
@@ -158,7 +182,6 @@ func BenchmarkDrawSpriteXYFlipped(b *testing.B) {
 func BenchmarkDrawSpriteXYFlippedWithMaps(b *testing.B) {
 	Init(PICO8)
 	for i := 0; i < b.N; i++ {
-		// _console.pb.SpriteFlipped(1, 0, 0, 16, 16, 16, 16, true, true)
 		_console.pb.spriteWithMaps(1, 0, 0, 16, 16, 16, 16, 0.0, true, true)
 	}
 }
@@ -166,7 +189,6 @@ func BenchmarkDrawSpriteXYFlippedWithMaps(b *testing.B) {
 func BenchmarkDrawSpriteXYFlippedWithCache(b *testing.B) {
 	Init(PICO8)
 	for i := 0; i < b.N; i++ {
-		// _console.pb.SpriteFlipped(1, 0, 0, 16, 16, 16, 16, true, true)
 		_console.pb.spriteWithCache(1, 0, 0, 16, 16, 16, 16, 0.0, true, true)
 	}
 }
@@ -174,7 +196,6 @@ func BenchmarkDrawSpriteXYFlippedWithCache(b *testing.B) {
 func BenchmarkDrawSpriteXFlippedScaled(b *testing.B) {
 	Init(PICO8)
 	for i := 0; i < b.N; i++ {
-		// _console.pb.SpriteFlipped(1, 0, 0, 16, 16, 32, 32, true, false)
 		_console.pb.sprite(1, 0, 0, 16, 16, 32, 32, 0.0, true, false)
 	}
 }
@@ -182,7 +203,6 @@ func BenchmarkDrawSpriteXFlippedScaled(b *testing.B) {
 func BenchmarkDrawSpriteXFlippedScaledWithMaps(b *testing.B) {
 	Init(PICO8)
 	for i := 0; i < b.N; i++ {
-		// _console.pb.SpriteFlipped(1, 0, 0, 16, 16, 32, 32, true, false)
 		_console.pb.spriteWithMaps(1, 0, 0, 16, 16, 32, 32, 0.0, true, false)
 	}
 }
@@ -190,7 +210,6 @@ func BenchmarkDrawSpriteXFlippedScaledWithMaps(b *testing.B) {
 func BenchmarkDrawSpriteXFlippedScaledWithCache(b *testing.B) {
 	Init(PICO8)
 	for i := 0; i < b.N; i++ {
-		// _console.pb.SpriteFlipped(1, 0, 0, 16, 16, 32, 32, true, false)
 		_console.pb.spriteWithCache(1, 0, 0, 16, 16, 32, 32, 0.0, true, false)
 	}
 }
@@ -198,7 +217,6 @@ func BenchmarkDrawSpriteXFlippedScaledWithCache(b *testing.B) {
 func BenchmarkDrawSpriteYFlippedScaled(b *testing.B) {
 	Init(PICO8)
 	for i := 0; i < b.N; i++ {
-		// _console.pb.SpriteFlipped(1, 0, 0, 16, 16, 32, 32, false, true)
 		_console.pb.sprite(1, 0, 0, 16, 16, 32, 32, 0.0, false, true)
 	}
 }
@@ -206,7 +224,6 @@ func BenchmarkDrawSpriteYFlippedScaled(b *testing.B) {
 func BenchmarkDrawSpriteYFlippedScaledWithMaps(b *testing.B) {
 	Init(PICO8)
 	for i := 0; i < b.N; i++ {
-		// _console.pb.SpriteFlipped(1, 0, 0, 16, 16, 32, 32, false, true)
 		_console.pb.spriteWithMaps(1, 0, 0, 16, 16, 32, 32, 0.0, false, true)
 	}
 }
@@ -214,14 +231,12 @@ func BenchmarkDrawSpriteYFlippedScaledWithMaps(b *testing.B) {
 func BenchmarkDrawSpriteYFlippedScaledWithCache(b *testing.B) {
 	Init(PICO8)
 	for i := 0; i < b.N; i++ {
-		// _console.pb.SpriteFlipped(1, 0, 0, 16, 16, 32, 32, false, true)
 		_console.pb.spriteWithCache(1, 0, 0, 16, 16, 32, 32, 0.0, false, true)
 	}
 }
 func BenchmarkDrawSpriteXYFlippedScaled(b *testing.B) {
 	Init(PICO8)
 	for i := 0; i < b.N; i++ {
-		// _console.pb.SpriteFlipped(1, 0, 0, 16, 16, 32, 32, true, true)
 		_console.pb.sprite(1, 0, 0, 16, 16, 32, 32, 0.0, true, true)
 	}
 }
@@ -229,7 +244,6 @@ func BenchmarkDrawSpriteXYFlippedScaled(b *testing.B) {
 func BenchmarkDrawSpriteXYFlippedScaledWithMaps(b *testing.B) {
 	Init(PICO8)
 	for i := 0; i < b.N; i++ {
-		// _console.pb.SpriteFlipped(1, 0, 0, 16, 16, 32, 32, true, true)
 		_console.pb.spriteWithMaps(1, 0, 0, 16, 16, 32, 32, 0.0, true, true)
 	}
 }
@@ -237,7 +251,6 @@ func BenchmarkDrawSpriteXYFlippedScaledWithMaps(b *testing.B) {
 func BenchmarkDrawSpriteXYFlippedScaledWithCache(b *testing.B) {
 	Init(PICO8)
 	for i := 0; i < b.N; i++ {
-		// _console.pb.SpriteFlipped(1, 0, 0, 16, 16, 32, 32, true, true)
 		_console.pb.spriteWithCache(1, 0, 0, 16, 16, 32, 32, 0.0, true, true)
 	}
 }
@@ -245,7 +258,6 @@ func BenchmarkDrawSpriteXYFlippedScaledWithCache(b *testing.B) {
 func BenchmarkDrawSpriteRotated(b *testing.B) {
 	Init(PICO8)
 	for i := 0; i < b.N; i++ {
-		// _console.pb.SpriteRotated(1, 0, 0, 16, 16, 32, 32, float64(i%360))
 		_console.pb.sprite(1, 0, 0, 16, 16, 32, 32, i%360, false, false)
 	}
 }
@@ -253,7 +265,6 @@ func BenchmarkDrawSpriteRotated(b *testing.B) {
 func BenchmarkDrawSpriteRotatedWithMaps(b *testing.B) {
 	Init(PICO8)
 	for i := 0; i < b.N; i++ {
-		// _console.pb.SpriteRotated(1, 0, 0, 16, 16, 32, 32, float64(i%360))
 		_console.pb.spriteWithMaps(1, 0, 0, 16, 16, 32, 32, i%360, false, false)
 	}
 }
@@ -261,7 +272,6 @@ func BenchmarkDrawSpriteRotatedWithMaps(b *testing.B) {
 func BenchmarkDrawSpriteRotatedWithCache(b *testing.B) {
 	Init(PICO8)
 	for i := 0; i < b.N; i++ {
-		// _console.pb.SpriteRotated(1, 0, 0, 16, 16, 32, 32, float64(i%360))
 		_console.pb.spriteWithCache(1, 0, 0, 16, 16, 32, 32, i%360, false, false)
 	}
 }
@@ -269,7 +279,6 @@ func BenchmarkDrawSpriteRotatedWithCache(b *testing.B) {
 func BenchmarkDrawSpriteRotatedSameAngle(b *testing.B) {
 	Init(PICO8)
 	for i := 0; i < b.N; i++ {
-		// _console.pb.SpriteRotated(1, 0, 0, 16, 16, 32, 32, float64(i%360))
 		_console.pb.sprite(1, 0, 0, 16, 16, 32, 32, 45, false, false)
 	}
 }
@@ -277,7 +286,6 @@ func BenchmarkDrawSpriteRotatedSameAngle(b *testing.B) {
 func BenchmarkDrawSpriteRotatedWithMapsSameAngle(b *testing.B) {
 	Init(PICO8)
 	for i := 0; i < b.N; i++ {
-		// _console.pb.SpriteRotated(1, 0, 0, 16, 16, 32, 32, float64(i%360))
 		_console.pb.spriteWithMaps(1, 0, 0, 16, 16, 32, 32, 45, false, false)
 	}
 }
@@ -285,7 +293,6 @@ func BenchmarkDrawSpriteRotatedWithMapsSameAngle(b *testing.B) {
 func BenchmarkDrawSpriteRotatedWithCacheSameAngle(b *testing.B) {
 	Init(PICO8)
 	for i := 0; i < b.N; i++ {
-		// _console.pb.SpriteRotated(1, 0, 0, 16, 16, 32, 32, float64(i%360))
 		_console.pb.spriteWithCache(1, 0, 0, 16, 16, 32, 32, 45, false, false)
 	}
 }

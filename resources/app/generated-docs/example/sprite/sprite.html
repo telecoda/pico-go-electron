@@ -194,7 +194,7 @@
 
 	<span style="color:#75715e">// example vars below
 </span><span style="color:#75715e"></span>	<span style="color:#a6e22e">running</span> <span style="color:#66d9ef">bool</span>
-	<span style="color:#a6e22e">rot</span>     <span style="color:#66d9ef">float64</span>
+	<span style="color:#a6e22e">rot</span>     <span style="color:#66d9ef">int</span>
 	<span style="color:#a6e22e">barY</span>    <span style="color:#66d9ef">int</span>
 	<span style="color:#a6e22e">scaleY</span>  <span style="color:#66d9ef">float64</span>
 	<span style="color:#a6e22e">scaleX</span>  <span style="color:#66d9ef">float64</span>
@@ -202,6 +202,7 @@
 
 <span style="color:#75715e">// Init -  called once
 </span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">c</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">cartridge</span>) <span style="color:#a6e22e">Init</span>() <span style="color:#66d9ef">error</span> {
+	<span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">ShowFPS</span>()
 	<span style="color:#66d9ef">return</span> <span style="color:#66d9ef">nil</span>
 }
 

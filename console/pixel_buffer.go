@@ -63,6 +63,7 @@ type spriteTx struct {
 type spriteCached struct {
 	txImage   *image.Paletted
 	maskImage *image.Paletted
+	lastUsed  time.Time
 }
 
 type pos struct {
@@ -609,11 +610,11 @@ func (p *pixelBuffer) Sprite(n, x, y, w, h, dw, dh int) {
 }
 
 func (p *pixelBuffer) SpriteFlipped(n, x, y, w, h, dw, dh int, flipX, flipY bool) {
-	p.sprite(n, x, y, w, h, dw, dh, 0, flipX, flipY)
+	p.spriteWithCache(n, x, y, w, h, dw, dh, 0, flipX, flipY)
 }
 
 func (p *pixelBuffer) SpriteRotated(n, x, y, w, h, dw, dh int, rot int) {
-	p.sprite(n, x, y, w, h, dw, dh, rot, false, false)
+	p.spriteWithCache(n, x, y, w, h, dw, dh, rot, false, false)
 }
 
 func (p *pixelBuffer) sprite(n, x, y, w, h, dw, dh, rot int, flipX, flipY bool) {
@@ -876,7 +877,9 @@ func (p *pixelBuffer) spriteWithCache(n, x, y, w, h, dw, dh, rot int, flipX, fli
 
 			// create a copy of the sprite
 			copyRect := image.Rect(0, 0, sw, sh)
-			copyImage := p.getCopyImage(copyRect)
+			// this fetches and empty image of the correct dimensions
+			copyImage := image.NewPaletted(copyRect, _console.sprites[userSpriteBank1].Palette)
+
 			point := image.Point{X: 0, Y: 0}
 			options := &drawx.Options{
 				SrcMask:  _console.sprites[userSpriteMask1],
@@ -885,13 +888,14 @@ func (p *pixelBuffer) spriteWithCache(n, x, y, w, h, dw, dh, rot int, flipX, fli
 			drawx.Copy(copyImage, point, _console.sprites[userSpriteBank1], spriteSrcRect, drawx.Src, options)
 
 			// rotate it
-			txImage := p.getTxImage(copyRect)
+			txImage := image.NewPaletted(copyRect, _console.sprites[userSpriteBank1].Palette)
 
 			drawx.NearestNeighbor.Transform(txImage, matrix, copyImage, copyRect, drawx.Src, nil)
 
 			// create a copy of the sprite as a mask
 			maskRect := image.Rect(0, 0, sw, sh)
-			maskImage := p.getMaskImage(maskRect)
+			maskImage := image.NewPaletted(maskRect, _console.sprites[userSpriteMask1].Palette)
+
 			drawx.Copy(maskImage, point, txImage, maskRect, drawx.Src, nil)
 
 			options = &drawx.Options{
@@ -906,10 +910,31 @@ func (p *pixelBuffer) spriteWithCache(n, x, y, w, h, dw, dh, rot int, flipX, fli
 			p.spriteCache[tx] = spriteCached{
 				txImage:   txImage,
 				maskImage: maskImage,
+				lastUsed:  time.Now(),
+			}
+
+			if len(p.spriteCache) > MaxSpriteCache {
+				// too many sprites in cache, lets delete the old ones.
+				now := time.Now()
+				delKeys := make([]spriteTx, 0)
+				for key, cached := range p.spriteCache {
+					if now.Sub(cached.lastUsed) > MaxCacheAge {
+						// out of date
+						delKeys = append(delKeys, key)
+					}
+				}
+				// do we have any sprites to delete?
+				if len(delKeys) > 0 {
+					for _, key := range delKeys {
+						delete(p.spriteCache, key)
+					}
+				}
 			}
 
 			return
 		} else {
+			//			fmt.Printf("TEMP: tx: %#v\n", tx)
+			//fmt.Printf("TEMP: cached: %#v\n", cached)
 
 			options := &drawx.Options{
 				SrcMask:  cached.maskImage,
@@ -918,6 +943,10 @@ func (p *pixelBuffer) spriteWithCache(n, x, y, w, h, dw, dh, rot int, flipX, fli
 			maskRect := image.Rect(0, 0, sw, sh)
 
 			drawx.NearestNeighbor.Scale(p.pixelSurface, screenRect, cached.txImage, maskRect, drawx.Over, options)
+
+			// update last used time
+			cached.lastUsed = time.Now()
+			p.spriteCache[tx] = cached
 
 			return
 
@@ -933,6 +962,7 @@ func (p *pixelBuffer) spriteWithCache(n, x, y, w, h, dw, dh, rot int, flipX, fli
 	drawx.NearestNeighbor.Scale(p.pixelSurface, screenRect, _console.sprites[userSpriteBank1], spriteSrcRect, drawx.Over, options)
 }
 
+// getCopyImage returns an empty image with the correct dimensions
 func (p *pixelBuffer) getCopyImage(r image.Rectangle) *image.Paletted {
 
 	copyImage, ok := p.copySpritesMap[r]

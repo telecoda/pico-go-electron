@@ -3,6 +3,7 @@ package console
 import (
 	"image"
 	"image/color"
+	"time"
 )
 
 type ColorID uint8
@@ -76,6 +77,9 @@ const (
 	ZXSPECTRUM = "zxspectrum"
 	CBM64      = "cbm64"
 )
+
+const MaxSpriteCache = 1000
+const MaxCacheAge = 1 * time.Minute
 
 var ConsoleTypes = map[ConsoleType]string{
 	PICO8:      "PICO8",
