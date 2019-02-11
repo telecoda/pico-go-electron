@@ -28,6 +28,13 @@ iframe {
     width: 100%;
 }
 
+#spriteEdFrame {
+    position: fixed;
+    min-height: 256px;
+    height: 100%;
+    width: 100%;
+}
+
 .mainDiv {
     padding-left: 0px;
     padding-right: 0px;

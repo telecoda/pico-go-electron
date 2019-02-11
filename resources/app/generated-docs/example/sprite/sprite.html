@@ -211,6 +211,12 @@
 <span style="color:#75715e">// Init -  called once
 </span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">c</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">cartridge</span>) <span style="color:#a6e22e">Init</span>() <span style="color:#66d9ef">error</span> {
 	<span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">ShowFPS</span>()
+
+	<span style="color:#75715e">// override resources with local versions
+</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">InitSprites</span>(<span style="color:#a6e22e">sprites_png</span>)
+	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+		panic(<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Sprintf</span>(<span style="color:#e6db74">&#34;ERROR: %s&#34;</span>, <span style="color:#a6e22e">err</span>.<span style="color:#a6e22e">Error</span>()))
+	}
 	<span style="color:#66d9ef">return</span> <span style="color:#66d9ef">nil</span>
 }
 

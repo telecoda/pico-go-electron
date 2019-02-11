@@ -7,6 +7,7 @@ import (
 	"io"
 	"io/ioutil"
 	"os"
+	"os/exec"
 	"path/filepath"
 	"strconv"
 	"strings"
@@ -53,17 +54,38 @@ func run(sourceCode SourceCode) (a Application, err error) {
 	}
 
 	tmpMainFile := filepath.Join(dir, "gen-main.go")
+	genMainSrc := genMainSrc1 + genMainSrc2 + genMainSrc3
 	if err = ioutil.WriteFile(tmpMainFile, []byte(genMainSrc), 0666); err != nil {
 		err = fmt.Errorf("Failed to write gen-main source to to temporary dir - %s", err)
 		return
 	}
 
+	// copy generate sprites file
+	tmpSpriteFile := filepath.Join(dir, "sprites.gif")
+	tmpGenSpritesFile := filepath.Join(dir, "gen-sprites.go")
+	if err = ioutil.WriteFile(tmpSpriteFile, []byte(default_sprite_png), 0666); err != nil {
+		err = fmt.Errorf("Failed to write gen-main source to to temporary dir - %s", err)
+		return
+	}
 
+	var out []byte
+	// generate sprites (etc)
+	cmd := exec.Command("go", "generate", "./...")
+	cmd.Dir = dir
+	out, err = cmd.CombinedOutput()
+	if err != nil {
+		if out == nil {
+			err = fmt.Errorf("Failed to call go generate - %s", err)
+			return
+		}
+		err = fmt.Errorf("Failed to call go generate - %s", string(out))
+		return
+	}
 	// compile with GopherJS
 	outFile := filepath.Join(dir, "cart.js")
 
-	cmd := getBuildCmd(tmpCartFile, tmpMainFile, outFile)
-	var out []byte
+	cmd = getBuildCmd(tmpCartFile, tmpMainFile, tmpGenSpritesFile, outFile)
+
 	out, err = cmd.CombinedOutput()
 	if err != nil {
 		if out == nil {

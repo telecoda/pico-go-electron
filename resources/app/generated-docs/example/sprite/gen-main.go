@@ -3,6 +3,9 @@
 
 	Don't change any of this code, you shouldn't even really be seeing it, I guess you're the curious type.
 */
+
+//go:generate file2byteslice -package=main -input=./sprites.gif -output=./gen-sprites.go -var=sprites_png
+
 package main
 
 import (

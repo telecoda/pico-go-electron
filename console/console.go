@@ -155,8 +155,31 @@ func Init(consoleType ConsoleType) error {
 	pImage := image.NewPaletted(rect, _console.palette.colors)
 	_console.pImage = pImage
 
+	err := _console.initSprites(images.Sprites_gif)
+	if err != nil {
+		return fmt.Errorf("Error initialising sprites: %s", err)
+	}
+
+	// init pixelbuffer
+	pb, err := newPixelBuffer(_console.Config)
+	if err != nil {
+		return fmt.Errorf("Error creating pixel buffer: %s", err)
+	}
+
+	_console.pb = pb
+
+	return nil
+}
+
+func InitSprites(spriteData []byte) error {
+	_console.Lock()
+	defer _console.Unlock()
+	return _console.initSprites(spriteData)
+}
+
+func (c *console) initSprites(spriteData []byte) error {
 	// init sprites
-	sprites, _, err := image.Decode(bytes.NewReader(images.Sprites_png))
+	sprites, _, err := image.Decode(bytes.NewReader(spriteData))
 	if err != nil {
 		return fmt.Errorf("Error loading sprites: %s", err)
 	}
@@ -165,7 +188,7 @@ func Init(consoleType ConsoleType) error {
 	_console.sprites[userSpriteBank1].Palette = _console.palette.colors
 
 	// create a mask
-	masks, _, err := image.Decode(bytes.NewReader(images.Sprites_png))
+	masks, _, err := image.Decode(bytes.NewReader(spriteData))
 	if err != nil {
 		return fmt.Errorf("Error loading sprites: %s", err)
 	}
@@ -180,14 +203,6 @@ func Init(consoleType ConsoleType) error {
 		maskPalette.colors[i] = color.RGBA{R: 255, G: 255, B: 255, A: 255}
 	}
 	mask.Palette = maskPalette.colors
-
-	// init pixelbuffer
-	pb, err := newPixelBuffer(_console.Config)
-	if err != nil {
-		return fmt.Errorf("Error creating pixel buffer: %s", err)
-	}
-
-	_console.pb = pb
 
 	return nil
 }

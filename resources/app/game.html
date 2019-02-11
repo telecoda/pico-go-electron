@@ -29,8 +29,11 @@
 			if (!listeners[type] || !listeners[type].length)
 				return;
 
-			for (let i = 0; i < listeners[type].length; i++)
+			for (let i = 0; i < listeners[type].length; i++) {
+				console.log("Game removing listener:" +listeners[type][i]);
+
 				window.removeEventListener(type, listeners[type][i]);
+			}
 		}
 		//
 	</script>
@@ -51,7 +54,7 @@
 			W = W * devicePixelRatio;
 			H = H * devicePixelRatio;
 
-			var scale = Math.min(window.innerHeight/H, window.innerWidth/W);
+			var scale = Math.min((window.innerHeight-50)/H, window.innerWidth/W);
 			// get a ref to canvas
 			var canvasElements = document.getElementsByTagName("canvas");
 			if (typeof canvasElements === "undefined" || canvasElements.length===0) {

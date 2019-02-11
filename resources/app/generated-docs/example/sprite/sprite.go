@@ -34,6 +34,12 @@ type cartridge struct {
 // Init -  called once
 func (c *cartridge) Init() error {
 	console.ShowFPS()
+
+	// override resources with local versions
+	err := console.InitSprites(sprites_png)
+	if err != nil {
+		panic(fmt.Sprintf("ERROR: %s", err.Error()))
+	}
 	return nil
 }
 

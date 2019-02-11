@@ -58,4 +58,5 @@ func (c *cartridge) Render() {
 	// get color of point // earlier rect
 	pointColor := c.PGet(85, 25)
 	c.PSet(95, 99, pointColor)
+
 }

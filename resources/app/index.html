@@ -24,6 +24,9 @@
                         <a id="codeTab"href="#codeeditor" aria-controls="codeeditor" data-toggle="tab">Code</a>
                     </li>
                     <li role="nav-item" class="navTab">
+                        <a href="#spriteEd" id="spriteEdTab" aria-controls="spriteEd" data-toggle="tab">Sprites</a>
+                    </li>
+                    <li role="nav-item" class="navTab">
                         <a href="#game" id="gameTab" aria-controls="game" data-toggle="tab">Game</a>
                     </li>
                     <li role="nav-item" class="navTab">
@@ -50,6 +53,12 @@
             <div role="tabpanel" class="tab-pane" id="game">
                 <div id="gameDiv">
                     <iframe id="gameFrame" src="game.html"></iframe>
+                </div>
+            </div>
+            <!-- Sprite editor panel -->
+            <div role="tabpanel" class="tab-pane" id="spriteEd">
+                <div id="spriteEdDiv">
+                    <iframe id="spriteEdFrame" src="spriteEd.html"></iframe>
                 </div>
             </div>
             <!-- Docs panel -->
@@ -88,6 +97,22 @@
     <script>window.jQuery = window.$ = module.exports</script>
     <script src="static/lib/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
     <script type="text/javascript">
+        document.getElementById("spriteEdTab").addEventListener("click", function () {
+            // get a reference to the embedded canvas created in the iframe page
+            var spriteEdWrapper = document.getElementById('spriteEdWrapper');
+			if (spriteEdWrapper === "undefined" || spriteEdWrapper === null) {
+                return;
+            }
+			var childNodes = spriteEdWrapper.childNodes;
+			if (childNodes === "undefined" || childNodes === null) {
+                return;
+            }
+			var canvas = childNodes[childNodes.length-1]; // get last child
+            // force focus on it so ebiten starts rendering frames
+            if (typeof canvas.focus != "undefined") {
+                canvas.focus();
+            }
+        });
         document.getElementById("gameTab").addEventListener("click", function () {
             // get a reference to the embedded canvas created in the iframe page
             var gameWrapper = document.getElementById('gameWrapper');
