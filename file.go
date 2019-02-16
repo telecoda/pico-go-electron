@@ -1,6 +1,7 @@
 package main
 
 import (
+	//"encoding/base64"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
@@ -18,13 +19,50 @@ var cancel chan bool
 
 // load - loads sourcecode from a specific path
 func load(path string) (a Application, err error) {
+	
+	if strings.HasSuffix(path, ".go") {
+		return loadGo(path)
+	}
+	
+	if strings.HasSuffix(path, ".gif") {
+		return loadSprites(path)
+	}
 
-	// If doesn't end with a filename
-	// look in default location
-	if !strings.HasSuffix(path, ".go") {
-		err = fmt.Errorf("Failed to open file: %s. File MUST be a .go file", path)
+	err = fmt.Errorf("Failed to open file: %s. File MUST be a .go or .gif file", path)
+
+	return
+
+
+}
+
+
+// load - loads sprite data from a specific path
+func loadSprites(path string) (a Application, err error) {
+
+	f, err := os.Open(path)
+	if err != nil {
+		err = fmt.Errorf("Failed to open file: %s", err)
 		return
 	}
+
+	spriteData, err := ioutil.ReadAll(f)
+	if err != nil {
+		err = fmt.Errorf("Failed to read file: %s", err)
+		return
+	}
+
+
+	// Init Application
+	a = Application{
+		Path:   path,
+		SpriteData: string(spriteData),
+	}
+
+	return
+}
+
+// loadGo - loads sourcecode from a specific path
+func loadGo(path string) (a Application, err error) {
 
 	f, err := os.Open(path)
 	if err != nil {

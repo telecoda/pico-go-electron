@@ -52,7 +52,11 @@ let index = {
         filenames = dialog.showOpenDialog({"title": "Select sourcefile","message": message});
         if (typeof filenames !== "undefined" && filenames.length >0)  {
             filename = filenames[0];
-            this.load(filenames[0]);
+            if (filename.endsWith(".go")) {
+                this.load(filename);
+            } else {
+                this.loadSprites(filename);
+            }
         }
     },
         // reload source changed
@@ -126,7 +130,36 @@ let index = {
 
         })
     },
-    // run - call to backend to compile and run current sourcecode
+
+    loadSprites: function(filename) {
+            // Create message
+            let message = {"name": "loadSprites"};
+            if (typeof filename !== "undefined") {
+                payload = {
+                    "path": filename,
+                }
+                message.payload = payload
+            }
+            // Send message
+            asticode.loader.show();
+            astilectron.sendMessage(message, function(message) {
+                // Init
+                asticode.loader.hide();
+    
+                // Check error
+                if (message.name === "error") {
+                    dialog.showErrorBox("Load Sprites Error",message.payload);
+                    return
+                }    
+                // save loaded sprite data in local storage for sprite editor
+                global.localStorage.setItem("pico-go-sprite-data",message.payload.spriteData)
+    
+                // switch to sprites tab
+                document.getElementById("spriteEdTab").click();
+    
+            })
+        },
+        // run - call to backend to compile and run current sourcecode
     run: function() {
 
         payload = {
@@ -137,6 +170,10 @@ let index = {
         let message = {"name": "run",
             "payload": payload
         };
+
+        let spriteData = localStorage.getItem("sprite-data");
+
+        console.log("SpriteData: " + spriteData);
 
         // send sourcecode to backend for compilation
         asticode.loader.show();

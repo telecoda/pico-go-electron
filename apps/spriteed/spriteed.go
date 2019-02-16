@@ -8,6 +8,7 @@ package main
 */
 
 import (
+	"encoding/base64"
 	"fmt"
 
 	"github.com/telecoda/pico-go-electron/console"
@@ -27,11 +28,25 @@ type cartridge struct {
 // Init -  called once
 func (c *cartridge) Init() error {
 
-	// override resources with local versions
-	err := console.InitSprites(sprites_gif)
+	// fetch sprites from local storage
+	base64SpriteData, err:= js.Global.Get("localStorage").Get("pico-go-sprite-data")
 	if err != nil {
-		panic(fmt.Sprintf("ERROR: %s", err.Error()))
+		return fmt.Errorf("ERROR: failed to fetch sprite data from local storage %s", err.Error()))
 	}
+
+	// decode
+	sprites_gif,err = base64.DecodeString(base64SpriteData)
+	if err != nil {
+		return fmt.Errorf("ERROR: failed to fetch sprite data from local storage %s", err.Error()))
+	}
+
+
+	// override resources with local versions
+	err = console.InitSprites(sprites_gif)
+	if err != nil {
+		return fmt.Errorf("ERROR: failed to initialise sprites %s", err.Error()))
+	}
+
 	return nil
 }
 

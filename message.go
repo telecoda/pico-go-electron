@@ -11,6 +11,7 @@ import (
 type Application struct {
 	Path         string    `json:"path"`
 	Source       string    `json:"source"`
+	SpriteData 	 string `json:"spriteData"`
 	CompResp     *CompResp `json:"compResp"`
 	ScreenWidth  int       `json:"screenWidth"`
 	ScreenHeight int       `json:"screenHeight"`
@@ -49,6 +50,20 @@ func handleMessages(_ *astilectron.Window, m bootstrap.MessageIn) (payload inter
 			}
 		}
 		payload, err = load(source.Path)
+		if err != nil {
+			payload = err.Error()
+		}
+		return
+	case "loadSprites":
+		source := SourceCode{}
+		if len(m.Payload) > 0 {
+			// Unmarshal payload
+			if err = json.Unmarshal(m.Payload, &source); err != nil {
+				payload = fmt.Sprintf("Failed to unmarshal message: %s - %s", string(m.Payload), err.Error())
+				return
+			}
+		}
+		payload, err = loadSprites(source.Path)
 		if err != nil {
 			payload = err.Error()
 		}
