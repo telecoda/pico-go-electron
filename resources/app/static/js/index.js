@@ -153,10 +153,11 @@ let index = {
                 }    
                 // save loaded sprite data in local storage for sprite editor
                 global.localStorage.setItem("pico-go-sprite-data",message.payload.spriteData)
-    
+                // set reload flag - so editor fetches latest sprite data
+                global.localStorage.setItem("pico-go-sprite-data-reload",true)
+
                 // switch to sprites tab
                 document.getElementById("spriteEdTab").click();
-    
             })
         },
         // run - call to backend to compile and run current sourcecode

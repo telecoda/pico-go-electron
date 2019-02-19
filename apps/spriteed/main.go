@@ -11,7 +11,9 @@
 package main
 
 import (
+	"encoding/base64"
 	"fmt"
+	"time"
 
 	"github.com/gopherjs/gopherjs/js"
 	"github.com/telecoda/pico-go-electron/console"
@@ -30,28 +32,64 @@ func main() {
 		return
 	}
 
-	spriteData = "ABCDEFG"
-	fmt.Printf("JS functions initialised\n")
-	// register functions
-	js.Global.Get("localStorage").Set("sprite-data", sprites_gif)
+	go reloader()
 
 	if err := console.Run(cart); err != nil {
 		fmt.Printf("Failed to run cartridge: %s\n", err)
 		return
 	}
+
 }
 
 var spriteData string
 
-func GetSpritesData() string {
-	return spriteData
+func LoadSprites() {
+
+	if js.Global != nil {
+		// if we are running in a web app
+		// fetch sprites from local storage
+		spriteData := js.Global.Get("localStorage").Get("pico-go-sprite-data")
+
+		spriteBytes, err := base64.StdEncoding.DecodeString(spriteData.String())
+		if err != nil {
+			fmt.Printf("Error decoding string - %s\n", err)
+			return
+		}
+		// decode
+		sprites_gif = spriteBytes
+	} else {
+		// just use the sprites already generated in the code
+	}
+
+	// override resources with local versions
+	err := console.InitSprites(sprites_gif)
+	if err != nil {
+		fmt.Printf("ERROR: failed to initialise sprites %s\n", err.Error())
+	}
+
 }
 
-func SetSpritesData(data string) {
-	spriteData = data
+func SaveSprites() {
+	fmt.Printf("TEMP: SaveSprites()\n")
 }
 
-func Hello() string {
-	fmt.Printf("Hello\n")
-	return "foo"
+func reloader() {
+	// go routine to keep an eye on local storage and check if sprites need reloading due to external changes
+
+	// only if in we app
+	if js.Global != nil {
+		for {
+			time.Sleep(2 * time.Second)
+			reload := js.Global.Get("localStorage").Get("pico-go-sprite-data-reload")
+
+			if reload.Bool() {
+				// clear reload flag
+				js.Global.Get("localStorage").Set("pico-go-sprite-data-reload", false)
+				// Load sprites from data in localStorage
+				LoadSprites()
+			}
+
+		}
+	}
+
 }

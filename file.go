@@ -1,7 +1,7 @@
 package main
 
 import (
-	//"encoding/base64"
+	"encoding/base64"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
@@ -51,11 +51,12 @@ func loadSprites(path string) (a Application, err error) {
 		return
 	}
 
+	
 
 	// Init Application
 	a = Application{
 		Path:   path,
-		SpriteData: string(spriteData),
+		SpriteData: base64.StdEncoding.EncodeToString(spriteData),
 	}
 
 	return

@@ -63,7 +63,7 @@ func run(sourceCode SourceCode) (a Application, err error) {
 	// copy generate sprites file
 	tmpSpriteFile := filepath.Join(dir, "sprites.gif")
 	tmpGenSpritesFile := filepath.Join(dir, "gen-sprites.go")
-	if err = ioutil.WriteFile(tmpSpriteFile, []byte(default_sprite_png), 0666); err != nil {
+	if err = ioutil.WriteFile(tmpSpriteFile, []byte(default_sprite_gif), 0666); err != nil {
 		err = fmt.Errorf("Failed to write gen-main source to to temporary dir - %s", err)
 		return
 	}

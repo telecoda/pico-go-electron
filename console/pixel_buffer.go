@@ -163,11 +163,6 @@ func (p *pixelBuffer) Flip() error {
 		return fmt.Errorf("No pixelsurface")
 	}
 
-	// if _console.screen == nil {
-	// 	fmt.Printf("TEMP: no screen\n")
-	// 	return nil
-	// }
-
 	if !p.flipReady {
 		time.Sleep(delay)
 		return nil
@@ -935,8 +930,6 @@ func (p *pixelBuffer) spriteWithCache(n, x, y, w, h, dw, dh, rot int, flipX, fli
 
 			return
 		} else {
-			//			fmt.Printf("TEMP: tx: %#v\n", tx)
-			//fmt.Printf("TEMP: cached: %#v\n", cached)
 
 			options := &drawx.Options{
 				SrcMask:  cached.maskImage,
