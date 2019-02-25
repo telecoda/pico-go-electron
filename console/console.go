@@ -60,6 +60,7 @@ type console struct {
 	screen *ebiten.Image
 	pImage *image.Paletted
 	pb     *pixelBuffer
+	inputs *inputs
 
 	font              font.Face
 	sprites           []*image.Paletted
@@ -69,7 +70,6 @@ type console struct {
 
 	//state    Persister
 	//recorder Recorder
-	//Inputter
 }
 
 func Run(cart Cartridge) error {
@@ -79,7 +79,6 @@ func Run(cart Cartridge) error {
 
 	// TODO screen recorder
 	//	_console.recorder = NewRecorder(cfg.FPS, cfg.GifLength)
-	//	_console.Inputter = NewInputter()
 
 	// init font
 	f := bytes.NewReader(fonts.Font_ttf)
@@ -107,6 +106,8 @@ func Run(cart Cartridge) error {
 
 	// set reference to pixel buffer
 	cart.initPb(_console.pb)
+	// set reference to pixel buffer
+	cart.initInputs(_console.inputs)
 
 	// init the cart
 	_console.cart.Init()
@@ -167,6 +168,8 @@ func Init(consoleType ConsoleType) error {
 	}
 
 	_console.pb = pb
+
+	_console.inputs = newInputs()
 
 	return nil
 }
@@ -258,10 +261,10 @@ func (c *console) handleInput() error {
 	return nil
 }
 
-func (c *console) mouseClicked(x, y int32) {
-	// transform window x,y coords to pixel buffer coords
-	fmt.Printf("Mouse clicked at x: %d y: %d\n", x, y)
-}
+// func (c *console) mouseClicked(x, y int) {
+// 	// transform window x,y coords to pixel buffer coords
+// 	fmt.Printf("Mouse clicked at x: %d y: %d\n", x, y)
+// }
 
 // saveScreenshot - saves a screenshot of current frame
 func (c *console) saveScreenshot() error {

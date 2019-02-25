@@ -25,7 +25,14 @@ type PicoGraphicsAPI interface {
 }
 
 type PicoInputAPI interface {
+	// return state of button
 	Btn(id int) bool
+	// true if mouse currently pressed
+	MousePressed() bool
+	// true is mouse just clicked, a second call will be false
+	MouseClicked() bool
+	// on screen position of mouse pointer
+	MousePosition() (int, int)
 }
 
 type Clearer interface {
@@ -104,6 +111,7 @@ type Cartridge interface {
 	// BaseCartridge methods already implemented
 	Configger
 	initPb(pb PixelBuffer)
+	initInputs(in PicoInputAPI)
 	PicoInputAPI
 	// User implemented methods below
 	Init() error
